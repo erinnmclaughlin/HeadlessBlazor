@@ -1,0 +1,24 @@
+@inherits MenuComponentBase
+
+<div @attributes="UserAttributes" @onclick="HandleClick">@ChildContent</div>
+
+@code {
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public EventCallback<MenuItem> OnClick { get; set; }
+
+    protected virtual async Task HandleClick()
+    {
+        if (OnClick.HasDelegate)
+        {
+            await OnClick.InvokeAsync(this);
+        }
+        else if (Menu.OnClickItem.HasDelegate)
+        {
+            await Menu.OnClickItem.InvokeAsync(this);
+        }
+    }
+}

@@ -1,0 +1,18 @@
+@inherits MenuComponentBase
+
+<button type="button" @attributes="UserAttributes" @onclick="HandleClick">
+    @ChildContent
+</button>
+
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public Func<Menu, Task> OnClick { get; set; } = m => m.Toggle();
+
+    private async Task HandleClick()
+    {
+        await OnClick(Menu);
+    }
+}

@@ -1,0 +1,13 @@
+@inherits DropdownComponentBase
+
+@if (Dropdown.IsOpen)
+{
+    <div @attributes="UserAttributes">@ChildContent</div>
+}
+
+@code {
+    public override Type Type => GetType();
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+}

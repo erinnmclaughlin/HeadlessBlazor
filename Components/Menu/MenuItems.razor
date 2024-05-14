@@ -1,0 +1,11 @@
+@inherits MenuComponentBase
+
+@if (Menu.IsOpen)
+{
+    <div @attributes="UserAttributes">@ChildContent</div>
+}
+
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+}

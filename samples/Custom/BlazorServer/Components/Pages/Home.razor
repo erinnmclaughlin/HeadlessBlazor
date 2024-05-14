@@ -1,0 +1,38 @@
+﻿@page "/"
+
+<PageTitle>Home</PageTitle>
+
+<h1>Headless Blazor</h1>
+
+<h2>Menu</h2>
+
+<div style="background-color: blueviolet; padding: 1rem; display: flex; gap: 1rem;">
+    <Dropdown OnClickItem="m => m.Dropdown.Close()" style="position: relative;">
+        <DropdownTrigger>Click Me</DropdownTrigger>
+        <DropdownItems style="background: white; border: 1px solid #dbdbdb; display: flex; flex-direction: column; padding: 0.5rem; position: absolute; min-width: 300px">
+            <DropdownItem>This is a div.</DropdownItem>
+            <DropdownItem InheritClickHandler="false">
+                <p style="margin: 0">This is also a div.</p>
+                <p style="margin: 0"><small>(but clicking it won't close the menu)</small></p>
+            </DropdownItem>
+            <DropdownItemLink href="counter">This is a link to another page.</DropdownItemLink>
+            <DropdownItemLink href="#">This is a link to this page.</DropdownItemLink>
+            <DropdownItemButton>This is a button.</DropdownItemButton>
+            <DropdownItemButton disabled="true">This is a disabled button.</DropdownItemButton>
+        </DropdownItems>
+    </Dropdown>
+    <Dropdown OnClickItem="m => m.Dropdown.Close()" style="position: relative">
+        <DropdownTrigger TriggerOnHover="true">Hover On Me</DropdownTrigger>
+        <DropdownItems style="background: white; border: 1px solid #dbdbdb; display: flex; flex-direction: column; padding: 0.5rem; position: absolute; min-width: 300px">
+            <DropdownItem>This is a div.</DropdownItem>
+            <DropdownItem InheritClickHandler="false">
+                <p style="margin: 0">This is also a div.</p>
+                <p style="margin: 0"><small>(but clicking it won't close the menu)</small></p>
+            </DropdownItem>
+            <DropdownItemLink href="counter">This is a link to another page.</DropdownItemLink>
+            <DropdownItemLink href="#">This is a link to this page.</DropdownItemLink>
+            <DropdownItemButton>This is a button.</DropdownItemButton>
+            <DropdownItemButton disabled="true">This is a disabled button.</DropdownItemButton>
+        </DropdownItems>
+    </Dropdown>
+</div>
