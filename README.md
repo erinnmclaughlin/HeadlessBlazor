@@ -1,20 +1,8 @@
-<br>
+<h1>
+  <img src="HeadlessBlazorLogo.svg" width="24" hspace="4" /> Headless Blazor
+</h1>
 
-<p align="center">
-  <a href="https://github.com/erinnmclaughlin/HeadlessBlazor">
-    <img src="HeadlessBlazorLogo.svg" height="52px" width="52px" /> 
-  </a>
-</p>
-
-<h3 align="center"><strong>Headless Blazor</strong></h3>
-
-<h2></h2>
-
-<p align="center">
-  <strong><a href="">Headless Blazor</a> is a headless UI component library for Blazor. Inspired by <a href="https://headlessui.com">Headless UI</a>.</strong>
-</p>
-
-<br>
+**[Headless Blazor](https://github.com/erinnmclaughlin/HeadlessBlazor) is a headless UI component library for Blazor. Inspired by [Headless UI](https://headlessui.com).**
 
 ## Installation
 
@@ -22,8 +10,6 @@
 > This library is very much a work-in-progress. Contributions are welcome!
 
 ### Try the Preview
-
-Install the [NuGet package](https://www.nuget.org/packages/HeadlessBlazor).
 
 ```cmd
 dotnet add package HeadlessBlazor
