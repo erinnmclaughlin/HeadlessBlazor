@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\HeadlessBlazor\HeadlessBlazor.csproj" />
+    <ProjectReference Include="..\..\..\src\HeadlessBlazor\HeadlessBlazor.csproj" />
   </ItemGroup>
 
 </Project>

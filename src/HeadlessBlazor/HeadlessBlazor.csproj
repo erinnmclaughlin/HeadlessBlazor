@@ -26,9 +26,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\HeadlessBlazorLogo.png" Pack="true" Visible="false" PackagePath="" />
-    <None Include="..\LICENSE" Pack="true" Visible="false" PackagePath="" />
-    <None Include="..\README.md" Pack="true" Visible="false" PackagePath="" />
+    <None Include="..\..\HeadlessBlazorLogo.png" Pack="true" Visible="false" PackagePath="" />
+    <None Include="..\..\LICENSE" Pack="true" Visible="false" PackagePath="" />
+    <None Include="..\..\README.md" Pack="true" Visible="false" PackagePath="" />
   </ItemGroup>
 
   <ItemGroup>
@@ -40,7 +40,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Components\Dropdown\Dropdown.csproj" />
+    <ProjectReference Include="..\HeadlessBlazor.Dropdown\HeadlessBlazor.Dropdown.csproj" />
   </ItemGroup>
 
 </Project>

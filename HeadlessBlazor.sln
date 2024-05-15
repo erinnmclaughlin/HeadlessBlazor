@@ -3,27 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34902.84
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HeadlessBlazor", "HeadlessBlazor\HeadlessBlazor.csproj", "{58700B4B-2D98-4CCD-B2AC-87059799A4C5}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{5E6A2831-07E7-400E-8EBB-128E15BC8267}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Components", "Components", "{83CA8F72-558C-403D-A510-F5497875257E}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dropdown", "Components\Dropdown\Dropdown.csproj", "{6DE2F4B7-453E-4D8D-AF3F-95E7B619F777}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bootstrap", "Bootstrap", "{AE382F06-76BB-4FA4-95C9-3E5C826AE646}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorWASM", "samples\Bootstrap\BlazorWASM\BlazorWASM.csproj", "{D9FE8C58-08F5-4CBB-A6D0-3F9B3E096731}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Custom", "Custom", "{055F257A-6CF4-42AC-847A-AC5C59FC8C0E}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorServer", "samples\Custom\BlazorServer\BlazorServer.csproj", "{B7099B25-51FC-4EF3-894C-4E4FB2D6F507}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{172636E0-D70E-4866-B6CD-49C458F47515}"
 	ProjectSection(SolutionItems) = preProject
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HeadlessBlazor", "src\HeadlessBlazor\HeadlessBlazor.csproj", "{44010F52-D712-4403-BF9C-08A464727230}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Themes", "Themes", "{D143F401-9A70-46B7-9146-1B21F3B77BE5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorWASM", "themes\Bootstrap\BlazorWASM\BlazorWASM.csproj", "{18DC8BC9-4E15-4A92-AB30-D80E2F651F19}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bootstrap", "Bootstrap", "{65E7B1B3-5403-44AA-BB13-A13C8931E550}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HeadlessBlazor.Dropdown", "src\HeadlessBlazor.Dropdown\HeadlessBlazor.Dropdown.csproj", "{E207C22E-D5FC-47C0-BA77-2A75B0B03272}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,32 +25,25 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{58700B4B-2D98-4CCD-B2AC-87059799A4C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{58700B4B-2D98-4CCD-B2AC-87059799A4C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{58700B4B-2D98-4CCD-B2AC-87059799A4C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{58700B4B-2D98-4CCD-B2AC-87059799A4C5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6DE2F4B7-453E-4D8D-AF3F-95E7B619F777}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6DE2F4B7-453E-4D8D-AF3F-95E7B619F777}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6DE2F4B7-453E-4D8D-AF3F-95E7B619F777}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6DE2F4B7-453E-4D8D-AF3F-95E7B619F777}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D9FE8C58-08F5-4CBB-A6D0-3F9B3E096731}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D9FE8C58-08F5-4CBB-A6D0-3F9B3E096731}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D9FE8C58-08F5-4CBB-A6D0-3F9B3E096731}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D9FE8C58-08F5-4CBB-A6D0-3F9B3E096731}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B7099B25-51FC-4EF3-894C-4E4FB2D6F507}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B7099B25-51FC-4EF3-894C-4E4FB2D6F507}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B7099B25-51FC-4EF3-894C-4E4FB2D6F507}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B7099B25-51FC-4EF3-894C-4E4FB2D6F507}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44010F52-D712-4403-BF9C-08A464727230}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44010F52-D712-4403-BF9C-08A464727230}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44010F52-D712-4403-BF9C-08A464727230}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44010F52-D712-4403-BF9C-08A464727230}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18DC8BC9-4E15-4A92-AB30-D80E2F651F19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18DC8BC9-4E15-4A92-AB30-D80E2F651F19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18DC8BC9-4E15-4A92-AB30-D80E2F651F19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18DC8BC9-4E15-4A92-AB30-D80E2F651F19}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E207C22E-D5FC-47C0-BA77-2A75B0B03272}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E207C22E-D5FC-47C0-BA77-2A75B0B03272}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E207C22E-D5FC-47C0-BA77-2A75B0B03272}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E207C22E-D5FC-47C0-BA77-2A75B0B03272}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{6DE2F4B7-453E-4D8D-AF3F-95E7B619F777} = {83CA8F72-558C-403D-A510-F5497875257E}
-		{AE382F06-76BB-4FA4-95C9-3E5C826AE646} = {5E6A2831-07E7-400E-8EBB-128E15BC8267}
-		{D9FE8C58-08F5-4CBB-A6D0-3F9B3E096731} = {AE382F06-76BB-4FA4-95C9-3E5C826AE646}
-		{055F257A-6CF4-42AC-847A-AC5C59FC8C0E} = {5E6A2831-07E7-400E-8EBB-128E15BC8267}
-		{B7099B25-51FC-4EF3-894C-4E4FB2D6F507} = {055F257A-6CF4-42AC-847A-AC5C59FC8C0E}
+		{18DC8BC9-4E15-4A92-AB30-D80E2F651F19} = {65E7B1B3-5403-44AA-BB13-A13C8931E550}
+		{65E7B1B3-5403-44AA-BB13-A13C8931E550} = {D143F401-9A70-46B7-9146-1B21F3B77BE5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2654F09D-E612-47A4-93C9-79A6F2B45627}
