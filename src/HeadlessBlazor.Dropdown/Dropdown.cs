@@ -28,6 +28,8 @@ public class Dropdown : HBElement<Dropdown>
 
         if (!OnClickOutside.HasDelegate && CloseOnOutsideClick)
             OnClickOutside = new EventCallback(this, Close);
+
+        base.OnInitialized();
     }
 
     protected override void BuildRenderTree(RenderTreeBuilder builder)

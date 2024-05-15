@@ -1,12 +1,17 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using HeadlessBlazor.Core.Themes;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace HeadlessBlazor;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddHeadlessBlazor(this IServiceCollection services)
+    public static IServiceCollection AddHeadlessBlazor(this IServiceCollection services, Action<HBThemeBuilder>? themeBuilderAction = null)
     {
-        // This does nothing! But it'll do SOMEthing... eventually.
+        var themeBuilder = HBTheme.CreateBuilder();
+        themeBuilderAction?.Invoke(themeBuilder);
+
+        services.AddSingleton(themeBuilder.Build());
+
         return services;
     }
 }

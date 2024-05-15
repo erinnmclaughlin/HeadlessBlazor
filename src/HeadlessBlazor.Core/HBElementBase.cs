@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using HeadlessBlazor.Core.Themes;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.Web;
 
@@ -8,6 +9,9 @@ public abstract class HBElementBase : ComponentBase
 {
     public virtual string ElementName { get; set; } = "div";
 
+    [Inject]
+    private HBTheme? Theme { get; set; }
+
     [Parameter(CaptureUnmatchedValues = true)]
     public virtual IDictionary<string, object?> UserAttributes { get; set; } = new Dictionary<string, object?>();
 
@@ -16,6 +20,11 @@ public abstract class HBElementBase : ComponentBase
 
     [Parameter]
     public bool OnClickPreventDefault { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Theme?.ApplyDefaults(this);
+    }
 
     protected override void OnParametersSet()
     {
