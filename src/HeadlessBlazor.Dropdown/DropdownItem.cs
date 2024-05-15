@@ -9,9 +9,6 @@ public class DropdownItem : HBElement
     [CascadingParameter]
     public Dropdown Dropdown { get; set; } = default!;
 
-    [Parameter]
-    public bool InheritClickHandler { get; set; } = true;
-
     protected override void OnParametersSet()
     {
         if (Dropdown == null)
@@ -24,7 +21,7 @@ public class DropdownItem : HBElement
 
     protected virtual async Task HandleClick(MouseEventArgs e)
     {
-        if (InheritClickHandler && !OnClickStopPropagation)
+        if (!OnClickStopPropagation)
             await Dropdown.OnClickItem.InvokeAsync(this);
     }
 }
