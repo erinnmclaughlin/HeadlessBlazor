@@ -4,16 +4,26 @@
 
 <div class="hb-example-snippet border">
     <div class="hb-example border-bottom">
-        <Dropdown class="dropdown d-inline-block" OnClickItem="item => item.Dropdown.Close()">
+        <Dropdown @ref="Dropdown" class="dropdown d-inline-block">
             <DropdownTrigger class="btn btn-primary dropdown-toggle">Click Me</DropdownTrigger>
-            <DropdownItems class="dropdown-menu show">
-                <DropdownItem class="dropdown-item">Option 1</DropdownItem>
-                <DropdownItem class="dropdown-item">Option 2</DropdownItem>
-                <DropdownItem class="dropdown-item">Option 3</DropdownItem>
-            </DropdownItems>
+            @if (Dropdown.IsOpen)
+            {
+                <DropdownItems class="dropdown-menu show">
+                    <DropdownItem class="dropdown-item">Option 1</DropdownItem>
+                    <DropdownItem class="dropdown-item">Option 2</DropdownItem>
+                    <DropdownItem class="dropdown-item">Option 3</DropdownItem>
+                    <DropdownItem ElementName="button" class="dropdown-item">Button</DropdownItem>
+                    <DropdownItem ElementName="button" class="dropdown-item" disabled="true">Disabled Button</DropdownItem>
+                    <DropdownItem ElementName="a" class="dropdown-item" href="#">Link</DropdownItem>
+                </DropdownItems>
+            }
         </Dropdown>
     </div>
     <div class="hb-code-block bg-light">
         <pre>@Example1CodeBlock</pre>
     </div>
 </div>
+
+@code {
+    private Dropdown Dropdown { get; set; } = default!;
+}

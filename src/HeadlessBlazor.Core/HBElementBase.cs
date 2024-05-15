@@ -6,48 +6,54 @@ namespace HeadlessBlazor.Core;
 
 public abstract class HBElementBase : ComponentBase
 {
+    protected int CurrentSequence { get; set; }
+
+    [Parameter]
+    public virtual ElementReference? Element { get; set; }
+
+    [Parameter]
+    public virtual EventCallback<ElementReference> ElementChanged { get; set; }
+
+    [Parameter]
     public virtual string ElementName { get; set; } = "div";
 
     [Parameter]
-    public ElementReference? Element { get; set; }
+    public virtual bool PreventClickDefault { get; set; }
 
     [Parameter]
-    public EventCallback<ElementReference> ElementChanged { get; set; }
+    public virtual bool StopClickPropagation { get; set; }
 
     [Parameter(CaptureUnmatchedValues = true)]
-    public IDictionary<string, object?> UserAttributes { get; set; } = new Dictionary<string, object?>();
-
-    [Parameter]
-    public bool StopClickPropagation { get; set; }
-
-    [Parameter]
-    public bool PreventClickDefault { get; set; }
+    public virtual IDictionary<string, object?> UserAttributes { get; set; } = new Dictionary<string, object?>();
 
     protected override void BuildRenderTree(RenderTreeBuilder builder)
     {
-        base.BuildRenderTree(builder);
+        builder.OpenElement(CurrentSequence++, ElementName);
 
-        builder.OpenElement(0, ElementName);
-
-        foreach (var attr in UserAttributes)
+        if (UserAttributes is { Count: > 0 })
         {
-            if (attr.Value != null)
-                builder.AddAttribute(1, attr.Key, attr.Value);
+            foreach (var attr in UserAttributes)
+            {
+                if (attr.Value != null)
+                    builder.AddAttribute(CurrentSequence, attr.Key, attr.Value);
+            }
+
+            CurrentSequence++;
         }
 
-        builder.AddEventStopPropagationAttribute(2, "onclick", !StopClickPropagation);
-        builder.AddEventPreventDefaultAttribute(3, "onclick", PreventClickDefault);
+        builder.AddEventStopPropagationAttribute(CurrentSequence++, "onclick", !StopClickPropagation);
+        builder.AddEventPreventDefaultAttribute(CurrentSequence++, "onclick", PreventClickDefault);
 
         if (Element.HasValue)
         {
-            builder.AddElementReferenceCapture(4, async element =>
+            builder.AddElementReferenceCapture(CurrentSequence++, async element =>
             {
                 Element = element;
                 await ElementChanged.InvokeAsync(Element.Value);
             });
         }
 
-        AddChildContent(builder, 5);
+        AddChildContent(builder, CurrentSequence++);
 
         builder.CloseElement();
     }
