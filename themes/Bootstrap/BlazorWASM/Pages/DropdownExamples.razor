@@ -4,9 +4,9 @@
 
 <div class="hb-example-snippet border">
     <div class="hb-example border-bottom">
-        <Dropdown @ref="Dropdown" class="dropdown d-inline-block">
+        <Dropdown class="dropdown d-inline-block">
             <DropdownTrigger class="btn btn-primary dropdown-toggle">Click Me</DropdownTrigger>
-            @if (Dropdown.IsOpen)
+            @if (context.IsOpen)
             {
                 <DropdownItems class="dropdown-menu show">
                     <DropdownItem class="dropdown-item">Default</DropdownItem>
@@ -24,7 +24,3 @@
         <pre>@Example1CodeBlock</pre>
     </div>
 </div>
-
-@code {
-    private Dropdown Dropdown { get; set; } = default!;
-}

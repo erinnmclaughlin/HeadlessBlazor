@@ -14,16 +14,13 @@ public class HBElement : HBElementBase
     }
 }
 
-// TODO: make this work!
-//public abstract class HBElement<T> : HBElementBase
-//{
-//    protected abstract T? Content { get; }
+public class HBElement<T> : HBElementBase where T : HBElement<T>
+{
+    [Parameter]
+    public RenderFragment<T>? ChildContent { get; set; }
 
-//    [Parameter]
-//    public RenderFragment<T?>? ChildContent { get; set; }
-
-//    protected override void AddChildContent(RenderTreeBuilder builder, int sequence)
-//    {
-//        builder.AddContent(sequence, ChildContent?.Invoke(Content));
-//    }
-//}
+    protected override void AddChildContent(RenderTreeBuilder builder, ref int sequence)
+    {
+        builder.AddContent(sequence++, ChildContent, (T)this);
+    }
+}

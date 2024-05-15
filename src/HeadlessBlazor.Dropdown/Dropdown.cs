@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Components.Rendering;
 
 namespace HeadlessBlazor;
 
-public class Dropdown : HBElement
+public class Dropdown : HBElement<Dropdown>
 {
     public bool IsOpen { get; private set; }
 
