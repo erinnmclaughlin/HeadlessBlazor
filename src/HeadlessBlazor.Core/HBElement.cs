@@ -8,9 +8,9 @@ public class HBElement : HBElementBase
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
-    protected override void AddChildContent(RenderTreeBuilder builder, int sequence)
+    protected override void AddChildContent(RenderTreeBuilder builder, ref int sequence)
     {
-        builder.AddContent(sequence, ChildContent);
+        builder.AddContent(sequence++, ChildContent);
     }
 }
 

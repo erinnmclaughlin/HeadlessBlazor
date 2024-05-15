@@ -32,20 +32,20 @@ public class Dropdown : HBElement
 
     protected override void BuildRenderTree(RenderTreeBuilder builder)
     {
-        builder.OpenComponent<CascadingValue<Dropdown>>(CurrentSequence++);
-        builder.AddAttribute(CurrentSequence, "Value", this);
-        builder.AddAttribute(CurrentSequence++, "ChildContent", (RenderFragment)((b) => {
+        var seq = 0;
+        builder.OpenComponent<CascadingValue<Dropdown>>(seq++);
+        builder.AddAttribute(seq, "Value", this);
+        builder.AddAttribute(seq++, "ChildContent", (RenderFragment)((b) =>
+        {
+            if (OnClickOutside.HasDelegate)
+            {
+                b.OpenElement(seq++, "div");
+                b.AddAttribute(seq, "style", "position: fixed; top:0; right: 0; bottom: 0; left:0");
+                b.AddAttribute(seq++, "onclick", OnClickOutside);
+                b.CloseElement();
+            }
 
-            // TODO: Figure out how to make this work!
-            //if (OnClickOutside.HasDelegate)
-            //{
-            //    builder.OpenElement(CurrentSequence++, "div");
-            //    //builder.AddAttribute(CurrentSequence, "style", "position: fixed; top:0; right: 0; bottom: 0; left:0");
-            //    //builder.AddAttribute(CurrentSequence++, "onclick", OnClickOutside);
-            //    builder.CloseElement();
-            //}
-
-            base.BuildRenderTree(b);
+            BuildRenderTree(b, ref seq);
         }));
         builder.CloseComponent();
     }

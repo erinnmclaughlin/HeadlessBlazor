@@ -6,8 +6,6 @@ namespace HeadlessBlazor.Core;
 
 public abstract class HBElementBase : ComponentBase
 {
-    protected int CurrentSequence { get; set; }
-
     [Parameter]
     public virtual ElementReference? Element { get; set; }
 
@@ -26,39 +24,51 @@ public abstract class HBElementBase : ComponentBase
     [Parameter(CaptureUnmatchedValues = true)]
     public virtual IDictionary<string, object?> UserAttributes { get; set; } = new Dictionary<string, object?>();
 
-    protected override void BuildRenderTree(RenderTreeBuilder builder)
+    protected void BuildRenderTree(RenderTreeBuilder builder, ref int sequenceNumber)
     {
-        builder.OpenElement(CurrentSequence++, ElementName);
+        var createElement = !string.IsNullOrWhiteSpace(ElementName);
 
-        if (UserAttributes is { Count: > 0 })
+        if (createElement)
         {
-            foreach (var attr in UserAttributes)
+            builder.OpenElement(sequenceNumber++, ElementName);
+
+            if (UserAttributes is { Count: > 0 })
             {
-                if (attr.Value != null)
-                    builder.AddAttribute(CurrentSequence, attr.Key, attr.Value);
+                foreach (var attr in UserAttributes)
+                {
+                    if (attr.Value != null)
+                        builder.AddAttribute(sequenceNumber, attr.Key, attr.Value);
+                }
+
+                sequenceNumber++;
             }
 
-            CurrentSequence++;
-        }
+            builder.AddEventStopPropagationAttribute(sequenceNumber++, "onclick", !StopClickPropagation);
+            builder.AddEventPreventDefaultAttribute(sequenceNumber++, "onclick", PreventClickDefault);
 
-        builder.AddEventStopPropagationAttribute(CurrentSequence++, "onclick", !StopClickPropagation);
-        builder.AddEventPreventDefaultAttribute(CurrentSequence++, "onclick", PreventClickDefault);
-
-        if (Element.HasValue)
-        {
-            builder.AddElementReferenceCapture(CurrentSequence++, async element =>
+            if (Element.HasValue)
             {
-                Element = element;
-                await ElementChanged.InvokeAsync(Element.Value);
-            });
+                builder.AddElementReferenceCapture(sequenceNumber++, async element =>
+                {
+                    Element = element;
+                    await ElementChanged.InvokeAsync(Element.Value);
+                });
+            }
         }
 
-        AddChildContent(builder, CurrentSequence++);
+        AddChildContent(builder, ref sequenceNumber);
 
-        builder.CloseElement();
+        if (createElement)
+            builder.CloseElement();
     }
 
-    protected virtual void AddChildContent(RenderTreeBuilder builder, int sequence)
+    protected override void BuildRenderTree(RenderTreeBuilder builder)
+    {
+        var seq = 0;
+        BuildRenderTree(builder, ref seq);
+    }
+
+    protected virtual void AddChildContent(RenderTreeBuilder builder, ref int sequence)
     {
     }
 }
