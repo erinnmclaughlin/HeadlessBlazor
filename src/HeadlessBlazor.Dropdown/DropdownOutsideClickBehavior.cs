@@ -1,13 +1,20 @@
-﻿using HeadlessBlazor.Core;
+﻿using HeadlessBlazor.Core.Behaviors;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Components.Rendering;
+using Microsoft.AspNetCore.Components.Web.Virtualization;
 
 namespace HeadlessBlazor;
 
-public class DropdownItem : HBElement
+public class DropdownOutsideClickBehavior : HBOutsideClickBehavior
 {
     [CascadingParameter]
     public Dropdown Dropdown { get; set; } = default!;
+
+    protected override void BuildRenderTree(RenderTreeBuilder builder)
+    {
+        if (Dropdown.IsOpen)
+            base.BuildRenderTree(builder);
+    }
 
     protected override void OnParametersSet()
     {
@@ -21,9 +28,8 @@ public class DropdownItem : HBElement
         base.OnParametersSet();
     }
 
-    protected virtual async Task HandleClick()
+    private async Task HandleClick()
     {
-        if (!OnClickStopPropagation)
-            await Dropdown.OnClickItem.InvokeAsync(this);
+        await Dropdown.Close();
     }
 }

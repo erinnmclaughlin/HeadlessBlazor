@@ -11,12 +11,6 @@ public class Dropdown : HBElement<Dropdown>
     [Parameter]
     public EventCallback<DropdownItem> OnClickItem { get; set; }
 
-    [Parameter]
-    public bool CloseOnOutsideClick { get; set; } = true;
-
-    [Parameter]
-    public EventCallback OnClickOutside { get; set; }
-
     public async Task Toggle() => await SetIsOpen(!IsOpen);
     public async Task Open() => await SetIsOpen(true);
     public async Task Close() => await SetIsOpen(false);
@@ -26,9 +20,6 @@ public class Dropdown : HBElement<Dropdown>
         if (!OnClickItem.HasDelegate)
             OnClickItem = new EventCallback<DropdownItem>(this, Close);
 
-        if (!OnClickOutside.HasDelegate && CloseOnOutsideClick)
-            OnClickOutside = new EventCallback(this, Close);
-
         base.OnInitialized();
     }
 
@@ -37,18 +28,7 @@ public class Dropdown : HBElement<Dropdown>
         var seq = 0;
         builder.OpenComponent<CascadingValue<Dropdown>>(seq++);
         builder.AddAttribute(seq, "Value", this);
-        builder.AddAttribute(seq++, "ChildContent", (RenderFragment)((b) =>
-        {
-            if (OnClickOutside.HasDelegate)
-            {
-                b.OpenElement(seq++, "div");
-                b.AddAttribute(seq, "style", "position: fixed; top:0; right: 0; bottom: 0; left:0");
-                b.AddAttribute(seq++, "onclick", OnClickOutside);
-                b.CloseElement();
-            }
-
-            BuildRenderTree(b, ref seq);
-        }));
+        builder.AddAttribute(seq++, "ChildContent", (RenderFragment)((b) => BuildRenderTree(b, ref seq)));
         builder.CloseComponent();
     }
 
