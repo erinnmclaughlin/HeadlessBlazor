@@ -1,11 +1,22 @@
-<div>
-  <img src="HeadlessBlazorLogo.png" align="left" height="40px" width="40px" /> 
-  <h1>Headless Blazor</h1>
-</div>
+<br>
 
-> [Headless Blazor](https://github.com/erinnmclaughlin/HeadlessBlazor) is a headless UI component library for Blazor. Inspired by [Headless UI](https://headlessui.com/).
+<p align="center">
+  <a href="https://github.com/erinnmclaughlin/HeadlessBlazor">
+    <img src="HeadlessBlazorLogo.svg" height="52px" width="52px" /> 
+  </a>
+</p>
+
+<h3 align="center"><strong>Headless Blazor</strong></h3>
+
+<h2></h2>
+
+<p align="center">
+  <strong><a href="">Headless Blazor</a> is a headless UI component library for Blazor. Inspired by <a href="https://headlessui.com">Headless UI</a>.</strong>
+</p>
 
 <br>
+
+## Installation
 
 > [!NOTE]  
 > This library is very much a work-in-progress. Contributions are welcome!
