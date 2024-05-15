@@ -7,22 +7,16 @@ namespace HeadlessBlazor.Core;
 public abstract class HBElementBase : ComponentBase
 {
     [Parameter]
-    public virtual ElementReference? Element { get; set; }
-
-    [Parameter]
-    public virtual EventCallback<ElementReference> ElementChanged { get; set; }
-
-    [Parameter]
     public virtual string ElementName { get; set; } = "div";
-
-    [Parameter]
-    public virtual bool PreventClickDefault { get; set; }
-
-    [Parameter]
-    public virtual bool StopClickPropagation { get; set; }
 
     [Parameter(CaptureUnmatchedValues = true)]
     public virtual IDictionary<string, object?> UserAttributes { get; set; } = new Dictionary<string, object?>();
+
+    [Parameter]
+    public bool OnClickStopPropagation { get; set; }
+
+    [Parameter]
+    public bool OnClickPreventDefault { get; set; }
 
     protected void BuildRenderTree(RenderTreeBuilder builder, ref int sequenceNumber)
     {
@@ -43,17 +37,8 @@ public abstract class HBElementBase : ComponentBase
                 sequenceNumber++;
             }
 
-            builder.AddEventStopPropagationAttribute(sequenceNumber++, "onclick", !StopClickPropagation);
-            builder.AddEventPreventDefaultAttribute(sequenceNumber++, "onclick", PreventClickDefault);
-
-            if (Element.HasValue)
-            {
-                builder.AddElementReferenceCapture(sequenceNumber++, async element =>
-                {
-                    Element = element;
-                    await ElementChanged.InvokeAsync(Element.Value);
-                });
-            }
+            builder.AddEventStopPropagationAttribute(sequenceNumber, "onclick", OnClickStopPropagation);
+            builder.AddEventPreventDefaultAttribute(sequenceNumber++, "onclick", OnClickPreventDefault);
         }
 
         AddChildContent(builder, ref sequenceNumber);

@@ -1,5 +1,6 @@
 ﻿using HeadlessBlazor.Core;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace HeadlessBlazor;
 
@@ -21,9 +22,9 @@ public class DropdownItem : HBElement
         UserAttributes.TryAdd("onclick", new EventCallback(this, HandleClick));
     }
 
-    protected virtual async Task HandleClick()
+    protected virtual async Task HandleClick(MouseEventArgs e)
     {
-        if (InheritClickHandler)
+        if (InheritClickHandler && !OnClickStopPropagation)
             await Dropdown.OnClickItem.InvokeAsync(this);
     }
 }
