@@ -10,7 +10,8 @@ public class HBElement : HBElementBase
 
     protected override void AddChildContent(RenderTreeBuilder builder, ref int sequence)
     {
-        builder.AddContent(sequence++, ChildContent);
+        if (ChildContent != null)
+            builder.AddContent(sequence, ChildContent);
     }
 }
 
@@ -21,6 +22,7 @@ public class HBElement<T> : HBElementBase where T : HBElement<T>
 
     protected override void AddChildContent(RenderTreeBuilder builder, ref int sequence)
     {
-        builder.AddContent(sequence++, ChildContent, (T)this);
+        if (ChildContent != null)
+            builder.AddContent(sequence, ChildContent, (T)this);
     }
 }

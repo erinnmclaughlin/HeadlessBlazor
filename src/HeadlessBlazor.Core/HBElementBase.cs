@@ -33,12 +33,10 @@ public abstract class HBElementBase : ComponentBase
                     if (attr.Value != null)
                         builder.AddAttribute(sequenceNumber, attr.Key, attr.Value);
                 }
-
-                sequenceNumber++;
             }
 
             builder.AddEventStopPropagationAttribute(sequenceNumber, "onclick", OnClickStopPropagation);
-            builder.AddEventPreventDefaultAttribute(sequenceNumber++, "onclick", OnClickPreventDefault);
+            builder.AddEventPreventDefaultAttribute(sequenceNumber, "onclick", OnClickPreventDefault);
         }
 
         AddChildContent(builder, ref sequenceNumber);
