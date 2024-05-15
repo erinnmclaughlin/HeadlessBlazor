@@ -1,14 +1,15 @@
 ﻿@inherits LayoutComponentBase
+
 <div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
-
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+    <nav class="navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="">
+                <img alt="Headless Blazor Logo" src="HeadlessBlazorLogo-white.svg" /> 
+                <span>Headless Blazor</span>
+            </a>
         </div>
-
+    </nav>
+    <main>
         <article class="content px-4">
             @Body
         </article>

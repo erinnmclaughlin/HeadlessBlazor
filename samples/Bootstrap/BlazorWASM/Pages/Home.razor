@@ -2,36 +2,4 @@
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
-
-<div class="d-flex gap-2">
-    <Dropdown class="dropdown" OnClickItem="m => m.Dropdown.Close()">
-        <DropdownTrigger class="btn btn-secondary dropdown-toggle">Click Me</DropdownTrigger>
-        <DropdownItems class="dropdown-menu show">
-            <DropdownItem class="dropdown-item">This is a div.</DropdownItem>
-            <DropdownItem class="dropdown-item" InheritClickHandler="false">
-                <p class="mb-0">This is also a div.</p>
-                <p class="mb-0"><small>(but clicking it won't close the menu)</small></p>
-            </DropdownItem>
-            <DropdownItemLink class="dropdown-item" href="counter">This is a link to another page.</DropdownItemLink>
-            <DropdownItemLink class="dropdown-item" href="#">This is a link to this page.</DropdownItemLink>
-            <DropdownItemButton class="dropdown-item">This is a button.</DropdownItemButton>
-            <DropdownItemButton class="dropdown-item" disabled="true">This is a disabled button.</DropdownItemButton>
-        </DropdownItems>
-    </Dropdown>
-    <Dropdown class="dropdown" OnClickItem="m => m.Dropdown.Close()">
-        <DropdownTrigger TriggerOnHover="true" class="btn btn-secondary dropdown-toggle">Hover Over Me</DropdownTrigger>
-        <DropdownItems class="dropdown-menu show">
-            <DropdownItem class="dropdown-item">This is a div.</DropdownItem>
-            <DropdownItem class="dropdown-item" InheritClickHandler="false">
-                <p class="mb-0">This is also a div.</p>
-                <p class="mb-0"><small>(but clicking it won't close the menu)</small></p>
-            </DropdownItem>
-            <DropdownItemLink class="dropdown-item" href="counter">This is a link to another page.</DropdownItemLink>
-            <DropdownItemLink class="dropdown-item" href="#">This is a link to this page.</DropdownItemLink>
-            <DropdownItemButton class="dropdown-item">This is a button.</DropdownItemButton>
-            <DropdownItemButton class="dropdown-item" disabled="true">This is a disabled button.</DropdownItemButton>
-        </DropdownItems>
-    </Dropdown>
-
-</div>
+<DropdownExamples />
