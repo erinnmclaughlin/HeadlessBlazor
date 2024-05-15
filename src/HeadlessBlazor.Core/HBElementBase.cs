@@ -6,7 +6,6 @@ namespace HeadlessBlazor.Core;
 
 public abstract class HBElementBase : ComponentBase
 {
-    [Parameter]
     public virtual string ElementName { get; set; } = "div";
 
     [Parameter(CaptureUnmatchedValues = true)]
@@ -17,6 +16,15 @@ public abstract class HBElementBase : ComponentBase
 
     [Parameter]
     public bool OnClickPreventDefault { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        if (UserAttributes.ContainsKey("__internal_preventDefault_onclick"))
+            OnClickPreventDefault = true;
+
+        if (UserAttributes.ContainsKey("__internal_stopPropagation_onclick"))
+            OnClickStopPropagation = true;
+    }
 
     protected void BuildRenderTree(RenderTreeBuilder builder, ref int sequenceNumber)
     {

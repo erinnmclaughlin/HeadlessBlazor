@@ -17,6 +17,8 @@ public class DropdownItem : HBElement
         }
 
         UserAttributes.TryAdd("onclick", new EventCallback(this, HandleClick));
+
+        base.OnParametersSet();
     }
 
     protected virtual async Task HandleClick(MouseEventArgs e)
