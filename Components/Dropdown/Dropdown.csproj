@@ -6,7 +6,25 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <AssemblyName>HeadlessBlazor.$(MSBuildProjectName)</AssemblyName>
     <RootNamespace>HeadlessBlazor</RootNamespace>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <Title>HeadlessBlazor.Dropdown</Title>
+    <Description>A headless dropdown componenet for Blazor.</Description>
+    <Version>1.0.0-preview1</Version>
+    <Authors>erinnmclaughlin</Authors>
+    <PackageIcon>HeadlessBlazorLogo.png</PackageIcon>
+    <PackageTags>Blazor, Headless UI, Components, Dropdown, Menu</PackageTags>
+    <RepositoryUrl>https://github.com/erinnmclaughlin/HeadlessBlazor</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\HeadlessBlazorLogo.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <SupportedPlatform Include="browser" />

@@ -4,8 +4,25 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <Title>HeadlessBlazor</Title>
+    <Description>A bundle of Blazor components, completely free of styling. Inspired by HeadlessUI.</Description>
+    <Version>1.0.0-preview1</Version>
+    <Authors>erinnmclaughlin</Authors>
+    <PackageIcon>HeadlessBlazorLogo.png</PackageIcon>
+    <PackageTags>Blazor, Headless UI, Components</PackageTags>
+    <RepositoryUrl>https://github.com/erinnmclaughlin/HeadlessBlazor</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\HeadlessBlazorLogo.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <SupportedPlatform Include="browser" />
