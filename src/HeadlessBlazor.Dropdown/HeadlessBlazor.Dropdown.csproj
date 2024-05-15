@@ -40,4 +40,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.*" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\HeadlessBlazor.Core\HeadlessBlazor.Core.csproj" />
+  </ItemGroup>
+
 </Project>
