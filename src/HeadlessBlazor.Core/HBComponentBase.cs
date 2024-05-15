@@ -6,14 +6,13 @@ namespace HeadlessBlazor.Core;
 
 public abstract class HBElementBase : ComponentBase
 {
+    public virtual string ElementName { get; set; } = "div";
+
     [Parameter]
     public ElementReference? Element { get; set; }
 
     [Parameter]
     public EventCallback<ElementReference> ElementChanged { get; set; }
-
-    [Parameter]
-    public string HtmlTag { get; set; } = "div";
 
     [Parameter(CaptureUnmatchedValues = true)]
     public IDictionary<string, object?> UserAttributes { get; set; } = new Dictionary<string, object?>();
@@ -28,7 +27,7 @@ public abstract class HBElementBase : ComponentBase
     {
         base.BuildRenderTree(builder);
 
-        builder.OpenElement(0, HtmlTag);
+        builder.OpenElement(0, ElementName);
 
         foreach (var attr in UserAttributes)
         {

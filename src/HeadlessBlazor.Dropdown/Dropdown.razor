@@ -2,9 +2,7 @@
 
 <CascadingValue Value="this">
     <DropdownOverlay @ref="Overlay" OnClick="HandleClickOutside" />
-    <div @attributes="UserAttributes">
-        @ChildContent?.Invoke(this)
-    </div>
+    @ChildContent
 </CascadingValue>
 
 @code {
@@ -13,16 +11,13 @@
     public bool IsOpen { get; private set; }
 
     [Parameter]
-    public RenderFragment<Dropdown>? ChildContent { get; set; }
+    public override string ElementName { get; set; } = "button";
 
     [Parameter]
     public EventCallback<Dropdown> OnClickOutside { get; set; }
 
     [Parameter]
     public EventCallback<DropdownItem> OnClickItem { get; set; }
-
-    [Parameter(CaptureUnmatchedValues = true)]
-    public IDictionary<string, object?>? UserAttributes { get; set; }
 
     public async Task Toggle()  => await SetIsOpen(!IsOpen);
     public async Task Open()    => await SetIsOpen(true);

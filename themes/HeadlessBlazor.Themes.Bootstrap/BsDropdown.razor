@@ -1,7 +1,7 @@
-<Dropdown Context="dropdown" class="dropdown d-inline-block">
+<Dropdown @ref="Dropdown" class="dropdown d-inline-block">
     <div class="dropdown">
         <DropdownTrigger Context="trigger">
-            <button class="btn btn-primary dropdown-toggle" @onclick="dropdown.Open">Click Me</button>
+            <button class="btn btn-primary dropdown-toggle" @onclick="Dropdown.Open">Click Me</button>
         </DropdownTrigger>
     </div>
     <DropdownTrigger class="btn btn-primary dropdown-toggle">Click Me</DropdownTrigger>
@@ -11,3 +11,7 @@
         <DropdownItem class="dropdown-item">Option 3</DropdownItem>
     </DropdownItems>
 </Dropdown>
+
+@code {
+    private Dropdown Dropdown { get; set; } = default!;
+}
