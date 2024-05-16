@@ -19,6 +19,6 @@ public sealed class HBThemeFactory(IServiceProvider serviceProvider)
         }
     }
 
-    public HBTheme GetTheme() => _serviceProvider.GetRequiredKeyedService<HBTheme>(Theme);
+    public HBTheme GetTheme() => _serviceProvider.GetKeyedService<HBTheme>(Theme) ?? _serviceProvider.GetRequiredService<HBTheme>();
     public HBTheme GetTheme(string theme) => _serviceProvider.GetRequiredKeyedService<HBTheme>(theme);
 }

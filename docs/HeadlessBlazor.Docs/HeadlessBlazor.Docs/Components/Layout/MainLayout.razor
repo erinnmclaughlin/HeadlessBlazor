@@ -1,10 +1,21 @@
 ﻿@using HeadlessBlazor.Core.Themes
 @inherits LayoutComponentBase
 @inject HBThemeFactory ThemeFactory
-@inject HeadManipulationService HeadManipulationService
+@inject NavigationManager NavigationManager
 @implements IDisposable
 
-<CascadingValue Value="CurrentTheme">
+<HeadContent>
+    @if (ThemeFactory.Theme == "Bootstrap")
+    {
+        <link rel="stylesheet" href="bootstrap/bootstrap.min.css" />
+    }
+    else if (ThemeFactory.Theme == "Tailwind")
+    {
+        <script src="https://cdn.tailwindcss.com"></script>
+    }
+</HeadContent>
+
+<CascadingValue Value="ThemeFactory.GetTheme()">
     <div class="page">
         <nav class="navbar">
             <div class="container-fluid">
@@ -38,32 +49,15 @@
     {
         if (firstRender)
         {
-            ThemeFactory.ThemeChanged += HandleThemeChanged;
             ThemeFactory.Theme = "Bootstrap";
+            ThemeFactory.ThemeChanged += HandleThemeChanged;
         }
     }
 
-    private async void HandleThemeChanged(string theme)
+    private void HandleThemeChanged(string theme)
     {
-        await HeadManipulationService.SetTheme(theme);
-
-        if (theme == "") return;
-
-        CurrentTheme = ThemeFactory.GetTheme(theme);
-        StateHasChanged();
-
-        if (theme == "Bootstrap")
-        {
-            await HeadManipulationService.RemoveScriptAsync("https://cdn.tailwindcss.com");
-            await HeadManipulationService.RemoveStyleAsync();
-            await HeadManipulationService.AddLinkAsync("bootstrap/bootstrap.min.css", "stylesheet");
-        }
-        else if (theme == "Tailwind")
-        {
-            await HeadManipulationService.RemoveLinkAsync("bootstrap/bootstrap.min.css");
-            await HeadManipulationService.AddScriptAsync("https://cdn.tailwindcss.com");
-        }
-
-        Console.WriteLine($"Theme changed to '{theme}'");
+        Console.WriteLine($"Changing theme to '{theme}'");
+        var uri = NavigationManager.GetUriWithQueryParameter("theme", theme);
+        NavigationManager.NavigateTo(uri, true);
     }
 }
