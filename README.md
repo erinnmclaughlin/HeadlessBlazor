@@ -23,6 +23,7 @@ dotnet add package HeadlessBlazor.{Component}
 ```
 
 ## Features for v1 Release
+### Components
 - [x] [Dropdown Component](https://www.nuget.org/packages/HeadlessBlazor.Dropdown)
 - [ ] Dialog Component
 - [ ] Popover Component
@@ -30,7 +31,12 @@ dotnet add package HeadlessBlazor.{Component}
 - [ ] Combobox (Autocomplete/Typeahead) Component
 - [ ] Listbox Combonent
 
+## Behaviors
+- [ ] Outside Click
+
+### Themes
+- [ ] Bootstrap
+- [ ] Tailwind
+
 ### Other Things to Do:
-- Document / showcase usage with at least two major CSS frameworks - most likely Bootstrap and Tailwind
-- Set up CI pipeline to publish on NuGet
-- Add tests!
+- [ ] Set up CI pipeline to publish on NuGet
