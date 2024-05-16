@@ -31,7 +31,7 @@ dotnet add package HeadlessBlazor.{Component}
 - [ ] Combobox (Autocomplete/Typeahead) Component
 - [ ] Listbox Combonent
 
-## Behaviors
+### Behaviors
 - [ ] Outside Click
 
 ### Themes
