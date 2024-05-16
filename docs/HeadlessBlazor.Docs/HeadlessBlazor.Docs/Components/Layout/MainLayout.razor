@@ -1,17 +1,69 @@
-﻿@inherits LayoutComponentBase
+﻿@using HeadlessBlazor.Core.Themes
+@inherits LayoutComponentBase
+@inject HBThemeFactory ThemeFactory
+@inject HeadManipulationService HeadManipulationService
+@implements IDisposable
 
-<div class="page">
-    <nav class="navbar">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="">
-                <img alt="Headless Blazor Logo" src="images/HeadlessBlazorLogo-white.svg" /> 
-                <span>Headless Blazor</span>
-            </a>
-        </div>
-    </nav>
-    <main>
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
+<CascadingValue Value="CurrentTheme">
+    <div class="page">
+        <nav class="navbar">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="">
+                    <img alt="Headless Blazor Logo" src="images/HeadlessBlazorLogo-white.svg" /> 
+                    <span>Headless Blazor</span>
+                </a>
+            </div>
+        </nav>
+        <main>
+            <article class="content px-4">
+                <select @bind="ThemeFactory.Theme">
+                    <option>Bootstrap</option>
+                    <option>Tailwind</option>
+                </select>
+                @Body
+            </article>
+        </main>
+    </div>
+</CascadingValue>
+
+@code {
+    private HBTheme CurrentTheme { get; set; } = default!;
+
+    public void Dispose()
+    {
+        ThemeFactory.ThemeChanged -= HandleThemeChanged;
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            ThemeFactory.ThemeChanged += HandleThemeChanged;
+            ThemeFactory.Theme = "Bootstrap";
+        }
+    }
+
+    private async void HandleThemeChanged(string theme)
+    {
+        await HeadManipulationService.SetTheme(theme);
+
+        if (theme == "") return;
+
+        CurrentTheme = ThemeFactory.GetTheme(theme);
+        StateHasChanged();
+
+        if (theme == "Bootstrap")
+        {
+            await HeadManipulationService.RemoveScriptAsync("https://cdn.tailwindcss.com");
+            await HeadManipulationService.RemoveStyleAsync();
+            await HeadManipulationService.AddLinkAsync("bootstrap/bootstrap.min.css", "stylesheet");
+        }
+        else if (theme == "Tailwind")
+        {
+            await HeadManipulationService.RemoveLinkAsync("bootstrap/bootstrap.min.css");
+            await HeadManipulationService.AddScriptAsync("https://cdn.tailwindcss.com");
+        }
+
+        Console.WriteLine($"Theme changed to '{theme}'");
+    }
+}

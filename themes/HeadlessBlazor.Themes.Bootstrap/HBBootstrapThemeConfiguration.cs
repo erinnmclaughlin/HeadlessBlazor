@@ -1,10 +1,20 @@
 ﻿using HeadlessBlazor.Core.Themes;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace HeadlessBlazor.Themes.Bootstrap;
 
 public static class HBBootstrapThemeConfiguration
 {
-    public static void UseBootstrap(this HBThemeBuilder t)
+    public static IServiceCollection AddBootstrapTheme(this IServiceCollection services)
+    {
+        var bootstrap = HBTheme.CreateBuilder().UseBootstrap();
+        services.AddKeyedSingleton("Bootstrap", bootstrap);
+        services.TryAddSingleton(sp => sp.GetRequiredKeyedService<HBTheme>("Bootstrap"));
+        return services;
+    }
+
+    public static HBTheme UseBootstrap(this HBThemeBuilder t)
     {
         t.AddComponentDefaults<Dropdown>(c => c.AddDefaultClassNames("dropdown", "d-inline-block"));
         t.AddComponentDefaults<DropdownTrigger>(c => c.AddDefaultClassNames("btn", "btn-primary", "dropdown-toggle"));
@@ -20,5 +30,7 @@ public static class HBBootstrapThemeConfiguration
             c.AddDefaultClassNames("dropdown-item");
             c.AddAttributeDefaults("href", "#");
         });
+
+        return t.Build();
     }
 }

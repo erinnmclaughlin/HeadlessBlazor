@@ -9,7 +9,7 @@ public abstract class HBElementBase : ComponentBase
 {
     public virtual string ElementName { get; set; } = "div";
 
-    [Inject]
+    [CascadingParameter]
     private HBTheme? Theme { get; set; }
 
     [Parameter(CaptureUnmatchedValues = true)]
@@ -21,13 +21,12 @@ public abstract class HBElementBase : ComponentBase
     [Parameter]
     public bool OnClickPreventDefault { get; set; }
 
-    protected override void OnInitialized()
-    {
-        Theme?.ApplyDefaults(this);
-    }
-
     protected override void OnParametersSet()
     {
+        base.OnParametersSet();
+
+        Theme?.ApplyDefaults(this);
+
         if (UserAttributes.ContainsKey("__internal_preventDefault_onclick"))
             OnClickPreventDefault = true;
 

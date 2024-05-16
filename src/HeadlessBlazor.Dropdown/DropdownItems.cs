@@ -11,6 +11,8 @@ public class DropdownItems : HBElement
 
     protected override void OnParametersSet()
     {
+        base.OnParametersSet();
+
         if (Dropdown == null)
         {
             throw new InvalidOperationException($"{GetType().Name} requires a cascading parameter of type {typeof(Dropdown).Name}.");

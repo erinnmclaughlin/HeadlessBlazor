@@ -1,11 +1,26 @@
 using HeadlessBlazor;
+using HeadlessBlazor.Core.Themes;
+using HeadlessBlazor.Docs.Client;
 using HeadlessBlazor.Docs.Components;
 using HeadlessBlazor.Themes.Bootstrap;
+using HeadlessBlazor.Themes.Tailwind;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddScoped<HeadManipulationService>();
+
+builder.Services.AddHeadlessBlazor()
+    .AddSingleton<HBThemeFactory>()
+    .AddBootstrapTheme()
+    .AddTailwindTheme()
+    .AddSingleton(sp =>
+    {
+        var theme = sp.GetRequiredService<IOptions<HBThemeFactory>>().Value.Theme;
+        return sp.GetRequiredKeyedService<HBTheme>(theme);
+    });
+
 builder.Services
-    .AddHeadlessBlazor(o => o.UseBootstrap())
     .AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();

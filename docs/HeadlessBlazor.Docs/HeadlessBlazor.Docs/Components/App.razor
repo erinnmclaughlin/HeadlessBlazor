@@ -1,5 +1,9 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿@using HeadlessBlazor.Core.Themes
+@inject HBThemeFactory ThemeFactory
+@implements IDisposable
+
+<!DOCTYPE html>
+<html lang="en" @ref="Root">
 
 <head>
     <meta charset="utf-8" />
@@ -8,16 +12,42 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&family=Inter:wght@100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="bootstrap/bootstrap.min.css" />
+    <HeadOutlet />
     <link rel="stylesheet" href="app.css" />
     <link rel="icon" type="image/svg" href="images/HeadlessBlazorLogo.svg" />
     <link rel="stylesheet" href="HeadlessBlazor.Docs.styles.css" />
-    <HeadOutlet />
 </head>
 
 <body>
-    <Routes />
+    <div style="display: none">@Theme</div>
+    <Routes @rendermode="InteractiveServer" />
+    <script src="js/headManipulation.js"></script>
     <script src="_framework/blazor.web.js"></script>
 </body>
 
 </html>
+
+@code {
+    private string Theme { get; set; } = "Bootstrap";
+
+    private ElementReference Root;
+
+    public void Dispose()
+    {
+        ThemeFactory.ThemeChanged -= HandleThemeChanged;
+    }
+
+    protected override void OnInitialized()
+    {
+        ThemeFactory.ThemeChanged += HandleThemeChanged;
+    }
+
+    private void HandleThemeChanged(string theme)
+    {
+        InvokeAsync(() =>
+        {
+            Theme = theme;
+            StateHasChanged();
+        });
+    }
+}
