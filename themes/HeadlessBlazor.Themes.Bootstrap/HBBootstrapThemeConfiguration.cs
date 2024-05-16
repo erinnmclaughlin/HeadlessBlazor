@@ -16,16 +16,16 @@ public static class HBBootstrapThemeConfiguration
 
     public static HBTheme UseBootstrap(this HBThemeBuilder t)
     {
-        t.AddComponentDefaults<Dropdown>(c => c.AddDefaultClassNames("dropdown", "d-inline-block"));
-        t.AddComponentDefaults<DropdownTrigger>(c => c.AddDefaultClassNames("btn", "btn-primary", "dropdown-toggle"));
-        t.AddComponentDefaults<DropdownItems>(c => c.AddDefaultClassNames("dropdown-menu", "show"));
-        t.AddComponentDefaults<DropdownItem>(c => c.AddDefaultClassNames("dropdown-item"));
-        t.AddComponentDefaults<DropdownItemButton>(c =>
+        t.AddComponentDefaults<HBDropdown>(c => c.AddDefaultClassNames("dropdown", "d-inline-block"));
+        t.AddComponentDefaults<HBDropdownTrigger>(c => c.AddDefaultClassNames("btn", "btn-primary", "dropdown-toggle"));
+        t.AddComponentDefaults<HBDropdownItems>(c => c.AddDefaultClassNames("dropdown-menu", "show"));
+        t.AddComponentDefaults<HBDropdownItem>(c => c.AddDefaultClassNames("dropdown-item"));
+        t.AddComponentDefaults<HBDropdownItemButton>(c =>
         {
             c.AddDefaultClassNames("dropdown-item");
             c.AddAttributeDefaults("type", "button");
         });
-        t.AddComponentDefaults<DropdownItemLink>(c =>
+        t.AddComponentDefaults<HBDropdownItemLink>(c =>
         {
             c.AddDefaultClassNames("dropdown-item");
             c.AddAttributeDefaults("href", "#");

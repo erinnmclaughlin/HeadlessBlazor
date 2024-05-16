@@ -1,12 +1,9 @@
 using HeadlessBlazor;
-using HeadlessBlazor.Docs.Client;
 using HeadlessBlazor.Docs.Components;
 using HeadlessBlazor.Themes.Bootstrap;
 using HeadlessBlazor.Themes.Tailwind;
 
 var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddScoped<HeadManipulationService>();
 
 builder.Services
     .AddHeadlessBlazor()

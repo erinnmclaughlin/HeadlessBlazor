@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Components.Rendering;
 
 namespace HeadlessBlazor;
 
-public class DropdownItems : HBElement
+public class HBDropdownItems : HBElement
 {
     [CascadingParameter]
-    public Dropdown Dropdown { get; set; } = default!;
+    public HBDropdown Dropdown { get; set; } = default!;
 
     protected override void OnParametersSet()
     {
@@ -15,7 +15,7 @@ public class DropdownItems : HBElement
 
         if (Dropdown == null)
         {
-            throw new InvalidOperationException($"{GetType().Name} requires a cascading parameter of type {typeof(Dropdown).Name}.");
+            throw new InvalidOperationException($"{GetType().Name} requires a cascading parameter of type {typeof(HBDropdown).Name}.");
         }
     }
 

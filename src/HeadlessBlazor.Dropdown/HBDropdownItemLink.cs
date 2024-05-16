@@ -1,6 +1,6 @@
 ﻿namespace HeadlessBlazor;
 
-public class DropdownItemLink : DropdownItem
+public class HBDropdownItemLink : HBDropdownItem
 {
     public override string ElementName { get; set; } = "a";
 }

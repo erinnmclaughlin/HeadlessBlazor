@@ -1,14 +1,13 @@
 ﻿using HeadlessBlazor.Core.Behaviors;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
-using Microsoft.AspNetCore.Components.Web.Virtualization;
 
 namespace HeadlessBlazor;
 
-public class DropdownOutsideClickBehavior : HBOutsideClickBehavior
+public class HBDropdownOutsideClickBehavior : HBOutsideClickBehavior
 {
     [CascadingParameter]
-    public Dropdown Dropdown { get; set; } = default!;
+    public HBDropdown Dropdown { get; set; } = default!;
 
     protected override void BuildRenderTree(RenderTreeBuilder builder)
     {
@@ -22,7 +21,7 @@ public class DropdownOutsideClickBehavior : HBOutsideClickBehavior
 
         if (Dropdown == null)
         {
-            throw new InvalidOperationException($"{GetType().Name} requires a cascading parameter of type {typeof(Dropdown).Name}.");
+            throw new InvalidOperationException($"{GetType().Name} requires a cascading parameter of type {typeof(HBDropdown).Name}.");
         }
 
         UserAttributes.TryAdd("onclick", new EventCallback(this, HandleClick));

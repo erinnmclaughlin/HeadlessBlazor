@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Components.Web;
 
 namespace HeadlessBlazor;
 
-public class DropdownItem : HBElement
+public class HBDropdownItem : HBElement
 {
     [CascadingParameter]
-    public Dropdown Dropdown { get; set; } = default!;
+    public HBDropdown Dropdown { get; set; } = default!;
 
     protected override void OnParametersSet()
     {
@@ -15,7 +15,7 @@ public class DropdownItem : HBElement
 
         if (Dropdown == null)
         {
-            throw new InvalidOperationException($"{GetType().Name} requires a cascading parameter of type {typeof(Dropdown).Name}.");
+            throw new InvalidOperationException($"{GetType().Name} requires a cascading parameter of type {typeof(HBDropdown).Name}.");
         }
 
         UserAttributes.TryAdd("onclick", new EventCallback(this, HandleClick));
