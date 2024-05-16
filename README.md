@@ -32,7 +32,7 @@ dotnet add package HeadlessBlazor.{Component}
 - [ ] Listbox Combonent
 
 ### Behaviors
-- [ ] Outside Click
+- [x] Outside Click
 
 ### Themes
 - [ ] Bootstrap
