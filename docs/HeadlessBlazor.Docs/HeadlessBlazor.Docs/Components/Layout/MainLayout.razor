@@ -49,15 +49,16 @@
     {
         if (firstRender)
         {
-            ThemeFactory.Theme = "Bootstrap";
             ThemeFactory.ThemeChanged += HandleThemeChanged;
+
+            if (string.IsNullOrEmpty(ThemeFactory.Theme))
+                ThemeFactory.Theme = "Bootstrap";
         }
     }
 
     private void HandleThemeChanged(string theme)
     {
         Console.WriteLine($"Changing theme to '{theme}'");
-        var uri = NavigationManager.GetUriWithQueryParameter("theme", theme);
-        NavigationManager.NavigateTo(uri, true);
+        NavigationManager.NavigateTo(NavigationManager.Uri, true);
     }
 }

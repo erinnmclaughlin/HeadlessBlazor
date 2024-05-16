@@ -42,15 +42,13 @@ public abstract class HBElementBase : ComponentBase
         {
             builder.OpenElement(sequenceNumber++, ElementName);
 
-            if (UserAttributes is { Count: > 0 })
+            foreach (var attr in UserAttributes)
             {
-                foreach (var attr in UserAttributes)
-                {
-                    if (attr.Value != null)
-                        builder.AddAttribute(sequenceNumber, attr.Key, attr.Value);
-                }
+                if (attr.Value != null)
+                    builder.AddAttribute(sequenceNumber, attr.Key, attr.Value);
             }
 
+            builder.AddAttribute(sequenceNumber, "data-hb-tag", GetType().Name);
             builder.AddEventStopPropagationAttribute(sequenceNumber, "onclick", OnClickStopPropagation);
             builder.AddEventPreventDefaultAttribute(sequenceNumber, "onclick", OnClickPreventDefault);
         }
