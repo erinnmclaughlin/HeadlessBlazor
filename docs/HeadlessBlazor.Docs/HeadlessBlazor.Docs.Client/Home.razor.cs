@@ -1,6 +1,6 @@
-namespace BlazorWASM.Pages;
+﻿namespace HeadlessBlazor.Docs.Client;
 
-public partial class DropdownExamples
+public partial class Home
 {
     private const string Example1CodeBlock = """
         <Dropdown>

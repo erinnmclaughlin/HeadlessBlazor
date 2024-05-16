@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\themes\HeadlessBlazor.Themes.Bootstrap\HeadlessBlazor.Themes.Bootstrap.csproj" />
     <ProjectReference Include="..\HeadlessBlazor.Docs.Client\HeadlessBlazor.Docs.Client.csproj" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.4" />
   </ItemGroup>

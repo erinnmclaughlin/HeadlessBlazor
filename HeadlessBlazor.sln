@@ -13,19 +13,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HeadlessBlazor", "src\Headl
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Themes", "Themes", "{D143F401-9A70-46B7-9146-1B21F3B77BE5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorWASM", "themes\Bootstrap\BlazorWASM\BlazorWASM.csproj", "{18DC8BC9-4E15-4A92-AB30-D80E2F651F19}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HeadlessBlazor.Dropdown", "src\HeadlessBlazor.Dropdown\HeadlessBlazor.Dropdown.csproj", "{E207C22E-D5FC-47C0-BA77-2A75B0B03272}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeadlessBlazor.Themes.Bootstrap", "themes\HeadlessBlazor.Themes.Bootstrap\HeadlessBlazor.Themes.Bootstrap.csproj", "{8E0D6A89-9EFD-493F-94DF-E0075CFF9D74}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HeadlessBlazor.Themes.Bootstrap", "themes\HeadlessBlazor.Themes.Bootstrap\HeadlessBlazor.Themes.Bootstrap.csproj", "{8E0D6A89-9EFD-493F-94DF-E0075CFF9D74}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{45E6AD2B-E550-4375-A452-63A8FE7787E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeadlessBlazor.Docs", "docs\HeadlessBlazor.Docs\HeadlessBlazor.Docs\HeadlessBlazor.Docs.csproj", "{AF6A89F6-60E3-43BE-A669-5AFC8C1EC73B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HeadlessBlazor.Docs", "docs\HeadlessBlazor.Docs\HeadlessBlazor.Docs\HeadlessBlazor.Docs.csproj", "{AF6A89F6-60E3-43BE-A669-5AFC8C1EC73B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeadlessBlazor.Docs.Client", "docs\HeadlessBlazor.Docs\HeadlessBlazor.Docs.Client\HeadlessBlazor.Docs.Client.csproj", "{29BBF971-CE6F-4B36-91C0-26C7F064CE3A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HeadlessBlazor.Docs.Client", "docs\HeadlessBlazor.Docs\HeadlessBlazor.Docs.Client\HeadlessBlazor.Docs.Client.csproj", "{29BBF971-CE6F-4B36-91C0-26C7F064CE3A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeadlessBlazor.Core", "src\HeadlessBlazor.Core\HeadlessBlazor.Core.csproj", "{E3A1957A-9803-4B81-B1F0-EB66F8E7DE12}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HeadlessBlazor.Core", "src\HeadlessBlazor.Core\HeadlessBlazor.Core.csproj", "{E3A1957A-9803-4B81-B1F0-EB66F8E7DE12}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,10 +35,6 @@ Global
 		{44010F52-D712-4403-BF9C-08A464727230}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{44010F52-D712-4403-BF9C-08A464727230}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44010F52-D712-4403-BF9C-08A464727230}.Release|Any CPU.Build.0 = Release|Any CPU
-		{18DC8BC9-4E15-4A92-AB30-D80E2F651F19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{18DC8BC9-4E15-4A92-AB30-D80E2F651F19}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{18DC8BC9-4E15-4A92-AB30-D80E2F651F19}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{18DC8BC9-4E15-4A92-AB30-D80E2F651F19}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E207C22E-D5FC-47C0-BA77-2A75B0B03272}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E207C22E-D5FC-47C0-BA77-2A75B0B03272}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E207C22E-D5FC-47C0-BA77-2A75B0B03272}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -66,7 +60,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{18DC8BC9-4E15-4A92-AB30-D80E2F651F19} = {D143F401-9A70-46B7-9146-1B21F3B77BE5}
 		{8E0D6A89-9EFD-493F-94DF-E0075CFF9D74} = {D143F401-9A70-46B7-9146-1B21F3B77BE5}
 		{AF6A89F6-60E3-43BE-A669-5AFC8C1EC73B} = {45E6AD2B-E550-4375-A452-63A8FE7787E4}
 		{29BBF971-CE6F-4B36-91C0-26C7F064CE3A} = {45E6AD2B-E550-4375-A452-63A8FE7787E4}

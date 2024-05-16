@@ -12,4 +12,9 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\themes\HeadlessBlazor.Themes.Bootstrap\HeadlessBlazor.Themes.Bootstrap.csproj" />
+    <ProjectReference Include="..\..\..\src\HeadlessBlazor\HeadlessBlazor.csproj" />
+  </ItemGroup>
+
 </Project>
