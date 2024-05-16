@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\themes\HeadlessBlazor.Themes.Bootstrap\HeadlessBlazor.Themes.Bootstrap.csproj" />
     <ProjectReference Include="..\..\..\src\HeadlessBlazor\HeadlessBlazor.csproj" />
+    <ProjectReference Include="..\..\..\themes\HeadlessBlazor.Themes.Tailwind\HeadlessBlazor.Themes.Tailwind.csproj" />
   </ItemGroup>
 
 </Project>
