@@ -38,5 +38,6 @@ dotnet add package HeadlessBlazor.{Component}
 - [ ] Bootstrap
 - [ ] Tailwind
 
-### Other Things to Do:
+### Misc
 - [ ] Set up CI pipeline to publish on NuGet
+- Improve APIs and code quality (ongoing!)
