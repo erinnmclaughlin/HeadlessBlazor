@@ -9,7 +9,7 @@ builder.Services
     .AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
 
-builder.Services.AddScoped<IRazorFileReader, DirectoryFileReader>();
+builder.Services.AddScoped<IRazorFileReader, DirectoryRazorFileReader>();
 
 var app = builder.Build();
 

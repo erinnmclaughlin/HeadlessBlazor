@@ -2,7 +2,7 @@
 
 namespace HeadlessBlazor.Docs;
 
-public class DirectoryFileReader : IRazorFileReader
+public class DirectoryRazorFileReader : IRazorFileReader
 {
     public async Task<string> ReadFileAsync(string fileName, CancellationToken cancellationToken)
     {
