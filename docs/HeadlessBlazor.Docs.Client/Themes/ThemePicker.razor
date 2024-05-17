@@ -1,4 +1,4 @@
-﻿<select @bind="ThemeFactory.CurrentTheme" placeholder="Select a theme...">
+﻿<select @bind="@CurrentTheme" @bind:after="AfterThemeUpdated" disabled="@(ThemeFactory is null)" placeholder="Select a theme...">
     <option value="">None</option>
     <option value="Bootstrap">Bootstrap</option>
     <option value="Tailwind">Tailwind</option>

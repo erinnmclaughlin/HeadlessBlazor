@@ -5,11 +5,13 @@
 <div class="page-root">
     <div class="hb-top-row">
         <h1>Headless Blazor</h1>
-        <ThemePicker @rendermode="InteractiveWebAssembly" />
+        <StatefulThemePicker @rendermode="InteractiveWebAssembly" />
     </div>
+    <div class="hb-content">
+        
+        <h2>Dropdown</h2>
 
-    <h2>Dropdown</h2>
-
-    <HeadlessBlazor.Docs.Client.Examples.Dropdown.SimpleDropdown @rendermode="InteractiveWebAssembly" />
+        <HeadlessBlazor.Docs.Client.Examples.Dropdown.SimpleDropdown @rendermode="InteractiveWebAssembly" />
+    </div>
 
 </div>

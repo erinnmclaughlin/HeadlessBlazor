@@ -1,16 +1,10 @@
-using HeadlessBlazor;
-using HeadlessBlazor.Themes.Bootstrap;
-using HeadlessBlazor.Themes.Tailwind;
+using HeadlessBlazor.Docs.Client;
 using HeadlessBlazor.Docs.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
-    .AddHeadlessBlazor()
-    .AddBootstrapTheme()
-    .AddTailwindTheme();
-
-builder.Services
+    .AddClientServices()
     .AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
 

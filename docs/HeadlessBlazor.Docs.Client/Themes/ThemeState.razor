@@ -7,6 +7,12 @@
 else if (ThemeFactory.CurrentTheme == "Tailwind")
 {
     <HeadContent>
-        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="stylesheet" href="tailwind.css" />
     </HeadContent>
 }
+
+<CascadingValue Value="ThemeFactory">
+    <CascadingValue Value="ThemeFactory.GetTheme()">
+        @ChildContent
+    </CascadingValue>
+</CascadingValue>
