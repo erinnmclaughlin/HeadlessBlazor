@@ -1,0 +1,15 @@
+﻿.page-root > * {
+    padding: 0.5rem 1rem;
+}
+
+.hb-top-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #dbdbdb;
+}
+
+    .hb-top-row {
+        flex-grow: 0;
+    }
+

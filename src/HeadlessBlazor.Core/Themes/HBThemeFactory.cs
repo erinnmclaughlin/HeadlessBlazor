@@ -9,7 +9,7 @@ public sealed class HBThemeFactory(IServiceProvider serviceProvider)
     public event Action<string>? ThemeChanged;
 
     private string _theme = "";
-    public string Theme
+    public string CurrentTheme
     {
         get => _theme;
         set
@@ -19,6 +19,6 @@ public sealed class HBThemeFactory(IServiceProvider serviceProvider)
         }
     }
 
-    public HBTheme GetTheme() => _serviceProvider.GetKeyedService<HBTheme>(Theme) ?? _serviceProvider.GetRequiredService<HBTheme>();
+    public HBTheme GetTheme() => _serviceProvider.GetKeyedService<HBTheme>(CurrentTheme) ?? _serviceProvider.GetRequiredService<HBTheme>();
     public HBTheme GetTheme(string theme) => _serviceProvider.GetRequiredKeyedService<HBTheme>(theme);
 }

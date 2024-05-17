@@ -1,7 +1,7 @@
 using HeadlessBlazor;
-using HeadlessBlazor.Docs.Components;
 using HeadlessBlazor.Themes.Bootstrap;
 using HeadlessBlazor.Themes.Tailwind;
+using HeadlessBlazor.Docs.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +12,6 @@ builder.Services
 
 builder.Services
     .AddRazorComponents()
-    .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
 
 var app = builder.Build();
@@ -33,7 +32,6 @@ app.UseStaticFiles();
 app.UseAntiforgery();
 
 app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(HeadlessBlazor.Docs.Client._Imports).Assembly);
 

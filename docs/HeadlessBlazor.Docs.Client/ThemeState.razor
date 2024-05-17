@@ -1,0 +1,12 @@
+﻿@if (ThemeFactory.CurrentTheme == "Bootstrap")
+{
+    <HeadContent>
+        <link rel="stylesheet" href="bootstrap/bootstrap.min.css" />
+    </HeadContent>
+}
+else if (ThemeFactory.CurrentTheme == "Tailwind")
+{
+    <HeadContent>
+        <script src="https://cdn.tailwindcss.com"></script>
+    </HeadContent>
+}
