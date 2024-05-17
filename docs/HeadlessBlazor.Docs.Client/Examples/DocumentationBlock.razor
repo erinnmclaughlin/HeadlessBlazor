@@ -3,23 +3,34 @@
         <DynamicComponent Type="Type" />
     </div>
     <div class="hb-code-preview">
-        <pre>
-            @CodeBlock
-        </pre>
+        @if (string.IsNullOrEmpty(CodeBlock))
+        {
+            <p>Loading...</p>
+        }
+        else
+        {
+            <pre>
+                @CodeBlock
+            </pre>
+        }
     </div>
 </div>
 
 @code {
     [Inject]
-    private IFileProvider FileProvider { get; set; } = default!;
+    private IRazorFileReader FileProvider { get; set; } = default!;
 
     [Parameter, EditorRequired]
     public required Type Type { get; set; }
 
     public string CodeBlock { get; private set; } = string.Empty;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        CodeBlock = await FileProvider.GetFilesAsync(Type.Name);
+        if (firstRender)
+        {
+            CodeBlock = await FileProvider.ReadFileAsync(Type.Name);
+            StateHasChanged();
+        }
     }
 }

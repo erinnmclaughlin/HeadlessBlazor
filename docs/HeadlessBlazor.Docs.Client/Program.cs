@@ -13,7 +13,7 @@ builder.Services
     .AddTailwindTheme();
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-builder.Services.AddScoped<IFileProvider, HttpFileProvider>();
+builder.Services.AddScoped<IRazorFileReader, HttpRazorFileReader>();
 
 builder.Services.AddBlazoredLocalStorage();
 

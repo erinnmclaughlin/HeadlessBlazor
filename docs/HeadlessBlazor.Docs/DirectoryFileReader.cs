@@ -2,14 +2,14 @@
 
 namespace HeadlessBlazor.Docs;
 
-public class DirectoryFileProvider : IFileProvider
+public class DirectoryFileReader : IRazorFileReader
 {
-    public async Task<string> GetFilesAsync(string fileName)
+    public async Task<string> ReadFileAsync(string fileName, CancellationToken cancellationToken)
     {
         var match = Directory.EnumerateFiles(AppDomain.CurrentDomain.BaseDirectory, fileName, SearchOption.AllDirectories).SingleOrDefault();
 
         if (match is not null)
-            return await File.ReadAllTextAsync(match);
+            return await File.ReadAllTextAsync(match, cancellationToken);
 
         return string.Empty;
     }

@@ -9,7 +9,7 @@ builder.Services
     .AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
 
-builder.Services.AddScoped<IFileProvider, DirectoryFileProvider>();
+builder.Services.AddScoped<IRazorFileReader, DirectoryFileReader>();
 
 var app = builder.Build();
 
@@ -32,9 +32,9 @@ app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(HeadlessBlazor.Docs.Client._Imports).Assembly);
 
-app.MapGet("api/files/{fileName}", async (string fileName, IFileProvider fileProvider) =>
+app.MapGet("api/files/{fileName}", async (string fileName, IRazorFileReader fileProvider) =>
 {
-    var content = await fileProvider.GetFilesAsync($"{fileName}.razor");
+    var content = await fileProvider.ReadFileAsync($"{fileName}.razor");
     return string.IsNullOrEmpty( content ) ? Results.NotFound() : Results.Ok(content);
 });
 
