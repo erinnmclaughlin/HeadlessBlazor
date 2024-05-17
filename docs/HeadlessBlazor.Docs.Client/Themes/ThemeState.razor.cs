@@ -29,8 +29,11 @@ public sealed partial class ThemeState : IDisposable
     {
         if (firstRender)
         {
-            ThemeFactory.CurrentTheme = await GetSavedThemeAsync();
+            var savedTheme = await GetSavedThemeAsync();
+            ThemeFactory.SetTheme(savedTheme);
+
             ThemeFactory.ThemeChanged += OnThemeChanged;
+
             IsRendered = true;
             StateHasChanged();
         }

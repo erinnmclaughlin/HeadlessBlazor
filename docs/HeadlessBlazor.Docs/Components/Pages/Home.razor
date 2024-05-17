@@ -1,17 +1,17 @@
 ﻿@page "/"
+@using HeadlessBlazor.Docs.Client.Examples.Dropdown
 
 <PageTitle>Home</PageTitle>
 
 <div class="page-root">
     <div class="hb-top-row">
-        <h1>Headless Blazor</h1>
+        <a href="" class="hb-brand">Headless Blazor</a>
         <StatefulThemePicker @rendermode="InteractiveWebAssembly" />
     </div>
     <div class="hb-content">
-        
         <h2>Dropdown</h2>
 
-        <HeadlessBlazor.Docs.Client.Examples.Dropdown.SimpleDropdown @rendermode="InteractiveWebAssembly" />
+        <DropdownExamples @rendermode="InteractiveWebAssembly" />
     </div>
 
 </div>

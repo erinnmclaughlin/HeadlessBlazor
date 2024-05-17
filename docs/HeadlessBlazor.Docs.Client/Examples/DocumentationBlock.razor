@@ -1,0 +1,25 @@
+﻿<div class="hb-doc-block">
+    <div class="hb-interactive-demo">
+        <DynamicComponent Type="Type" />
+    </div>
+    <div class="hb-code-preview">
+        <pre>
+            @CodeBlock
+        </pre>
+    </div>
+</div>
+
+@code {
+    [Inject]
+    private IFileProvider FileProvider { get; set; } = default!;
+
+    [Parameter, EditorRequired]
+    public required Type Type { get; set; }
+
+    public string CodeBlock { get; private set; } = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        CodeBlock = await FileProvider.GetFilesAsync(Type.Name);
+    }
+}

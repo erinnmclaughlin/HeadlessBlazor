@@ -12,7 +12,7 @@ public sealed class HBThemeFactory(IServiceProvider serviceProvider)
     public string CurrentTheme
     {
         get => _theme;
-        set
+        private set
         {
             _theme = value;
             ThemeChanged?.Invoke(value);
@@ -20,5 +20,5 @@ public sealed class HBThemeFactory(IServiceProvider serviceProvider)
     }
 
     public HBTheme GetTheme() => _serviceProvider.GetKeyedService<HBTheme>(CurrentTheme) ?? _serviceProvider.GetRequiredService<HBTheme>();
-    public HBTheme GetTheme(string theme) => _serviceProvider.GetRequiredKeyedService<HBTheme>(theme);
+    public void SetTheme(string theme) => CurrentTheme = theme;
 }

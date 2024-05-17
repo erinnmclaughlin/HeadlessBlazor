@@ -19,4 +19,10 @@
     <ProjectReference Include="..\..\themes\HeadlessBlazor.Themes.Tailwind\HeadlessBlazor.Themes.Tailwind.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="**\*Example.razor">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
