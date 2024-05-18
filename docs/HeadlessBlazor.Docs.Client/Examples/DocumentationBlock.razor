@@ -1,15 +1,15 @@
-﻿<div class="hb-doc-block">
-    <div class="hb-interactive-demo not-prose">
+﻿<div class="hb-doc-block border">
+    <div class="hb-interactive-demo border-bottom p-3">
         <DynamicComponent Type="Type" />
     </div>
-    <div class="hb-code-preview">
+    <div class="hb-code-preview bg-light">
         @if (string.IsNullOrEmpty(CodeBlock))
         {
-            <p>Loading...</p>
+            <p class="p-3">Loading...</p>
         }
         else
         {
-            <pre>
+            <pre class="mb-0 p-3">
                 @CodeBlock
             </pre>
         }

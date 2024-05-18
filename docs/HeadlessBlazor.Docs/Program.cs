@@ -5,10 +5,10 @@ using HeadlessBlazor.Docs.Components;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
-    .AddClientServices()
     .AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
 
+builder.Services.AddSharedServices();
 builder.Services.AddScoped<IRazorFileReader, DirectoryRazorFileReader>();
 
 var app = builder.Build();

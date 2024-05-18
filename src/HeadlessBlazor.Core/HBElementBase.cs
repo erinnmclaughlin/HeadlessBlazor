@@ -1,5 +1,4 @@
-﻿using HeadlessBlazor.Core.Themes;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.Web;
 
@@ -8,9 +7,6 @@ namespace HeadlessBlazor.Core;
 public abstract class HBElementBase : ComponentBase
 {
     public virtual string ElementName { get; set; } = "div";
-
-    [CascadingParameter]
-    private HBTheme? Theme { get; set; }
 
     [Parameter(CaptureUnmatchedValues = true)]
     public virtual IDictionary<string, object?> UserAttributes { get; set; } = new Dictionary<string, object?>();
@@ -21,17 +17,19 @@ public abstract class HBElementBase : ComponentBase
     [Parameter]
     public bool OnClickPreventDefault { get; set; }
 
-    protected override void OnParametersSet()
+    protected virtual void OnBeforeInitialized() { }
+    protected virtual void OnAfterInitialized() { }
+    protected sealed override void OnInitialized()
     {
-        base.OnParametersSet();
-
-        Theme?.ApplyDefaults(this);
+        OnBeforeInitialized();
 
         if (UserAttributes.ContainsKey("__internal_preventDefault_onclick"))
             OnClickPreventDefault = true;
 
         if (UserAttributes.ContainsKey("__internal_stopPropagation_onclick"))
             OnClickStopPropagation = true;
+
+        OnAfterInitialized();
     }
 
     protected void BuildRenderTree(RenderTreeBuilder builder, ref int sequenceNumber)
