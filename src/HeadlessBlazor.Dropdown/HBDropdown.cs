@@ -1,24 +1,37 @@
-﻿using HeadlessBlazor.Core;
+﻿using HeadlessBlazor.Behaviors;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 
 namespace HeadlessBlazor;
 
-public class HBDropdown : HBElement<HBDropdown>
+public class HBDropdown : HBElement<HBDropdown>, ICloseable
 {
+    public ElementReference ElementReference { get; set; }
     public bool IsOpen { get; private set; }
+
+    [Parameter]
+    public bool CloseOnOutsideClick { get; set; } = true;
 
     [Parameter]
     public EventCallback<HBDropdownItem> OnClickItem { get; set; }
 
-    public async Task Toggle() => await SetIsOpen(!IsOpen);
-    public async Task Open() => await SetIsOpen(true);
-    public async Task Close() => await SetIsOpen(false);
+    public Task ToggleAsync() => SetIsOpen(!IsOpen);
+    public Task OpenAsync() => SetIsOpen(true);
+    public Task CloseAsync() => SetIsOpen(false);
 
     protected override void OnAfterInitialized()
     {
         if (!OnClickItem.HasDelegate)
-            OnClickItem = new EventCallback<HBDropdownItem>(this, Close);
+            OnClickItem = new EventCallback<HBDropdownItem>(this, CloseAsync);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await ElementReference.FocusAsync();
+            StateHasChanged();
+        }
     }
 
     protected override void BuildRenderTree(RenderTreeBuilder builder)
@@ -26,13 +39,29 @@ public class HBDropdown : HBElement<HBDropdown>
         var seq = 0;
         builder.OpenComponent<CascadingValue<HBDropdown>>(seq++);
         builder.AddAttribute(seq, "Value", this);
-        builder.AddAttribute(seq++, "ChildContent", (RenderFragment)((b) => BuildRenderTree(b, ref seq)));
+        builder.AddAttribute(seq++, "ChildContent", (RenderFragment)((b) =>
+        {
+            if (IsOpen && CloseOnOutsideClick)
+            {
+                b.OpenComponent<HBOutsideClickBehavior>(seq++);
+                b.AddAttribute(seq++, "Closeable", this);
+                b.CloseComponent();
+            }
+
+            BuildRenderTree(b, ref seq);
+        }));
+        
         builder.CloseComponent();
     }
 
-    private Task SetIsOpen(bool isOpen)
+    protected override void AddElementReference(RenderTreeBuilder builder, ref int sequenceNumber)
     {
-        return InvokeAsync(() =>
+        builder.AddElementReferenceCapture(sequenceNumber++, capturedRef => ElementReference = capturedRef);
+    }
+
+    private async Task SetIsOpen(bool isOpen)
+    {
+        await InvokeAsync(() =>
         {
             IsOpen = isOpen;
             StateHasChanged();
