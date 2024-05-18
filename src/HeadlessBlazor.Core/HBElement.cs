@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 
-namespace HeadlessBlazor.Core;
+namespace HeadlessBlazor;
 
 public class HBElement : HBElementBase
 {

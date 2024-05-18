@@ -1,5 +1,4 @@
-﻿using HeadlessBlazor.Core;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 
 namespace HeadlessBlazor;
@@ -31,12 +30,12 @@ public class HBDropdownTrigger : HBElement
 
     private async Task HandleClick()
     {
-        await Dropdown.Toggle();
+        await Dropdown.ToggleAsync();
     }
     
     private async Task HandleKeyDown(KeyboardEventArgs e)
     {
         if (e.Code == "Escape" && CloseOnEscape)
-            await Dropdown.Close();
+            await Dropdown.CloseAsync();
     }
 }
