@@ -11,26 +11,15 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.4" />
   </ItemGroup>
 
-  <!-- Add SCSS files to dotnet watch -->
-  <ItemGroup>
-    <Watch Include="..\**\*.scss" />
-    <None Update="..\**\*.css" watch="false" />
-  </ItemGroup>
-
   <!-- Compile SCSS files into CSS -->
   <ItemGroup>
     <ComponentScssFiles Include="../**/*/*.scss" Exclude="node_modules/**;wwwroot/**;Styles/**" />
   </ItemGroup>
 
   <!-- Compile SCSS files into CSS -->
-  <Target Name="CompileComponentSass" BeforeTargets="CompileGlobalSass">
-    <Message Text="Compiling Component SCSS files" Importance="high" />
-    <Exec Condition="!$([System.Text.RegularExpressions.Regex]::IsMatch('%(ComponentScssFiles.Identity)', `.*[/\\]_.*`))" Command="npm run sass -- --style=compressed --no-source-map --load-path=Styles/Core %(ComponentScssFiles.Identity) %(relativedir)%(filename).css" />
-  </Target>
-
   <Target Name="CompileGlobalSass" BeforeTargets="Compile">
     <Message Text="Compiling global SCSS file" Importance="high" />
-    <Exec Command="npm run sass -- --style=compressed Styles:wwwroot/css" />
+    <Exec Command="npm run sass -- --style compressed Styles/app.scss:wwwroot/css/app.min.css" />
   </Target>
 
 </Project>
