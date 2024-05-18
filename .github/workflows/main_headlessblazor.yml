@@ -26,7 +26,7 @@ jobs:
         uses: actions/setup-node@v4.0.2
         
       - name: Install Node dependencies
-        run: npm ci
+        run: npm ci  --workspace=docs/HeadlessBlazor.Docs
         
       - name: Build with dotnet
         run: dotnet build --configuration Release
