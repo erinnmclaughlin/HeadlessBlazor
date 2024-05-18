@@ -49,9 +49,10 @@ public abstract class HBElementBase : ComponentBase
             builder.AddAttribute(sequenceNumber, "data-hb-tag", GetType().Name);
 
             AddEventHandlers(builder, ref sequenceNumber);
-
             builder.AddEventStopPropagationAttribute(sequenceNumber, "onclick", OnClickStopPropagation);
             builder.AddEventPreventDefaultAttribute(sequenceNumber, "onclick", OnClickPreventDefault);
+
+            AddElementReference(builder, ref sequenceNumber);
         }
 
         AddChildContent(builder, ref sequenceNumber);
@@ -67,6 +68,10 @@ public abstract class HBElementBase : ComponentBase
     }
 
     protected virtual void AddChildContent(RenderTreeBuilder builder, ref int sequence)
+    {
+    }
+
+    protected virtual void AddElementReference(RenderTreeBuilder builder, ref int sequenceNumber)
     {
     }
 

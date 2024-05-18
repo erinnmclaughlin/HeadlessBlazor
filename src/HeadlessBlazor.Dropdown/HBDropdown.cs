@@ -6,6 +6,7 @@ namespace HeadlessBlazor;
 
 public class HBDropdown : HBElement<HBDropdown>, ICloseable
 {
+    public ElementReference ElementReference { get; set; }
     public bool IsOpen { get; private set; }
 
     [Parameter]
@@ -33,15 +34,20 @@ public class HBDropdown : HBElement<HBDropdown>, ICloseable
         {
             if (IsOpen && CloseOnOutsideClick)
             {
-                b.OpenComponent<HBOutsideClickBehavior<HBDropdown>>(seq++);
+                b.OpenComponent<HBOutsideClickBehavior>(seq++);
+                b.AddAttribute(seq++, "Closeable", this);
                 b.CloseComponent();
             }
 
             BuildRenderTree(b, ref seq);
         }));
         
-
         builder.CloseComponent();
+    }
+
+    protected override void AddElementReference(RenderTreeBuilder builder, ref int sequenceNumber)
+    {
+        builder.AddElementReferenceCapture(sequenceNumber++, capturedRef => ElementReference = capturedRef);
     }
 
     private async Task SetIsOpen(bool isOpen)
