@@ -1,5 +1,10 @@
-﻿<select @bind="@CurrentTheme" @bind:after="AfterThemeUpdated" disabled="@(ThemeFactory is null)" placeholder="Select a theme...">
-    <option value="">None</option>
-    <option value="Bootstrap">Bootstrap</option>
-    <option value="Tailwind">Tailwind</option>
-</select>
+﻿<HBDropdown>
+    <HBDropdownOutsideClickBehavior />
+    <HBDropdownTrigger class="btn btn-light btn-sm dropdown-toggle">
+        @(string.IsNullOrEmpty(CurrentTheme) ? "Select Theme" : CurrentTheme)
+    </HBDropdownTrigger>
+    <HBDropdownItems>
+        <HBDropdownItemButton @onclick="@(() => SetTheme("Bootstrap"))">Bootstrap</HBDropdownItemButton>
+        <HBDropdownItemButton @onclick="@(() => SetTheme("Tailwind"))">Tailwind</HBDropdownItemButton>
+    </HBDropdownItems>
+</HBDropdown>

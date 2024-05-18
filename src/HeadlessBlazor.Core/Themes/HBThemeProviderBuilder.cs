@@ -23,12 +23,7 @@ public class HBThemeProviderBuilder<T>() where T : HBElementBase
 
     public HBThemeProviderBuilder<T> AddAttributeDefaults(string key, object? value)
     {
-        Action += e =>
-        {
-            if (!e.UserAttributes.TryAdd(key, value))
-                e.UserAttributes[key] = value;
-        };
-
+        Action += e => e.UserAttributes.TryAdd(key, value);
         return this;
     }
 }
