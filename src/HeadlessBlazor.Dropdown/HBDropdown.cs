@@ -6,7 +6,7 @@ namespace HeadlessBlazor;
 
 public class HBDropdown : HBElement<HBDropdown>, ICloseable
 {
-    public ElementReference ElementReference { get; set; }
+    public ElementReference ElementReference { get; private set; }
     public bool IsOpen { get; private set; }
 
     [Parameter]
@@ -23,15 +23,6 @@ public class HBDropdown : HBElement<HBDropdown>, ICloseable
     {
         if (!OnClickItem.HasDelegate)
             OnClickItem = new EventCallback<HBDropdownItem>(this, CloseAsync);
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            await ElementReference.FocusAsync();
-            StateHasChanged();
-        }
     }
 
     protected override void BuildRenderTree(RenderTreeBuilder builder)
