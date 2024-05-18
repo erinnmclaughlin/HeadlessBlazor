@@ -24,19 +24,16 @@ dotnet add package HeadlessBlazor.{Component}
 
 ## Features for v1 Release
 ### Components
-- [x] [Dropdown Component](https://www.nuget.org/packages/HeadlessBlazor.Dropdown)
-- [ ] Dialog Component
-- [ ] Popover Component
-- [ ] Tab Component
-- [ ] Combobox (Autocomplete/Typeahead) Component
-- [ ] Listbox Combonent
+
+| Package | Latest Release | # Downloads |
+| :-- | :-- | :-- |
+| [Dropdown](https://www.nuget.org/packages/HeadlessBlazor.Dropdown) | ![NuGet Version](https://img.shields.io/nuget/vpre/HeadlessBlazor.Dropdown?logo=NuGet) | ![NuGet Downloads](https://img.shields.io/nuget/dt/HeadlessBlazor.Dropdown) |
+| Dialog | TODO | TODO |
+| Popover | TODO | TODO |
+| Tabs | TODO | TODO |
 
 ### Behaviors
 - [x] Outside Click
-
-### Themes
-- [ ] Bootstrap
-- [ ] Tailwind
 
 ### Misc
 - [x] Set up CI pipeline to publish documentation site
