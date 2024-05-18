@@ -8,7 +8,10 @@
     private IJSRuntime JS { get; set; } = default!;
 
     [Parameter]
-    public ICloseable Closeable { get; set; } = default!;
+    public IReferenceable Referenceable { get; set; } = default!;
+
+    [Parameter]
+    public EventCallback OnClick { get; set; }
 
     public async ValueTask DisposeAsync()
     {
@@ -24,7 +27,7 @@
     [JSInvokable]
     public async void NotifyClickOutside()
     {
-        await HandleClick();
+        await OnClick.InvokeAsync();
     }
 
     protected override void OnInitialized()
@@ -37,10 +40,8 @@
         if (firstRender)
         {
             var module = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/HeadlessBlazor.Core/Behaviors/HBOutsideClickBehavior.razor.js");
-            jsObjRef = await module.InvokeAsync<IJSObjectReference>("OutsideClickBehavior.createInstance", Closeable.ElementReference, objRef);
+            jsObjRef = await module.InvokeAsync<IJSObjectReference>("OutsideClickBehavior.createInstance", Referenceable.ElementReference, objRef);
             await module.DisposeAsync();
         }
     }
-
-    private Task HandleClick() => Closeable is null ? Task.CompletedTask : Closeable.CloseAsync();
 }
