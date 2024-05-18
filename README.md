@@ -2,7 +2,7 @@
   <img src="HeadlessBlazorLogo.svg" width="24" hspace="4" /> Headless Blazor
 </h1>
 
-**[Headless Blazor](https://github.com/erinnmclaughlin/HeadlessBlazor) is a style-agnostic component library for Blazor. Inspired by [Headless UI](https://headlessui.com).**
+[Headless Blazor](https://headlessblazor.org) is a style-agnostic component library for Blazor. Inspired by [Headless UI](https://headlessui.com).
 
 ## Installation
 
@@ -25,9 +25,9 @@ dotnet add package HeadlessBlazor.{Component}
 ## Features for v1 Release
 ### Components
 
-| Package | Latest Release | # Downloads |
+| Package | Latest Release | Downloads |
 | :-- | :-- | :-- |
-| [Dropdown](https://www.nuget.org/packages/HeadlessBlazor.Dropdown) | ![NuGet Version](https://img.shields.io/nuget/vpre/HeadlessBlazor.Dropdown?logo=NuGet) | ![NuGet Downloads](https://img.shields.io/nuget/dt/HeadlessBlazor.Dropdown) |
+| [Dropdown](https://headlessblazor.org#Dropdown) | ![NuGet Version](https://img.shields.io/nuget/vpre/HeadlessBlazor.Dropdown?logo=NuGet) | ![NuGet Downloads](https://img.shields.io/nuget/dt/HeadlessBlazor.Dropdown) |
 | Dialog | TODO | TODO |
 | Popover | TODO | TODO |
 | Tabs | TODO | TODO |
