@@ -11,15 +11,4 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.4" />
   </ItemGroup>
 
-  <!-- Compile SCSS files into CSS -->
-  <ItemGroup>
-    <ComponentScssFiles Include="../**/*/*.scss" Exclude="node_modules/**;wwwroot/**;Styles/**" />
-  </ItemGroup>
-
-  <!-- Compile SCSS files into CSS -->
-  <Target Name="CompileGlobalSass" BeforeTargets="Compile">
-    <Message Text="Compiling global SCSS file" Importance="high" />
-    <Exec Command="npm run sass -- --style compressed Styles/app.scss:wwwroot/css/app.min.css" />
-  </Target>
-
 </Project>

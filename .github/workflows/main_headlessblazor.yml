@@ -22,12 +22,6 @@ jobs:
           dotnet-version: '8.x'
           include-prerelease: true
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4.0.2
-        
-      - name: Install Node dependencies
-        run: npm ci  --workspace=docs/HeadlessBlazor.Docs
-        
       - name: Build with dotnet
         run: dotnet build --configuration Release
 
