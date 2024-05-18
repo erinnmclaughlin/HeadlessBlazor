@@ -1,14 +1,8 @@
-﻿<HBDropdown class="dropdown">
-    <HBDropdownOutsideClickBehavior />
-    <HBDropdownTrigger class="btn btn-primary dropdown-toggle">Click Me</HBDropdownTrigger>
-    <HBDropdownItems class="dropdown-menu show">
-        <HBDropdownItem class="dropdown-item">Default</HBDropdownItem>
-        <HBDropdownItemButton class="dropdown-item">Button</HBDropdownItemButton>
-        <HBDropdownItemButton class="dropdown-item" disabled="true">Disabled Button</HBDropdownItemButton>
-        <HBDropdownItemButton class="dropdown-item" @onclick:stopPropagation="true">Button (Stop Propagation)</HBDropdownItemButton>
-        <HBDropdownItemLink class="dropdown-item">Link</HBDropdownItemLink>
-        <HBDropdownItemLink class="dropdown-item" @onclick:preventDefault="true">Link (Prevent Default)</HBDropdownItemLink>
-        <HBDropdownItemLink class="dropdown-item" @onclick:stopPropagation="true">Link (Stop Propagation)</HBDropdownItemLink>
-        <HBDropdownItemLink class="dropdown-item" OnClickPreventDefault="true" OnClickStopPropagation="true">Link (Prevent Default and Stop Propagation)</HBDropdownItemLink>
-    </HBDropdownItems>
+﻿<HBDropdown Context="dropdown" class="dropdown">
+    <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">Click Me</button>
+    <ul class="dropdown-menu @(dropdown.IsOpen ? "show" : "")">
+        <li><a class="dropdown-item" href="#">Action</a></li>
+        <li><a class="dropdown-item" href="#">Another action</a></li>
+        <li><a class="dropdown-item" href="#">Something else here</a></li>
+    </ul>
 </HBDropdown>

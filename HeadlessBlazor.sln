@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HeadlessBlazor.Docs.Client"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HeadlessBlazor.Docs", "docs\HeadlessBlazor.Docs\HeadlessBlazor.Docs.csproj", "{289A8091-D213-4689-B1CD-03E5F15AF32F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeadlessBlazor.FloatingUI", "src\HeadlessBlazor.FloatingUI\HeadlessBlazor.FloatingUI.csproj", "{28043EA5-A28E-43D8-8BD1-FF7A74541FC5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{289A8091-D213-4689-B1CD-03E5F15AF32F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{289A8091-D213-4689-B1CD-03E5F15AF32F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{289A8091-D213-4689-B1CD-03E5F15AF32F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28043EA5-A28E-43D8-8BD1-FF7A74541FC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28043EA5-A28E-43D8-8BD1-FF7A74541FC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28043EA5-A28E-43D8-8BD1-FF7A74541FC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28043EA5-A28E-43D8-8BD1-FF7A74541FC5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
