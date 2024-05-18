@@ -1,9 +1,11 @@
 ﻿@implements IAsyncDisposable
-@inherits HBBehaviorBase<HBOutsideClickBehavior>
 
 @code {
     private IJSObjectReference? jsObjRef;
     private DotNetObjectReference<HBOutsideClickBehavior>? objRef;
+
+    [Inject]
+    private IJSRuntime JS { get; set; } = default!;
 
     [Parameter]
     public ICloseable Closeable { get; set; } = default!;
@@ -34,10 +36,9 @@
     {
         if (firstRender)
         {
-            jsObjRef = await LoadFromModuleAsync(module =>
-            {
-                return module.InvokeAsync<IJSObjectReference>("OutsideClickBehavior.createInstance", Closeable.ElementReference, objRef);
-            });
+            var module = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/HeadlessBlazor.Core/Behaviors/HBOutsideClickBehavior.razor.js");
+            jsObjRef = await module.InvokeAsync<IJSObjectReference>("OutsideClickBehavior.createInstance", Closeable.ElementReference, objRef);
+            await module.DisposeAsync();
         }
     }
 
