@@ -39,5 +39,6 @@ dotnet add package HeadlessBlazor.{Component}
 - [ ] Tailwind
 
 ### Misc
+- [x] Set up CI pipeline to publish documentation site
 - [ ] Set up CI pipeline to publish on NuGet
 - Improve APIs and code quality (ongoing!)

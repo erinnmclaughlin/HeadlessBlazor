@@ -1,0 +1,36 @@
+﻿<div class="hb-doc-block border">
+    <div class="hb-interactive-demo border-bottom p-3">
+        <DynamicComponent Type="Type" />
+    </div>
+    <div class="hb-code-preview bg-light">
+        @if (string.IsNullOrEmpty(CodeBlock))
+        {
+            <p class="p-3">Loading...</p>
+        }
+        else
+        {
+            <pre class="mb-0 p-3">
+                @CodeBlock
+            </pre>
+        }
+    </div>
+</div>
+
+@code {
+    [Inject]
+    private IRazorFileReader FileProvider { get; set; } = default!;
+
+    [Parameter, EditorRequired]
+    public required Type Type { get; set; }
+
+    public string CodeBlock { get; private set; } = string.Empty;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            CodeBlock = await FileProvider.ReadFileAsync(Type.Name);
+            StateHasChanged();
+        }
+    }
+}

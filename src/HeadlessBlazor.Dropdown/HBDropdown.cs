@@ -15,10 +15,8 @@ public class HBDropdown : HBElement<HBDropdown>
     public async Task Open() => await SetIsOpen(true);
     public async Task Close() => await SetIsOpen(false);
 
-    protected override void OnInitialized()
+    protected override void OnAfterInitialized()
     {
-        base.OnInitialized();
-
         if (!OnClickItem.HasDelegate)
             OnClickItem = new EventCallback<HBDropdownItem>(this, Close);
     }
