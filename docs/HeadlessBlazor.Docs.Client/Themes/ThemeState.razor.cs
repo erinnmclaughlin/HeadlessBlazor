@@ -41,16 +41,37 @@ public sealed partial class ThemeState : IDisposable
 
     private void OnThemeChanged(string theme)
     {
+        if (!IsRendered) return;
+
+        Console.WriteLine($"Theme changed to {theme}!");
+        Exception? exception = null;
         InvokeAsync(async () =>
         {
-            var savedTheme = await GetSavedThemeAsync();
+            try
+            {
+                var savedTheme = await GetSavedThemeAsync();
 
-            if (savedTheme.Equals(theme, StringComparison.OrdinalIgnoreCase))
-                return;
+                Console.WriteLine("saved theme is " + savedTheme);
 
-            await LocalStorage.SetItemAsync("theme", theme);
-            NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+                if (savedTheme.Equals(theme, StringComparison.OrdinalIgnoreCase))
+                    return;
+
+                Console.WriteLine("Saving to local storage...");
+                await LocalStorage.SetItemAsync("theme", theme);
+
+                Console.WriteLine("Saved!");
+                NavigationManager.NavigateTo(NavigationManager.BaseUri, forceLoad: true, replace: true);
+                Console.WriteLine("Reloading!");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                exception = ex;
+            }
         });
+
+        if (exception is not null)
+            throw exception;
     }
 
     private async Task<string> GetSavedThemeAsync()

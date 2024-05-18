@@ -17,6 +17,7 @@ public sealed partial class ThemePicker
 
     private void AfterThemeUpdated()
     {
+        Console.WriteLine($"Changing theme to '{CurrentTheme}'");
         ThemeFactory?.SetTheme(CurrentTheme);
     }
 }
