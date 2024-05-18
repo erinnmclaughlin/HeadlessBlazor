@@ -13,6 +13,7 @@ export class OutsideClickBehavior {
      * @param {any} dotNetRef
      */
     constructor(element, dotNetRef) {
+        console.log('creating');
         this.element = element;
         this.dotNetRef = dotNetRef;
 
@@ -22,6 +23,7 @@ export class OutsideClickBehavior {
     }
 
     dispose() {
+        console.log('disposing');
         document.removeEventListener('click', this.handleDocumentClick);
     }
 

@@ -1,1 +1,46 @@
-﻿
+﻿@implements IAsyncDisposable
+
+@code {
+    private IJSObjectReference? jsObjRef;
+    private DotNetObjectReference<HBOutsideClickBehavior>? objRef;
+
+    [Inject]
+    private IJSRuntime JS { get; set; } = default!;
+
+    [Parameter]
+    public ICloseable Closeable { get; set; } = default!;
+
+    public async ValueTask DisposeAsync()
+    {
+        if (jsObjRef is not null)
+        {
+            await jsObjRef.InvokeVoidAsync("dispose");
+            await jsObjRef.DisposeAsync();
+        }
+
+        objRef?.Dispose();
+    }
+
+    [JSInvokable]
+    public async void NotifyClickOutside()
+    {
+        await HandleClick();
+    }
+
+    protected override void OnInitialized()
+    {
+        objRef = DotNetObjectReference.Create(this);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var module = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/HeadlessBlazor.Core/Behaviors/HBOutsideClickBehavior.razor.js");
+            jsObjRef = await module.InvokeAsync<IJSObjectReference>("OutsideClickBehavior.createInstance", Closeable.ElementReference, objRef);
+            await module.DisposeAsync();
+        }
+    }
+
+    private Task HandleClick() => Closeable is null ? Task.CompletedTask : Closeable.CloseAsync();
+}

@@ -25,6 +25,15 @@ public class HBDropdown : HBElement<HBDropdown>, ICloseable
             OnClickItem = new EventCallback<HBDropdownItem>(this, CloseAsync);
     }
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await ElementReference.FocusAsync();
+            StateHasChanged();
+        }
+    }
+
     protected override void BuildRenderTree(RenderTreeBuilder builder)
     {
         var seq = 0;

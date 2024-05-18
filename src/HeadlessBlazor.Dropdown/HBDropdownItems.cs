@@ -5,6 +5,9 @@ namespace HeadlessBlazor;
 
 public class HBDropdownItems : HBElement
 {
+    [Parameter]
+    public bool RenderWhenClosed { get; set; }
+
     [CascadingParameter]
     public HBDropdown Dropdown { get; set; } = default!;
 
@@ -18,7 +21,7 @@ public class HBDropdownItems : HBElement
 
     protected override void BuildRenderTree(RenderTreeBuilder builder)
     {
-        if (Dropdown.IsOpen)
+        if (Dropdown.IsOpen || RenderWhenClosed)
             base.BuildRenderTree(builder);
     }
 }
