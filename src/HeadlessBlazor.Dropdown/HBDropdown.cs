@@ -45,7 +45,7 @@ public class HBDropdown : HBElement<HBDropdown>, ICloseable
             {
                 b.OpenComponent<HBOutsideClickBehavior>(seq++);
                 b.AddAttribute(seq++, nameof(HBOutsideClickBehavior.OnClick), new EventCallback(this, CloseAsync));
-                b.AddAttribute(seq++, nameof(HBOutsideClickBehavior.Referenceable), this);
+                b.AddAttribute(seq++, nameof(HBOutsideClickBehavior.Container), this);
                 b.CloseComponent();
             }
 
