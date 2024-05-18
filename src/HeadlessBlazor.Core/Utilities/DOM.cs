@@ -7,9 +7,9 @@ public sealed class DOM(IJSRuntime js) : IAsyncDisposable
 {
     private readonly Lazy<ValueTask<IJSObjectReference>> _module = new(() => js.InvokeAsync<IJSObjectReference>("import", "./_content/HeadlessBlazor.Core/utils.js"));
 
-    public async ValueTask<WindowDimensions> GetWindowDimensionsAsync()
+    public async ValueTask<Dimensions> GetWindowDimensionsAsync()
     {
-        return await InvokeAsync<WindowDimensions>("getWindowDimensions");
+        return await InvokeAsync<Dimensions>("getWindowDimensions");
     }
 
     public async ValueTask<ClientRect> GetBoundingClientRect(ElementReference element)
