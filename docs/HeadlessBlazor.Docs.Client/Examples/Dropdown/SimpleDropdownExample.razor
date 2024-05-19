@@ -1,5 +1,10 @@
 ﻿<div class="d-flex justify-content-between">
     <HBDropdown class="dropdown d-inline-block">
+        @if (context.IsOpen)
+        {
+            <HBOutsideClickBehavior Container="context" OnClick="context.CloseAsync" />
+        }
+        <HBPopoverBehavior Container="context" />
         <HBDropdownTrigger class="btn btn-primary dropdown-toggle">Click Me</HBDropdownTrigger>
         <HBDropdownItems class="@(context.IsOpen ? "dropdown-menu show" : "dropdown-menu")">
             <HBDropdownItem class="dropdown-item">Default</HBDropdownItem>
@@ -12,7 +17,12 @@
             <HBDropdownItemLink class="dropdown-item" href="#" OnClickPreventDefault="true" OnClickStopPropagation="true">Link (Prevent Default and Stop Propagation)</HBDropdownItemLink>
         </HBDropdownItems>
     </HBDropdown>
-    <HBDropdown class="dropdown d-inline-block" Alignment="HBPopoverAlignment.End">
+    <HBDropdown class="dropdown d-inline-block">
+        @if (context.IsOpen)
+        {
+            <HBOutsideClickBehavior Container="context" OnClick="context.CloseAsync" />
+        }
+        <HBPopoverBehavior Container="context" />
         <HBDropdownTrigger class="btn btn-primary dropdown-toggle">Click Me</HBDropdownTrigger>
         <HBDropdownItems class="@(context.IsOpen ? "dropdown-menu show" : "dropdown-menu")">
             <HBDropdownItem class="dropdown-item">Default</HBDropdownItem>
