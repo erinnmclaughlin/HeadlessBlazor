@@ -1,8 +1,4 @@
-﻿.page-root {
-    height: 200vh;
-}
-
-.page-root > * {
+﻿.page-root > * {
     padding: 0.5rem 1rem;
 }
 
