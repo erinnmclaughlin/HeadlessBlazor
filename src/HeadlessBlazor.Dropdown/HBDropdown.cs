@@ -10,6 +10,12 @@ public class HBDropdown : HBElement<HBDropdown>, IReferenceable
     public bool IsOpen { get; private set; }
 
     [Parameter]
+    public bool AutoPosition { get; set; } = true;
+
+    [Parameter]
+    public bool CloseOnOutsideClick { get; set; } = true;
+
+    [Parameter]
     public EventCallback<HBDropdownItem> OnClickItem { get; set; }
 
     public async Task OpenAsync() => await InvokeAsync(() =>
@@ -39,10 +45,25 @@ public class HBDropdown : HBElement<HBDropdown>, IReferenceable
     {
         var seq = 0;
         builder.OpenComponent<CascadingValue<HBDropdown>>(seq++);
-        builder.AddAttribute(seq, "Value", this);
+        builder.AddAttribute(seq++, "Value", this);
         builder.AddAttribute(seq++, "ChildContent", (RenderFragment)((b) =>
         {
             BuildRenderTree(b, ref seq);
+
+            if (AutoPosition)
+            {
+                b.OpenComponent<HBPopoverBehavior>(seq++);
+                b.AddAttribute(seq++, nameof(HBPopoverBehavior.Container), this);
+                b.CloseComponent();
+            }
+
+            if (IsOpen && CloseOnOutsideClick)
+            {
+                b.OpenComponent<HBOutsideClickBehavior>(seq++);
+                b.AddAttribute(seq++, nameof(HBOutsideClickBehavior.OnClick), EventCallback.Factory.Create(this, CloseAsync));
+                b.AddAttribute(seq++, nameof(HBOutsideClickBehavior.Container), this);
+                b.CloseComponent();
+            }
         }));
         
         builder.CloseComponent();
