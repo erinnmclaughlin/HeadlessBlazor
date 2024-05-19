@@ -1,11 +1,8 @@
-﻿.page-root > * {
-    padding: 0.5rem 1rem;
-}
-
-.hb-top-row {
+﻿.hb-top-row {
     background-image: linear-gradient(45deg, #5271FF, hotpink);
     display: flex;
     justify-content: space-between;
+    padding: 0.5rem 1rem;
 }
 
     .hb-top-row .hb-brand {
@@ -22,6 +19,6 @@
             width: 0.85em;
         }
 
-    .hb-top-row {
-        flex-grow: 0;
-    }
+.hb-content {
+    padding: 1rem;
+}

@@ -21,12 +21,11 @@ export class HBPopoverBehavior {
      * @param {any} options
      */
     constructor(anchor, content, options) {
-        const side = (options && options.Side) || 'bottom';
-        const align = (options && options.Alignment) || 'start';
-
+        const side = options.side || 'bottom';
+        const align = options.alignment || 'start';
         this.dispose = autoUpdate(anchor, content, () => {
             computePosition(anchor, content, {
-                placement: `${side}-${align}`,
+                placement: `${side}-${align}`.toLowerCase(),
                 middleware: [flip()]
             }).then(({ x, y }) => {
                 Object.assign(content.style, {

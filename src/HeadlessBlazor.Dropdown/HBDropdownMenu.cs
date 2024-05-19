@@ -8,7 +8,7 @@ public class HBDropdownMenu : HBElement
     public ElementReference ElementReference { get; private set; }
 
     [Parameter]
-    public HBPopoverAlignment Alignment { get; set; } = HBPopoverAlignment.Start;
+    public HBPopoverAlignment? Alignment { get; set; }
 
     [Parameter]
     public bool AutoPosition { get; set; } = true;
@@ -17,7 +17,7 @@ public class HBDropdownMenu : HBElement
     protected HBDropdown Dropdown { get; set; } = default!;
 
     [Parameter]
-    public HBPopoverSide Side { get; set; } = HBPopoverSide.Bottom;
+    public HBPopoverSide? Side { get; set; }
 
     protected override void AddBehaviors(RenderTreeBuilder builder, ref int sequenceNumber)
     {
