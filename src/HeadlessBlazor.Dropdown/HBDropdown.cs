@@ -10,9 +10,6 @@ public class HBDropdown : HBElement<HBDropdown>, IReferenceable
     public bool IsOpen { get; private set; }
 
     [Parameter]
-    public bool AutoPosition { get; set; } = true;
-
-    [Parameter]
     public bool CloseOnOutsideClick { get; set; } = true;
 
     [Parameter]
@@ -49,13 +46,6 @@ public class HBDropdown : HBElement<HBDropdown>, IReferenceable
         builder.AddAttribute(seq++, "ChildContent", (RenderFragment)((b) =>
         {
             BuildRenderTree(b, ref seq);
-
-            if (AutoPosition)
-            {
-                b.OpenComponent<HBPopoverBehavior>(seq++);
-                b.AddAttribute(seq++, nameof(HBPopoverBehavior.Container), this);
-                b.CloseComponent();
-            }
 
             if (IsOpen && CloseOnOutsideClick)
             {

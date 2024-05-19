@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 
 namespace HeadlessBlazor;
 
@@ -11,32 +10,9 @@ public class HBDropdownTrigger : HBElement
     [Parameter]
     public override string ElementName { get; set; } = "button";
 
-    [Parameter]
-    public bool CloseOnEscape { get; set; } = true;
-
-    [Parameter]
-    public bool TriggerOnHover { get; set; }
-
     protected override void OnParametersSet()
     {
-        if (Dropdown == null)
-        {
-            throw new InvalidOperationException($"{GetType().Name} requires a cascading parameter of type {typeof(HBDropdown).Name}.");
-        }
-
         UserAttributes.Add("hb-popover-anchor", "");
-        UserAttributes.TryAdd("onclick", new EventCallback(this, HandleClick));
-        UserAttributes.TryAdd("onkeydown", new EventCallback<KeyboardEventArgs>(this, HandleKeyDown));
-    }
-
-    private async Task HandleClick()
-    {
-        await Dropdown.ToggleAsync();
-    }
-    
-    private async Task HandleKeyDown(KeyboardEventArgs e)
-    {
-        if (e.Code == "Escape" && CloseOnEscape)
-            await Dropdown.CloseAsync();
+        UserAttributes.TryAdd("onclick", new EventCallback(this, Dropdown.ToggleAsync));
     }
 }

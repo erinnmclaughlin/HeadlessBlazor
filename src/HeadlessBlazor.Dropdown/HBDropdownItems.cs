@@ -1,18 +1,44 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Rendering;
 
 namespace HeadlessBlazor;
 
 public class HBDropdownItems : HBElement
 {
-    [CascadingParameter]
-    public HBDropdown Dropdown { get; set; } = default!;
+    public ElementReference ElementReference { get; private set; }
 
-    protected override void OnBeforeInitialized()
+    [Parameter]
+    public HBPopoverAlignment Alignment { get; set; } = HBPopoverAlignment.Start;
+
+    [Parameter]
+    public bool AutoPosition { get; set; } = true;
+
+    [CascadingParameter]
+    protected HBDropdown Dropdown { get; set; } = default!;
+
+    [Parameter]
+    public HBPopoverSide Side { get; set; } = HBPopoverSide.Bottom;
+
+    protected override void AddBehaviors(RenderTreeBuilder builder, ref int sequenceNumber)
     {
-        if (Dropdown == null)
+        if (AutoPosition)
         {
-            throw new InvalidOperationException($"{GetType().Name} requires a cascading parameter of type {typeof(HBDropdown).Name}.");
+            builder.OpenComponent<HBPopoverBehavior>(sequenceNumber++);
+            builder.AddAttribute(sequenceNumber++, nameof(HBPopoverBehavior.Alignment), Alignment);
+            builder.AddAttribute(sequenceNumber++, nameof(HBPopoverBehavior.Anchor), Dropdown.ElementReference);
+            builder.AddAttribute(sequenceNumber++, nameof(HBPopoverBehavior.Content), ElementReference);
+            builder.AddAttribute(sequenceNumber++, nameof(HBPopoverBehavior.Side), Side);
+            builder.CloseComponent();
         }
+    }
+
+    protected override void AddElementReference(RenderTreeBuilder builder, ref int sequenceNumber)
+    {
+        builder.AddElementReferenceCapture(sequenceNumber, async (elementRef) =>
+        {
+            ElementReference = elementRef;
+            await InvokeAsync(StateHasChanged);
+        });
     }
 
     protected override void OnParametersSet()

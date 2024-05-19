@@ -4,33 +4,32 @@ export class HBPopoverBehavior {
 
     /**
      * @static
-     * @param {Element} container
+     * @param {Element} anchor
+     * @param {Element} content
      * @param {any} options
      * @returns {HBPopoverBehavior}
      */
-    static createInstance(container, options) {
-        return new HBPopoverBehavior(container, options);
+    static createInstance(anchor, content, options) {
+        return new HBPopoverBehavior(anchor, content, options);
     }
 
     /**
      * Creates a new instance of HBPopoverBehavior.
      * @constructor
-     * @param {Element} container
+     * @param {Element} anchor
+     * @param {Element} content
      * @param {any} options
      */
-    constructor(container, options) {
-        const anchor = container.querySelector('[hb-popover-anchor]');
-        const floater = container.querySelector('[hb-popover]');
-        
+    constructor(anchor, content, options) {
         const side = (options && options.Side) || 'bottom';
         const align = (options && options.Alignment) || 'start';
 
-        this.dispose = autoUpdate(anchor, floater, () => {
-            computePosition(anchor, floater, {
+        this.dispose = autoUpdate(anchor, content, () => {
+            computePosition(anchor, content, {
                 placement: `${side}-${align}`,
                 middleware: [flip()]
             }).then(({ x, y }) => {
-                Object.assign(floater.style, {
+                Object.assign(content.style, {
                     left: `${x}px`,
                     top: `${y}px`,
                 });

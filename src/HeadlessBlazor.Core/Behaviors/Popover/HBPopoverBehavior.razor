@@ -9,8 +9,11 @@
     [Parameter]
     public HBPopoverAlignment? Alignment { get; set; }
 
-    [Parameter]
-    public IReferenceable Container { get; set; } = default!;
+    [Parameter, EditorRequired]
+    public required ElementReference Anchor { get; set; }
+
+    [Parameter, EditorRequired]
+    public required ElementReference Content { get; set; }
 
     [Parameter]
     public HBPopoverSide? Side { get; set; }
@@ -31,7 +34,7 @@
         {
             var moduleName = nameof(HBPopoverBehavior);
             var module = await JS.InvokeAsync<IJSObjectReference>("import", $"./_content/HeadlessBlazor.Core/Behaviors/Popover/{moduleName}.razor.js");
-            popover = await module.InvokeAsync<IJSObjectReference>($"{moduleName}.createInstance", Container.ElementReference, new HBPopoverOptions
+            popover = await module.InvokeAsync<IJSObjectReference>($"{moduleName}.createInstance", Anchor, Content, new HBPopoverOptions
             {
                 Alignment = Alignment,
                 Side = Side

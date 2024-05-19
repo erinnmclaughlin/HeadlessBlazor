@@ -57,6 +57,8 @@ public abstract class HBElementBase : ComponentBase
 
         AddChildContent(builder, ref sequenceNumber);
 
+        AddBehaviors(builder, ref sequenceNumber);
+
         if (createElement)
             builder.CloseElement();
     }
@@ -68,6 +70,10 @@ public abstract class HBElementBase : ComponentBase
     }
 
     protected virtual void AddChildContent(RenderTreeBuilder builder, ref int sequence)
+    {
+    }
+
+    protected virtual void AddBehaviors(RenderTreeBuilder builder, ref int sequenceNumber)
     {
     }
 

@@ -9,11 +9,6 @@ public class HBDropdownItem : HBElement
 
     protected override void OnParametersSet()
     {
-        if (Dropdown == null)
-        {
-            throw new InvalidOperationException($"{GetType().Name} requires a cascading parameter of type {typeof(HBDropdown).Name}.");
-        }
-
         UserAttributes.TryAdd("onclick", new EventCallback(this, HandleClick));
     }
 
