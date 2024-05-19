@@ -55,9 +55,9 @@ public abstract class HBElementBase : ComponentBase
             AddElementReference(builder, ref sequenceNumber);
         }
 
-        AddChildContent(builder, ref sequenceNumber);
-
         AddBehaviors(builder, ref sequenceNumber);
+
+        AddChildContent(builder, ref sequenceNumber);
 
         if (createElement)
             builder.CloseElement();

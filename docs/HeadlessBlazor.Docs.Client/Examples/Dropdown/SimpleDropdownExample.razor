@@ -1,18 +1,18 @@
 ﻿<div class="d-flex justify-content-between">
     <HBDropdown class="dropdown d-inline-block">
         <HBDropdownTrigger class="btn btn-primary dropdown-toggle">Click Me</HBDropdownTrigger>
-        <HBDropdownItems class="@(context.IsOpen ? "dropdown-menu show" : "dropdown-menu")">
-            <HBDropdownItem class="dropdown-item">Option 1</HBDropdownItem>
-            <HBDropdownItem class="dropdown-item">Option 2</HBDropdownItem>
-            <HBDropdownItem class="dropdown-item">Option 3</HBDropdownItem>
-        </HBDropdownItems>
+        <HBDropdownMenu class="@(context.IsOpen ? "dropdown-menu show" : "dropdown-menu")">
+            <HBDropdownItemButton class="dropdown-item">Option 1</HBDropdownItemButton>
+            <HBDropdownItemButton class="dropdown-item">Option 2</HBDropdownItemButton>
+            <HBDropdownItemButton class="dropdown-item">Option 3</HBDropdownItemButton>
+        </HBDropdownMenu>
     </HBDropdown> 
     <HBDropdown class="dropdown d-inline-block">
         <HBDropdownTrigger class="btn btn-primary dropdown-toggle">Click Me</HBDropdownTrigger>
-        <HBDropdownItems class="@(context.IsOpen ? "dropdown-menu show" : "dropdown-menu")">
-            <HBDropdownItem class="dropdown-item">Option 1</HBDropdownItem>
-            <HBDropdownItem class="dropdown-item">Option 2</HBDropdownItem>
-            <HBDropdownItem class="dropdown-item">Option 3</HBDropdownItem>
-        </HBDropdownItems>
+        <HBDropdownMenu class="@(context.IsOpen ? "dropdown-menu show" : "dropdown-menu")">
+            <HBDropdownItemLink href="#" class="dropdown-item">Option 1</HBDropdownItemLink>
+            <HBDropdownItemLink href="#" class="dropdown-item">Option 2</HBDropdownItemLink>
+            <HBDropdownItemLink href="#" class="dropdown-item">Option 3</HBDropdownItemLink>
+        </HBDropdownMenu>
     </HBDropdown>
 </div>

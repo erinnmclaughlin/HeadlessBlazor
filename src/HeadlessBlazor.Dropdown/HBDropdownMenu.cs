@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components.Rendering;
 
 namespace HeadlessBlazor;
 
-public class HBDropdownItems : HBElement
+public class HBDropdownMenu : HBElement
 {
     public ElementReference ElementReference { get; private set; }
 
@@ -39,10 +39,5 @@ public class HBDropdownItems : HBElement
             ElementReference = elementRef;
             await InvokeAsync(StateHasChanged);
         });
-    }
-
-    protected override void OnParametersSet()
-    {
-        UserAttributes.TryAdd("hb-popover", "");
     }
 }
