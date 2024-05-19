@@ -10,13 +10,16 @@
         else
         {
             <pre class="mb-0 p-3">
-                @CodeBlock
+                <code>@CodeBlock</code>
             </pre>
         }
     </div>
 </div>
 
 @code {
+    [Inject]
+    private IJSRuntime JS { get; set; } = default!;
+
     [Inject]
     private IRazorFileReader FileProvider { get; set; } = default!;
 
@@ -31,6 +34,8 @@
         {
             CodeBlock = await FileProvider.ReadFileAsync(Type.Name);
             StateHasChanged();
+
+            await JS.InvokeVoidAsync("hljs.highlightAll");
         }
     }
 }
