@@ -1,7 +1,7 @@
 ﻿@implements IAsyncDisposable
 @code {
-    private DotNetObjectReference<HBOutsideClickBehavior>? dotNetObjRef;
-    private IJSObjectReference? handlerRef;
+    private DotNetObjectReference<HBPopoverBehavior>? dotNetObjRef;
+    private IJSObjectReference? popover;
 
     [Inject]
     private IJSRuntime JS { get; set; } = default!;
@@ -9,25 +9,16 @@
     [Parameter]
     public IReferenceable Container { get; set; } = default!;
 
-    [Parameter]
-    public EventCallback OnClick { get; set; }
-
     public async ValueTask DisposeAsync()
     {
-        if (handlerRef is not null)
+        if (popover is not null)
         {
-            await handlerRef.InvokeVoidAsync("dispose");
-            await handlerRef.DisposeAsync();
-            handlerRef = null;
+            await popover.InvokeVoidAsync("dispose");
+            await popover.DisposeAsync();
+            popover = null;
         }
 
         dotNetObjRef?.Dispose();
-    }
-
-    [JSInvokable]
-    public async void NotifyClickOutside()
-    {
-        await OnClick.InvokeAsync();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -35,9 +26,9 @@
         if (firstRender)
         {
             dotNetObjRef ??= DotNetObjectReference.Create(this);
-            var moduleName = nameof(HBOutsideClickBehavior);
+            var moduleName = nameof(HBPopoverBehavior);
             var module = await JS.InvokeAsync<IJSObjectReference>("import", $"./_content/HeadlessBlazor.Core/Behaviors/{moduleName}.razor.js");
-            handlerRef = await module.InvokeAsync<IJSObjectReference>($"{moduleName}.createInstance", Container.ElementReference, dotNetObjRef);
+            popover = await module.InvokeAsync<IJSObjectReference>($"{moduleName}.createInstance", Container.ElementReference, dotNetObjRef);
             await module.DisposeAsync();
         }
     }

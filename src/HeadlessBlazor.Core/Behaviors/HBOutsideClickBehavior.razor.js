@@ -1,36 +1,37 @@
-export class OutsideClickBehavior {
+export class HBOutsideClickBehavior {
 
     /**
      * @param {Element} element
      * @param {any} dotNetRef
+     * @returns {HBOutsideClickBehavior}
      */
     static createInstance(element, dotNetRef) {
-        return new OutsideClickBehavior(element, dotNetRef);
+        return new HBOutsideClickBehavior(element, dotNetRef);
     }
 
     /**
+     * @constructor
      * @param {Element} element
      * @param {any} dotNetRef
      */
     constructor(element, dotNetRef) {
-        console.log('creating');
         this.element = element;
         this.dotNetRef = dotNetRef;
-
-        this.handleDocumentClick = this.handleDocumentClick.bind(this);
-
+        
         document.addEventListener('click', this.handleDocumentClick);
     }
 
     dispose() {
-        console.log('disposing');
         document.removeEventListener('click', this.handleDocumentClick);
     }
 
     /**
      * @param {MouseEvent} e
      */
-    handleDocumentClick(e) {
+    handleDocumentClick = e => {
+        console.log('you clicked outside!');
+        console.log(this.element);
+
         if (!this.element.contains(e.target)) {
             this.dotNetRef.invokeMethodAsync('NotifyClickOutside');
         }

@@ -24,6 +24,7 @@ public class HBDropdownTrigger : HBElement
             throw new InvalidOperationException($"{GetType().Name} requires a cascading parameter of type {typeof(HBDropdown).Name}.");
         }
 
+        UserAttributes.Add("hb-popover-anchor", "");
         UserAttributes.TryAdd("onclick", new EventCallback(this, HandleClick));
         UserAttributes.TryAdd("onkeydown", new EventCallback<KeyboardEventArgs>(this, HandleKeyDown));
     }

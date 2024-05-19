@@ -1,6 +1,6 @@
 ﻿namespace HeadlessBlazor.Behaviors;
 
-public interface ICloseable : IReferenceable
+public interface ICloseable
 {
     Task CloseAsync();
 }

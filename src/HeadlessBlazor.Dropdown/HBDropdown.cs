@@ -4,8 +4,9 @@ using Microsoft.AspNetCore.Components.Rendering;
 
 namespace HeadlessBlazor;
 
-public class HBDropdown : HBElement<HBDropdown>, ICloseable
+public class HBDropdown : HBElement<HBDropdown>, ICloseable, IReferenceable
 {
+    public bool IsElementReferenceSet { get; private set; }
     public ElementReference ElementReference { get; private set; }
     public bool IsOpen { get; private set; }
 
@@ -32,12 +33,20 @@ public class HBDropdown : HBElement<HBDropdown>, ICloseable
         builder.AddAttribute(seq, "Value", this);
         builder.AddAttribute(seq++, "ChildContent", (RenderFragment)((b) =>
         {
-            if (IsOpen && CloseOnOutsideClick)
+            if (IsOpen)
             {
-                b.OpenComponent<HBOutsideClickBehavior>(seq++);
-                b.AddAttribute(seq++, nameof(HBOutsideClickBehavior.OnClick), new EventCallback(this, CloseAsync));
-                b.AddAttribute(seq++, nameof(HBOutsideClickBehavior.Container), this);
+                b.OpenComponent<HBPopoverBehavior>(seq++);
+                b.AddAttribute(seq++, nameof(HBPopoverBehavior.Container), this);
                 b.CloseComponent();
+
+                if (CloseOnOutsideClick)
+                {
+                    b.OpenComponent<HBOutsideClickBehavior>(seq++);
+                    b.AddAttribute(seq++, nameof(HBOutsideClickBehavior.OnClick), new EventCallback(this, CloseAsync));
+                    b.AddAttribute(seq++, nameof(HBOutsideClickBehavior.Container), this);
+                    b.CloseComponent();
+                }
+               
             }
 
             BuildRenderTree(b, ref seq);
@@ -48,7 +57,11 @@ public class HBDropdown : HBElement<HBDropdown>, ICloseable
 
     protected override void AddElementReference(RenderTreeBuilder builder, ref int sequenceNumber)
     {
-        builder.AddElementReferenceCapture(sequenceNumber++, capturedRef => ElementReference = capturedRef);
+        builder.AddElementReferenceCapture(sequenceNumber++, async capturedRef =>
+        {
+            ElementReference = capturedRef;
+            await InvokeAsync(StateHasChanged);
+        });
     }
 
     private async Task SetIsOpen(bool isOpen)

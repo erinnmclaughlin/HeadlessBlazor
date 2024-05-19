@@ -1,17 +1,13 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Rendering;
 
 namespace HeadlessBlazor;
 
 public class HBDropdownItems : HBElement
 {
-    [Parameter]
-    public bool RenderWhenClosed { get; set; }
-
     [CascadingParameter]
     public HBDropdown Dropdown { get; set; } = default!;
 
-    protected override void OnParametersSet()
+    protected override void OnBeforeInitialized()
     {
         if (Dropdown == null)
         {
@@ -19,9 +15,8 @@ public class HBDropdownItems : HBElement
         }
     }
 
-    protected override void BuildRenderTree(RenderTreeBuilder builder)
+    protected override void OnParametersSet()
     {
-        if (Dropdown.IsOpen || RenderWhenClosed)
-            base.BuildRenderTree(builder);
+        UserAttributes.TryAdd("hb-popover", "");
     }
 }
