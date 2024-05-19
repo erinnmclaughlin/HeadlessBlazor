@@ -1,4 +1,5 @@
 ﻿@implements IAsyncDisposable
+@namespace HeadlessBlazor
 @code {
     private IJSObjectReference? popover;
 
@@ -29,7 +30,7 @@
         if (firstRender)
         {
             var moduleName = nameof(HBPopoverBehavior);
-            var module = await JS.InvokeAsync<IJSObjectReference>("import", $"./_content/HeadlessBlazor.Core/Behaviors/{moduleName}.razor.js");
+            var module = await JS.InvokeAsync<IJSObjectReference>("import", $"./_content/HeadlessBlazor.Core/Behaviors/Popover/{moduleName}.razor.js");
             popover = await module.InvokeAsync<IJSObjectReference>($"{moduleName}.createInstance", Container.ElementReference, new HBPopoverOptions
             {
                 Alignment = Alignment,

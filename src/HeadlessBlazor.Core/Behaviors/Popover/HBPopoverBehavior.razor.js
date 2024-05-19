@@ -1,4 +1,4 @@
-import { autoUpdate, computePosition, flip } from '../floating-ui.dom.browser.min.mjs';
+import { autoUpdate, computePosition, flip } from '../../floating-ui.dom.browser.min.mjs';
 
 export class HBPopoverBehavior {
 

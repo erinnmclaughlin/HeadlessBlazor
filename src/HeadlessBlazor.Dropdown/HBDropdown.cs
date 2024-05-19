@@ -1,5 +1,4 @@
-﻿using HeadlessBlazor.Behaviors;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 
 namespace HeadlessBlazor;

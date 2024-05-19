@@ -1,4 +1,6 @@
 ﻿@implements IAsyncDisposable
+@namespace HeadlessBlazor
+
 @code {
     private DotNetObjectReference<HBOutsideClickBehavior>? dotNetObjRef;
     private IJSObjectReference? handlerRef;
@@ -36,7 +38,7 @@
         {
             dotNetObjRef ??= DotNetObjectReference.Create(this);
             var moduleName = nameof(HBOutsideClickBehavior);
-            var module = await JS.InvokeAsync<IJSObjectReference>("import", $"./_content/HeadlessBlazor.Core/Behaviors/{moduleName}.razor.js");
+            var module = await JS.InvokeAsync<IJSObjectReference>("import", $"./_content/HeadlessBlazor.Core/Behaviors/OutsideClick/{moduleName}.razor.js");
             handlerRef = await module.InvokeAsync<IJSObjectReference>($"{moduleName}.createInstance", Container.ElementReference, dotNetObjRef);
             await module.DisposeAsync();
         }

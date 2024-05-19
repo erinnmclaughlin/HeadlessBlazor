@@ -1,4 +1,4 @@
-﻿namespace HeadlessBlazor.Behaviors;
+﻿namespace HeadlessBlazor;
 
 public interface ICloseable
 {

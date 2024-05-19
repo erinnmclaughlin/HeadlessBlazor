@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-namespace HeadlessBlazor.Behaviors;
+namespace HeadlessBlazor;
 
 public interface IReferenceable
 {

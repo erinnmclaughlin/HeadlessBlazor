@@ -29,9 +29,6 @@ export class HBOutsideClickBehavior {
      * @param {MouseEvent} e
      */
     handleDocumentClick = e => {
-        console.log('you clicked outside!');
-        console.log(this.element);
-
         if (!this.element.contains(e.target)) {
             this.dotNetRef.invokeMethodAsync('NotifyClickOutside');
         }
