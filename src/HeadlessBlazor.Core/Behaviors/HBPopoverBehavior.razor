@@ -1,13 +1,18 @@
 ﻿@implements IAsyncDisposable
 @code {
-    private DotNetObjectReference<HBPopoverBehavior>? dotNetObjRef;
     private IJSObjectReference? popover;
 
     [Inject]
     private IJSRuntime JS { get; set; } = default!;
 
     [Parameter]
+    public HBPopoverAlignment? Alignment { get; set; }
+
+    [Parameter]
     public IReferenceable Container { get; set; } = default!;
+
+    [Parameter]
+    public HBPopoverSide? Side { get; set; }
 
     public async ValueTask DisposeAsync()
     {
@@ -17,18 +22,19 @@
             await popover.DisposeAsync();
             popover = null;
         }
-
-        dotNetObjRef?.Dispose();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            dotNetObjRef ??= DotNetObjectReference.Create(this);
             var moduleName = nameof(HBPopoverBehavior);
             var module = await JS.InvokeAsync<IJSObjectReference>("import", $"./_content/HeadlessBlazor.Core/Behaviors/{moduleName}.razor.js");
-            popover = await module.InvokeAsync<IJSObjectReference>($"{moduleName}.createInstance", Container.ElementReference, dotNetObjRef);
+            popover = await module.InvokeAsync<IJSObjectReference>($"{moduleName}.createInstance", Container.ElementReference, new HBPopoverOptions
+            {
+                Alignment = Alignment,
+                Side = Side
+            });
             await module.DisposeAsync();
         }
     }

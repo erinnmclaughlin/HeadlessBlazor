@@ -11,6 +11,12 @@ public class HBDropdown : HBElement<HBDropdown>, ICloseable, IReferenceable
     public bool IsOpen { get; private set; }
 
     [Parameter]
+    public HBPopoverAlignment Alignment { get; set; } = HBPopoverAlignment.Start;
+
+    [Parameter]
+    public HBPopoverSide Side { get; set; } = HBPopoverSide.Bottom;
+
+    [Parameter]
     public bool CloseOnOutsideClick { get; set; } = true;
 
     [Parameter]
@@ -36,7 +42,9 @@ public class HBDropdown : HBElement<HBDropdown>, ICloseable, IReferenceable
             if (IsOpen)
             {
                 b.OpenComponent<HBPopoverBehavior>(seq++);
+                b.AddAttribute(seq++, nameof(HBPopoverBehavior.Alignment), Alignment);
                 b.AddAttribute(seq++, nameof(HBPopoverBehavior.Container), this);
+                b.AddAttribute(seq++, nameof(HBPopoverBehavior.Side), Side);
                 b.CloseComponent();
 
                 if (CloseOnOutsideClick)
@@ -46,7 +54,6 @@ public class HBDropdown : HBElement<HBDropdown>, ICloseable, IReferenceable
                     b.AddAttribute(seq++, nameof(HBOutsideClickBehavior.Container), this);
                     b.CloseComponent();
                 }
-               
             }
 
             BuildRenderTree(b, ref seq);

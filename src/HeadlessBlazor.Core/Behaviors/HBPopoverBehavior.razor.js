@@ -1,38 +1,36 @@
-import {
-    autoUpdate,
-    computePosition,
-    flip
-} from '../@floating-ui/dom/dist/floating-ui.dom.browser.min.mjs';
+import { autoUpdate, computePosition, flip } from '../floating-ui.dom.browser.min.mjs';
 
 export class HBPopoverBehavior {
 
     /**
      * @static
      * @param {Element} container
-     * @param {any} dotNetRef
+     * @param {any} options
      * @returns {HBPopoverBehavior}
      */
-    static createInstance(container) {
-        return new HBPopoverBehavior(container);
+    static createInstance(container, options) {
+        return new HBPopoverBehavior(container, options);
     }
 
     /**
      * Creates a new instance of HBPopoverBehavior.
      * @constructor
      * @param {Element} container
-     * @param {any} dotNetRef
+     * @param {any} options
      */
-    constructor(container) {
+    constructor(container, options) {
         const anchor = container.querySelector('[hb-popover-anchor]');
         const floater = container.querySelector('[hb-popover]');
+        
+        const side = (options && options.Side) || 'bottom';
+        const align = (options && options.Alignment) || 'start';
 
         this.dispose = autoUpdate(anchor, floater, () => {
             computePosition(anchor, floater, {
-                placement: 'bottom-start',
+                placement: `${side}-${align}`,
                 middleware: [flip()]
             }).then(({ x, y }) => {
                 Object.assign(floater.style, {
-                    display: `block`,
                     left: `${x}px`,
                     top: `${y}px`,
                 });
