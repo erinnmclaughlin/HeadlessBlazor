@@ -10,7 +10,7 @@
     private IJSRuntime JS { get; set; } = default!;
 
     [Parameter]
-    public IReferenceable Container { get; set; } = default!;
+    public ElementReference Container { get; set; } = default!;
 
     [Parameter]
     public EventCallback OnClick { get; set; }
@@ -40,7 +40,7 @@
             dotNetObjRef ??= DotNetObjectReference.Create(this);
             var moduleName = nameof(HBOutsideClickBehavior);
             var module = await JS.InvokeAsync<IJSObjectReference>("import", $"./_content/HeadlessBlazor.Core/Behaviors/OutsideClick/{moduleName}.razor.js");
-            handlerRef = await module.InvokeAsync<IJSObjectReference>($"{moduleName}.createInstance", Container.ElementReference, dotNetObjRef);
+            handlerRef = await module.InvokeAsync<IJSObjectReference>($"{moduleName}.createInstance", Container, dotNetObjRef);
             await module.DisposeAsync();
         }
     }

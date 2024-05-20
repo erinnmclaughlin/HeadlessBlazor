@@ -32,12 +32,11 @@
     {
         if (popover is not null)
         {
-            Console.WriteLine("updating options");
             await popover.InvokeVoidAsync("updateOptions", new HBFloatOptions
-                {
-                    Alignment = Alignment,
-                    Side = Side
-                });
+            {
+                Alignment = Alignment,
+                Side = Side
+            });
         }
     }
 
