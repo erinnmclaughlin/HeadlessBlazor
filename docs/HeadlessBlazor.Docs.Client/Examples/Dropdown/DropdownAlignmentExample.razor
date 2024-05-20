@@ -1,18 +1,34 @@
-﻿<div class="d-flex justify-content-between">
-    <HBDropdown class="dropdown d-inline-block">
-        <HBDropdownTrigger class="btn btn-primary dropdown-toggle">Click Me</HBDropdownTrigger>
-        <HBDropdownMenu class="@(context.IsOpen ? "dropdown-menu show" : "dropdown-menu")">
-            <HBDropdownItemButton class="dropdown-item">Option 1</HBDropdownItemButton>
-            <HBDropdownItemButton class="dropdown-item">Option 2</HBDropdownItemButton>
-            <HBDropdownItemButton class="dropdown-item">Option 3</HBDropdownItemButton>
-        </HBDropdownMenu>
-    </HBDropdown>
-    <HBDropdown class="dropdown d-inline-block">
-        <HBDropdownTrigger class="btn btn-primary dropdown-toggle">Click Me</HBDropdownTrigger>
-        <HBDropdownMenu Side="HBPopoverSide.Top" class="@(context.IsOpen ? "dropdown-menu show" : "dropdown-menu")">
-            <HBDropdownItemLink href="#" class="dropdown-item">Option 1</HBDropdownItemLink>
-            <HBDropdownItemLink href="#" class="dropdown-item">Option 2</HBDropdownItemLink>
-            <HBDropdownItemLink href="#" class="dropdown-item">Option 3</HBDropdownItemLink>
-        </HBDropdownMenu>
-    </HBDropdown>
+﻿<div class="row g-0">
+    <div class="col-12 col-md-6 col-lg-9 d-flex align-items-center p-3 justify-content-center">
+        <HBDropdown class="dropdown">
+            <HBDropdownTrigger class="btn btn-primary dropdown-toggle">Click Me</HBDropdownTrigger>
+            <HBDropdownMenu Alignment="Alignment" Side="Side" class="@(context.IsOpen ? "dropdown-menu show" : "dropdown-menu")">
+                <HBDropdownItemLink href="#" class="dropdown-item">Option 1</HBDropdownItemLink>
+                <HBDropdownItemLink href="#" class="dropdown-item">Option 2</HBDropdownItemLink>
+                <HBDropdownItemLink href="#" class="dropdown-item">Option 3</HBDropdownItemLink>
+            </HBDropdownMenu>
+        </HBDropdown>
+    </div>
+    <div class="col-12 col-md-6 col-lg-3 p-3 bg-tertiary">
+        <label for="dropdownAlignment" class="form-label">Alignment</label>
+        <select @bind="Alignment" @bind:after="StateHasChanged" class="form-select mb-3" id="dropdownAlignment">
+            @foreach (var option in Enum.GetValues<HBPopoverAlignment>())
+            {
+                <option value="@option">@option</option>
+            }
+        </select>
+        <label for="dropdownSide" class="form-label">Side</label>
+        <select @bind="Side" @bind:after="StateHasChanged" class="form-select mb-3" id="dropdownSide">
+            @foreach (var option in Enum.GetValues<HBPopoverSide>())
+            {
+                <option value="@option">@option</option>
+            }
+        </select>
+    </div>
 </div>
+
+@code {
+
+    public HBPopoverAlignment Alignment { get; set; }
+    public HBPopoverSide Side { get; set; }
+}

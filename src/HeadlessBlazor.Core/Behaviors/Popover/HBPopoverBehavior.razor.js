@@ -21,18 +21,29 @@ export class HBPopoverBehavior {
      * @param {any} options
      */
     constructor(anchor, content, options) {
-        const side = options.side || 'bottom';
-        const align = options.alignment || 'start';
-        this.dispose = autoUpdate(anchor, content, () => {
-            computePosition(anchor, content, {
-                placement: `${side}-${align}`.toLowerCase(),
-                middleware: [flip()]
-            }).then(({ x, y }) => {
-                Object.assign(content.style, {
-                    left: `${x}px`,
-                    top: `${y}px`,
-                });
-            })
-        });
+        this.anchor = anchor;
+        this.content = content;
+        this.options = options;
+        this.dispose = autoUpdate(anchor, content, this.update);
+    }
+
+    updateOptions = (options) => {
+        this.options = options;
+        this.update();
+    }
+
+    update = () => {
+        const side = this.options.side || 'bottom';
+        const align = this.options.alignment || 'start';
+
+        computePosition(this.anchor, this.content, {
+            placement: `${side}-${align}`.toLowerCase(),
+            middleware: [flip()]
+        }).then(({ x, y }) => {
+            Object.assign(this.content.style, {
+                left: `${x}px`,
+                top: `${y}px`,
+            });
+        })
     }
 }

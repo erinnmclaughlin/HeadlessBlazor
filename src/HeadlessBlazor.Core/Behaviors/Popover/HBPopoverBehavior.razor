@@ -28,6 +28,19 @@
         }
     }
 
+    protected override async Task OnParametersSetAsync()
+    {
+        if (popover is not null)
+        {
+            Console.WriteLine("updating options");
+            await popover.InvokeVoidAsync("updateOptions", new HBPopoverOptions
+            {
+                Alignment = Alignment,
+                Side = Side
+            });
+        }
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)

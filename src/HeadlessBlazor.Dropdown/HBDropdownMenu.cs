@@ -23,6 +23,7 @@ public class HBDropdownMenu : HBElement
     {
         if (AutoPosition)
         {
+            Console.WriteLine("adding popover behavior");
             builder.OpenComponent<HBPopoverBehavior>(sequenceNumber++);
             builder.AddAttribute(sequenceNumber++, nameof(HBPopoverBehavior.Alignment), Alignment);
             builder.AddAttribute(sequenceNumber++, nameof(HBPopoverBehavior.Anchor), Dropdown.ElementReference);
