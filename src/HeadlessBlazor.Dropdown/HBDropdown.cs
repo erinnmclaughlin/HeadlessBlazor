@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace HeadlessBlazor;
 
@@ -8,6 +9,9 @@ public class HBDropdown : HBElement<HBDropdown>, IReferenceable
     public ElementReference ElementReference { get; private set; }
 
     public bool IsOpen { get; private set; }
+
+    [Parameter]
+    public bool CloseOnEscape { get; set; } = true;
 
     [Parameter]
     public bool CloseOnOutsideClick { get; set; } = true;
@@ -57,6 +61,18 @@ public class HBDropdown : HBElement<HBDropdown>, IReferenceable
         }));
         
         builder.CloseComponent();
+    }
+
+    protected override void AddEventHandlers(RenderTreeBuilder builder, ref int sequenceNumber)
+    {
+        if (CloseOnEscape)
+        {
+            builder.AddAttribute(sequenceNumber++, "onkeydown", EventCallback.Factory.Create<KeyboardEventArgs>(this, async (args) =>
+            {
+                if (args.Key == "Escape")
+                    await CloseAsync();
+            }));
+        }
     }
 
     protected override void AddElementReference(RenderTreeBuilder builder, ref int sequenceNumber)
