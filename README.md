@@ -1,6 +1,4 @@
-<h1>
-  <img src="HeadlessBlazorLogo.svg" width="24" hspace="4" /> Headless Blazor
-</h1>
+![Headless Blazor Header Image](HeadlessBlazorHeader.svg)
 
 [Headless Blazor](https://headlessblazor.org) is a style-agnostic component library for Blazor. Inspired by [Headless UI](https://headlessui.com).
 
