@@ -27,7 +27,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\..\HeadlessBlazorLogo.png" Pack="true" Visible="false" PackagePath="" />
+    <None Include="..\..\assets\HeadlessBlazorLogo.png" Pack="true" Visible="false" PackagePath="" />
     <None Include="..\..\LICENSE" Pack="true" Visible="false" PackagePath="" />
     <None Include="..\..\README.md" Pack="true" Visible="false" PackagePath="" />
   </ItemGroup>

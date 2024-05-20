@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -28,7 +28,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\..\HeadlessBlazorLogo.png" Pack="true" Visible="false" PackagePath="" />
+    <None Include="..\..\assets\HeadlessBlazorLogo.png" Pack="true" Visible="false" PackagePath="" />
     <None Include="..\..\LICENSE" Pack="true" Visible="false" PackagePath="" />
     <None Include="..\..\README.md" Pack="true" Visible="false" PackagePath="" />
   </ItemGroup>
