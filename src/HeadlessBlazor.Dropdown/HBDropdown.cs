@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Components.Web;
 
 namespace HeadlessBlazor;
 
-public class HBDropdown : HBElement<HBDropdown>, IReferenceable
+public class HBDropdown : HBElement<HBDropdown>
 {
     public ElementReference ElementReference { get; private set; }
 

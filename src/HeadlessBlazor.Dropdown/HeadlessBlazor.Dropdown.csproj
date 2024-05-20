@@ -43,6 +43,7 @@
   <ItemGroup>
     <ProjectReference Include="..\HeadlessBlazor.Core\HeadlessBlazor.Core.csproj" />
     <ProjectReference Include="..\HeadlessBlazor.FloatingElement\HeadlessBlazor.FloatingElement.csproj" />
+    <ProjectReference Include="..\HeadlessBlazor.OutsideClick\HeadlessBlazor.OutsideClick.csproj" />
   </ItemGroup>
 
 </Project>
