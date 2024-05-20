@@ -9,24 +9,17 @@
 
 ### Quick Start
 
+Install the bundle from [NuGet](https://www.nuget.org/packages/HeadlessBlazor):
+
 ```cmd
 dotnet add package HeadlessBlazor
 ```
 
-#### Looking for individual components?
-Each component is packaged separately, so if you're only after one or two specific components, you can install those individually:
+## Individual Packages
 
-```cmd
-dotnet add package HeadlessBlazor.{Component}
-```
-
-## Packages
-
-#### HeadlessBlazor
-> A bundle package that includes all core HeadlessBlazor components and behaviors.
-> 
-> [![NuGet Version](https://img.shields.io/nuget/vpre/HeadlessBlazor?logo=NuGet)](https://www.nuget.org/packages/HeadlessBlazor)
-
+> [!TIP]
+> **Looking for individual components?**
+> Each component is packaged separately, so if you're only after one or two specific components, you can install those individually.
 
 #### HeadlessBlazor.Dropdown
 > A headless dropdown component.
