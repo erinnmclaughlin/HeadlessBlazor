@@ -8,7 +8,7 @@ public class HBDropdownMenu : HBElement
     public ElementReference ElementReference { get; private set; }
 
     [Parameter]
-    public HBPopoverAlignment? Alignment { get; set; }
+    public HBFloatAlignment? Alignment { get; set; }
 
     [Parameter]
     public bool AutoPosition { get; set; } = true;
@@ -17,18 +17,17 @@ public class HBDropdownMenu : HBElement
     protected HBDropdown Dropdown { get; set; } = default!;
 
     [Parameter]
-    public HBPopoverSide? Side { get; set; }
+    public HBFloatSide? Side { get; set; }
 
     protected override void AddBehaviors(RenderTreeBuilder builder, ref int sequenceNumber)
     {
         if (AutoPosition)
         {
-            Console.WriteLine("adding popover behavior");
-            builder.OpenComponent<HBPopoverBehavior>(sequenceNumber++);
-            builder.AddAttribute(sequenceNumber++, nameof(HBPopoverBehavior.Alignment), Alignment);
-            builder.AddAttribute(sequenceNumber++, nameof(HBPopoverBehavior.Anchor), Dropdown.ElementReference);
-            builder.AddAttribute(sequenceNumber++, nameof(HBPopoverBehavior.Content), ElementReference);
-            builder.AddAttribute(sequenceNumber++, nameof(HBPopoverBehavior.Side), Side);
+            builder.OpenComponent<HBFloatBehavior>(sequenceNumber++);
+            builder.AddAttribute(sequenceNumber++, nameof(HBFloatBehavior.Alignment), Alignment);
+            builder.AddAttribute(sequenceNumber++, nameof(HBFloatBehavior.Anchor), Dropdown.ElementReference);
+            builder.AddAttribute(sequenceNumber++, nameof(HBFloatBehavior.Content), ElementReference);
+            builder.AddAttribute(sequenceNumber++, nameof(HBFloatBehavior.Side), Side);
             builder.CloseComponent();
         }
     }

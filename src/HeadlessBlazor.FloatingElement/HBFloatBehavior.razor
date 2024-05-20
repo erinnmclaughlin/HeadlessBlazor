@@ -1,4 +1,4 @@
-﻿@implements IAsyncDisposable
+@implements IAsyncDisposable
 @namespace HeadlessBlazor
 @code {
     private IJSObjectReference? popover;
@@ -7,7 +7,7 @@
     private IJSRuntime JS { get; set; } = default!;
 
     [Parameter]
-    public HBPopoverAlignment? Alignment { get; set; }
+    public HBFloatAlignment? Alignment { get; set; }
 
     [Parameter, EditorRequired]
     public required ElementReference Anchor { get; set; }
@@ -16,7 +16,7 @@
     public required ElementReference Content { get; set; }
 
     [Parameter]
-    public HBPopoverSide? Side { get; set; }
+    public HBFloatSide? Side { get; set; }
 
     public async ValueTask DisposeAsync()
     {
@@ -33,11 +33,11 @@
         if (popover is not null)
         {
             Console.WriteLine("updating options");
-            await popover.InvokeVoidAsync("updateOptions", new HBPopoverOptions
-            {
-                Alignment = Alignment,
-                Side = Side
-            });
+            await popover.InvokeVoidAsync("updateOptions", new HBFloatOptions
+                {
+                    Alignment = Alignment,
+                    Side = Side
+                });
         }
     }
 
@@ -45,13 +45,13 @@
     {
         if (firstRender)
         {
-            var moduleName = nameof(HBPopoverBehavior);
-            var module = await JS.InvokeAsync<IJSObjectReference>("import", $"./_content/HeadlessBlazor.Core/Behaviors/Popover/{moduleName}.razor.js");
-            popover = await module.InvokeAsync<IJSObjectReference>($"{moduleName}.createInstance", Anchor, Content, new HBPopoverOptions
-            {
-                Alignment = Alignment,
-                Side = Side
-            });
+            var moduleName = nameof(HBFloatBehavior);
+            var module = await JS.InvokeAsync<IJSObjectReference>("import", $"./_content/HeadlessBlazor.FloatingElement/{moduleName}.razor.js");
+            popover = await module.InvokeAsync<IJSObjectReference>($"{moduleName}.createInstance", Anchor, Content, new HBFloatOptions
+                {
+                    Alignment = Alignment,
+                    Side = Side
+                });
             await module.DisposeAsync();
         }
     }

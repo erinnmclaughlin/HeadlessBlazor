@@ -3,10 +3,9 @@
 namespace HeadlessBlazor;
 
 [JsonConverter(typeof(JsonStringEnumConverter))]
-public enum HBPopoverSide
+public enum HBFloatAlignment
 {
-    Top,
-    Right,
-    Bottom,
-    Left
+    Start,
+    Center,
+    End
 }

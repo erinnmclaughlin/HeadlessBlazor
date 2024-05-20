@@ -12,14 +12,14 @@
     <div class="col-12 col-md-6 col-lg-3 p-3 bg-tertiary">
         <label for="dropdownAlignment" class="form-label">Alignment</label>
         <select @bind="Alignment" @bind:after="StateHasChanged" class="form-select mb-3" id="dropdownAlignment">
-            @foreach (var option in Enum.GetValues<HBPopoverAlignment>())
+            @foreach (var option in Enum.GetValues<HBFloatAlignment>())
             {
                 <option value="@option">@option</option>
             }
         </select>
         <label for="dropdownSide" class="form-label">Side</label>
         <select @bind="Side" @bind:after="StateHasChanged" class="form-select mb-3" id="dropdownSide">
-            @foreach (var option in Enum.GetValues<HBPopoverSide>())
+            @foreach (var option in Enum.GetValues<HBFloatSide>())
             {
                 <option value="@option">@option</option>
             }
@@ -28,7 +28,6 @@
 </div>
 
 @code {
-
-    public HBPopoverAlignment Alignment { get; set; }
-    public HBPopoverSide Side { get; set; }
+    public HBFloatAlignment Alignment { get; set; }
+    public HBFloatSide Side { get; set; }
 }
