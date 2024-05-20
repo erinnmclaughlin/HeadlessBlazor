@@ -9,15 +9,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HeadlessBlazor.Dropdown", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{45E6AD2B-E550-4375-A452-63A8FE7787E4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HeadlessBlazor.Base", "src\HeadlessBlazor.Core\HeadlessBlazor.Base.csproj", "{E3A1957A-9803-4B81-B1F0-EB66F8E7DE12}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HeadlessBlazor.Core", "src\HeadlessBlazor.Core\HeadlessBlazor.Core.csproj", "{E3A1957A-9803-4B81-B1F0-EB66F8E7DE12}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HeadlessBlazor.Docs.Client", "docs\HeadlessBlazor.Docs.Client\HeadlessBlazor.Docs.Client.csproj", "{802E5B41-3FE0-49D3-B6F6-B43F98DD294A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HeadlessBlazor.Docs", "docs\HeadlessBlazor.Docs\HeadlessBlazor.Docs.csproj", "{289A8091-D213-4689-B1CD-03E5F15AF32F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeadlessBlazor.FloatingElement", "src\HeadlessBlazor.FloatingElement\HeadlessBlazor.FloatingElement.csproj", "{C6C092FD-EDA4-4313-B7D8-E162861A2750}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HeadlessBlazor.FloatingElement", "src\HeadlessBlazor.FloatingElement\HeadlessBlazor.FloatingElement.csproj", "{C6C092FD-EDA4-4313-B7D8-E162861A2750}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeadlessBlazor.OutsideClick", "src\HeadlessBlazor.OutsideClick\HeadlessBlazor.OutsideClick.csproj", "{A9EA3407-BCEE-4F73-980F-8287C71CB8DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HeadlessBlazor.OutsideClick", "src\HeadlessBlazor.OutsideClick\HeadlessBlazor.OutsideClick.csproj", "{A9EA3407-BCEE-4F73-980F-8287C71CB8DF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

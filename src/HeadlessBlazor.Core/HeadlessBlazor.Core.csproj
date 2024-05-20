@@ -1,21 +1,20 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>HeadlessBlazor</RootNamespace>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
 
-  <PropertyGroup>
-    <Title>HeadlessBlazor.OutsideClick</Title>
-    <Description>A HeadlessBlazor package that enables outside click event handling.</Description>
+ <PropertyGroup>
+    <Title>HeadlessBlazor.Core</Title>
+    <Description>Core services used by HeadlessBlazor libraries.</Description>
     <Version>1.0.0-preview2</Version>
     <Authors>erinnmclaughlin</Authors>
     <PackageIcon>HeadlessBlazorLogo.png</PackageIcon>
-    <PackageTags>Blazor, HeadlessUI, FloatingElement, OutsideClick</PackageTags>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/erinnmclaughlin/HeadlessBlazor</RepositoryUrl>
     <Copyright>2024 Erin McLaughlin</Copyright>
@@ -39,10 +38,6 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.4" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\HeadlessBlazor.Core\HeadlessBlazor.Core.csproj" />
   </ItemGroup>
 
 </Project>
