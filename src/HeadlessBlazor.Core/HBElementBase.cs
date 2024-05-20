@@ -4,21 +4,35 @@ using Microsoft.AspNetCore.Components.Web;
 
 namespace HeadlessBlazor;
 
+/// <summary>
+/// A base class for all HeadlessBlazor components.
+/// </summary>
 public abstract class HBElementBase : ComponentBase
 {
+    /// <summary>
+    /// The type of element to render.
+    /// </summary>
     public virtual string ElementName { get; set; } = "div";
 
+    /// <summary>
+    /// The HTML attributes to apply to the element.
+    /// </summary>
     [Parameter(CaptureUnmatchedValues = true)]
     public virtual IDictionary<string, object?> UserAttributes { get; set; } = new Dictionary<string, object?>();
 
+    /// <summary>
+    /// When <see langword="true"/>, will stop propagation of click events. Default is <see langword="false" />.
+    /// </summary>
     [Parameter]
     public bool OnClickStopPropagation { get; set; }
 
+    /// <summary>
+    /// When <see langword="true"/>, will stop default behavior of click events. Default is <see langword="false" />.
+    /// </summary>
     [Parameter]
     public bool OnClickPreventDefault { get; set; }
 
-    protected virtual void OnBeforeInitialized() { }
-    protected virtual void OnAfterInitialized() { }
+    /// <inheritdoc />
     protected sealed override void OnInitialized()
     {
         OnBeforeInitialized();
@@ -32,53 +46,76 @@ public abstract class HBElementBase : ComponentBase
         OnAfterInitialized();
     }
 
+    /// <summary>
+    /// Called before the <see cref="OnInitialized"/> method.
+    /// </summary>
+    protected virtual void OnBeforeInitialized()
+    {
+    }
+
+    /// <summary>
+    /// Called after the <see cref="OnInitialized"/> method.
+    /// </summary>
+    protected virtual void OnAfterInitialized() 
+    {
+    }
+
+    /// <inheritdoc />
     protected override void BuildRenderTree(RenderTreeBuilder builder)
     {
         var seq = 0;
         BuildRenderTree(ref seq, builder);
     }
 
+    /// <summary>
+    /// Renders the component to the supplied <see cref="RenderTreeBuilder"/> starting at the given <paramref name="sequence"/> number
+    /// </summary>
+    /// <param name="sequence">A reference to the sequence number.</param>
+    /// <param name="builder">A <see cref="RenderTreeBuilder"/> that will receive the render output.</param>
     protected void BuildRenderTree(ref int sequence, RenderTreeBuilder builder)
     {
-        var createElement = !string.IsNullOrWhiteSpace(ElementName);
+        OnBeforeOpenElement(ref sequence, builder);
 
-        if (createElement)
+        builder.OpenElement(sequence++, ElementName);
+
+        foreach (var attr in UserAttributes)
         {
-            builder.OpenElement(sequence++, ElementName);
-
-            foreach (var attr in UserAttributes)
-            {
-                if (attr.Value != null)
-                    builder.AddAttribute(sequence, attr.Key, attr.Value);
-            }
-
-            AddEventHandlers(ref sequence, builder);
-            builder.AddEventStopPropagationAttribute(sequence, "onclick", OnClickStopPropagation);
-            builder.AddEventPreventDefaultAttribute(sequence, "onclick", OnClickPreventDefault);
-
-            AddElementReference(ref sequence, builder);
+            if (attr.Value != null)
+                builder.AddAttribute(sequence, attr.Key, attr.Value);
         }
 
-        AddBehaviors(ref sequence, builder);
-        AddChildContent(ref sequence, builder);
+        builder.AddEventPreventDefaultAttribute(sequence++, "onclick", OnClickPreventDefault);
+        builder.AddEventStopPropagationAttribute(sequence++, "onclick", OnClickStopPropagation);
 
-        if (createElement)
-            builder.CloseElement();
+        OnBeforeCloseElement(ref sequence, builder);
+
+        builder.CloseElement();
     }
 
-    protected virtual void AddChildContent(ref int sequence, RenderTreeBuilder builder)
+    /// <summary>
+    /// Adds additional render content to the render tree before the element is opened.
+    /// </summary>
+    /// <param name="sequence">A reference to the sequence number.</param>
+    /// <param name="builder">A <see cref="RenderTreeBuilder"/> that will receive the render output.</param>
+    protected virtual void OnBeforeOpenElement(ref int sequence, RenderTreeBuilder builder)
     {
     }
 
-    protected virtual void AddBehaviors(ref int sequence, RenderTreeBuilder builder)
+    /// <summary>
+    /// Adds additional render content to the render tree before the element is closed.
+    /// </summary>
+    /// <param name="sequence">A reference to the sequence number.</param>
+    /// <param name="builder">A <see cref="RenderTreeBuilder"/> that will receive the render output.</param>
+    protected virtual void OnBeforeCloseElement(ref int sequence, RenderTreeBuilder builder)
     {
     }
 
-    protected virtual void AddElementReference(ref int sequence, RenderTreeBuilder builder)
-    {
-    }
-
-    protected virtual void AddEventHandlers(ref int sequence, RenderTreeBuilder builder)
+    /// <summary>
+    /// Adds additional render content to the render tree after the element is closed.
+    /// </summary>
+    /// <param name="sequence">A reference to the sequence number.</param>
+    /// <param name="builder">A <see cref="RenderTreeBuilder"/> that will receive the render output.</param>
+    protected virtual void OnAfterCloseElement(ref int sequence, RenderTreeBuilder builder)
     {
     }
 }

@@ -10,12 +10,19 @@
     [Inject]
     private IJSRuntime JS { get; set; } = default!;
 
+    /// <summary>
+    /// A reference to the container element.
+    /// </summary>
     [Parameter]
     public ElementReference Container { get; set; } = default!;
 
+    /// <summary>
+    /// A callback that will be invoked when the user clicks outside of the container.
+    /// </summary>
     [Parameter]
     public EventCallback OnClick { get; set; }
 
+    /// <inheritdoc />
     public async ValueTask DisposeAsync()
     {
         if (handlerRef is not null)
@@ -28,12 +35,16 @@
         dotNetObjRef?.Dispose();
     }
 
+    /// <summary>
+    /// Invokes the <see cref="OnClick"/> event.
+    /// </summary>
     [JSInvokable]
     public async void NotifyClickOutside()
     {
         await OnClick.InvokeAsync();
     }
 
+    /// <inheritdoc />
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)

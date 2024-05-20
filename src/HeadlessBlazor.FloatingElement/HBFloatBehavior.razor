@@ -6,18 +6,31 @@
     [Inject]
     private IJSRuntime JS { get; set; } = default!;
 
+    /// <summary>
+    /// The alignment of the floating element, relative to the <see cref="Anchor"/>.
+    /// </summary>
     [Parameter]
     public HBFloatAlignment? Alignment { get; set; }
 
+    /// <summary>
+    /// A reference to the anchor element.
+    /// </summary>
     [Parameter, EditorRequired]
     public required ElementReference Anchor { get; set; }
 
+    /// <summary>
+    /// A reference to the floating element.
+    /// </summary>
     [Parameter, EditorRequired]
     public required ElementReference Content { get; set; }
 
+    /// <summary>
+    /// The side to which the floating element should be attached.
+    /// </summary>
     [Parameter]
     public HBFloatSide? Side { get; set; }
 
+    /// <inheritdoc />
     public async ValueTask DisposeAsync()
     {
         if (popover is not null)
@@ -28,6 +41,7 @@
         }
     }
 
+    /// <inheritdoc />
     protected override async Task OnParametersSetAsync()
     {
         if (popover is not null)
@@ -40,6 +54,7 @@
         }
     }
 
+    /// <inheritdoc />
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -47,10 +62,10 @@
             var moduleName = nameof(HBFloatBehavior);
             var module = await JS.InvokeAsync<IJSObjectReference>("import", $"./_content/HeadlessBlazor.FloatingElement/{moduleName}.razor.js");
             popover = await module.InvokeAsync<IJSObjectReference>($"{moduleName}.createInstance", Anchor, Content, new HBFloatOptions
-                {
-                    Alignment = Alignment,
-                    Side = Side
-                });
+            {
+                Alignment = Alignment,
+                Side = Side
+            });
             await module.DisposeAsync();
         }
     }
