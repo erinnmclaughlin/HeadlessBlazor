@@ -32,56 +32,53 @@ public abstract class HBElementBase : ComponentBase
         OnAfterInitialized();
     }
 
-    protected void BuildRenderTree(RenderTreeBuilder builder, ref int sequenceNumber)
+    protected override void BuildRenderTree(RenderTreeBuilder builder)
+    {
+        var seq = 0;
+        BuildRenderTree(ref seq, builder);
+    }
+
+    protected void BuildRenderTree(ref int sequence, RenderTreeBuilder builder)
     {
         var createElement = !string.IsNullOrWhiteSpace(ElementName);
 
         if (createElement)
         {
-            builder.OpenElement(sequenceNumber++, ElementName);
+            builder.OpenElement(sequence++, ElementName);
 
             foreach (var attr in UserAttributes)
             {
                 if (attr.Value != null)
-                    builder.AddAttribute(sequenceNumber, attr.Key, attr.Value);
+                    builder.AddAttribute(sequence, attr.Key, attr.Value);
             }
 
-            builder.AddAttribute(sequenceNumber, "data-hb-tag", GetType().Name);
+            AddEventHandlers(ref sequence, builder);
+            builder.AddEventStopPropagationAttribute(sequence, "onclick", OnClickStopPropagation);
+            builder.AddEventPreventDefaultAttribute(sequence, "onclick", OnClickPreventDefault);
 
-            AddEventHandlers(builder, ref sequenceNumber);
-            builder.AddEventStopPropagationAttribute(sequenceNumber, "onclick", OnClickStopPropagation);
-            builder.AddEventPreventDefaultAttribute(sequenceNumber, "onclick", OnClickPreventDefault);
-
-            AddElementReference(builder, ref sequenceNumber);
+            AddElementReference(ref sequence, builder);
         }
 
-        AddBehaviors(builder, ref sequenceNumber);
-
-        AddChildContent(builder, ref sequenceNumber);
+        AddBehaviors(ref sequence, builder);
+        AddChildContent(ref sequence, builder);
 
         if (createElement)
             builder.CloseElement();
     }
 
-    protected override void BuildRenderTree(RenderTreeBuilder builder)
-    {
-        var seq = 0;
-        BuildRenderTree(builder, ref seq);
-    }
-
-    protected virtual void AddChildContent(RenderTreeBuilder builder, ref int sequence)
+    protected virtual void AddChildContent(ref int sequence, RenderTreeBuilder builder)
     {
     }
 
-    protected virtual void AddBehaviors(RenderTreeBuilder builder, ref int sequenceNumber)
+    protected virtual void AddBehaviors(ref int sequence, RenderTreeBuilder builder)
     {
     }
 
-    protected virtual void AddElementReference(RenderTreeBuilder builder, ref int sequenceNumber)
+    protected virtual void AddElementReference(ref int sequence, RenderTreeBuilder builder)
     {
     }
 
-    protected virtual void AddEventHandlers(RenderTreeBuilder builder, ref int sequenceNumber)
+    protected virtual void AddEventHandlers(ref int sequence, RenderTreeBuilder builder)
     {
     }
 }

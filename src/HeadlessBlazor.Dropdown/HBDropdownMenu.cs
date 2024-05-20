@@ -19,22 +19,22 @@ public class HBDropdownMenu : HBElement
     [Parameter]
     public HBFloatSide? Side { get; set; }
 
-    protected override void AddBehaviors(RenderTreeBuilder builder, ref int sequenceNumber)
+    protected override void AddBehaviors(ref int sequence, RenderTreeBuilder builder)
     {
         if (AutoPosition)
         {
-            builder.OpenComponent<HBFloatBehavior>(sequenceNumber++);
-            builder.AddAttribute(sequenceNumber++, nameof(HBFloatBehavior.Alignment), Alignment);
-            builder.AddAttribute(sequenceNumber++, nameof(HBFloatBehavior.Anchor), Dropdown.ElementReference);
-            builder.AddAttribute(sequenceNumber++, nameof(HBFloatBehavior.Content), ElementReference);
-            builder.AddAttribute(sequenceNumber++, nameof(HBFloatBehavior.Side), Side);
+            builder.OpenComponent<HBFloatBehavior>(sequence++);
+            builder.AddAttribute(sequence, nameof(HBFloatBehavior.Alignment), Alignment);
+            builder.AddAttribute(sequence, nameof(HBFloatBehavior.Anchor), Dropdown.ElementReference);
+            builder.AddAttribute(sequence, nameof(HBFloatBehavior.Content), ElementReference);
+            builder.AddAttribute(sequence, nameof(HBFloatBehavior.Side), Side);
             builder.CloseComponent();
         }
     }
 
-    protected override void AddElementReference(RenderTreeBuilder builder, ref int sequenceNumber)
+    protected override void AddElementReference(ref int sequence, RenderTreeBuilder builder)
     {
-        builder.AddElementReferenceCapture(sequenceNumber, async (elementRef) =>
+        builder.AddElementReferenceCapture(sequence, async (elementRef) =>
         {
             ElementReference = elementRef;
             await InvokeAsync(StateHasChanged);

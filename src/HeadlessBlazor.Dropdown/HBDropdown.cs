@@ -49,7 +49,7 @@ public class HBDropdown : HBElement<HBDropdown>
         builder.AddAttribute(seq++, "Value", this);
         builder.AddAttribute(seq++, "ChildContent", (RenderFragment)((b) =>
         {
-            BuildRenderTree(b, ref seq);
+            BuildRenderTree(ref seq, b);
 
             if (IsOpen && CloseOnOutsideClick)
             {
@@ -63,11 +63,11 @@ public class HBDropdown : HBElement<HBDropdown>
         builder.CloseComponent();
     }
 
-    protected override void AddEventHandlers(RenderTreeBuilder builder, ref int sequenceNumber)
+    protected override void AddEventHandlers(ref int sequence, RenderTreeBuilder builder)
     {
         if (CloseOnEscape)
         {
-            builder.AddAttribute(sequenceNumber++, "onkeydown", EventCallback.Factory.Create<KeyboardEventArgs>(this, async (args) =>
+            builder.AddAttribute(sequence++, "onkeydown", EventCallback.Factory.Create<KeyboardEventArgs>(this, async (args) =>
             {
                 if (args.Key == "Escape")
                     await CloseAsync();
@@ -75,9 +75,9 @@ public class HBDropdown : HBElement<HBDropdown>
         }
     }
 
-    protected override void AddElementReference(RenderTreeBuilder builder, ref int sequenceNumber)
+    protected override void AddElementReference(ref int sequence, RenderTreeBuilder builder)
     {
-        builder.AddElementReferenceCapture(sequenceNumber++, async capturedRef =>
+        builder.AddElementReferenceCapture(sequence++, async capturedRef =>
         {
             ElementReference = capturedRef;
             await InvokeAsync(StateHasChanged);
