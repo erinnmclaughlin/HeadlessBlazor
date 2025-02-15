@@ -8,7 +8,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\HeadlessBlazor.Docs.Client\HeadlessBlazor.Docs.Client.csproj" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.13" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.13" />
   </ItemGroup>
 
 </Project>

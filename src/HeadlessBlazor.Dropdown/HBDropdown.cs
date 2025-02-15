@@ -42,12 +42,26 @@ public class HBDropdown : HBElement<HBDropdown>
     public EventCallback<HBDropdownItem> OnClickItem { get; set; }
 
     /// <summary>
+    /// Invoked when the dropdown menu closes.
+    /// </summary>
+    [Parameter]
+    public EventCallback<HBDropdown> OnClose { get; set; }
+
+    /// <summary>
+    /// Invoked when the dropdown menu opens.
+    /// </summary>
+    [Parameter]
+    public EventCallback<HBDropdown> OnOpen { get; set; }
+
+    /// <summary>
     /// Opens the dropdown menu.
     /// </summary>
     public async Task OpenAsync() => await InvokeAsync(() =>
     {
         IsOpen = true;
         StateHasChanged();
+
+        OnOpen.InvokeAsync(this);
     });
 
     /// <summary>
@@ -57,6 +71,8 @@ public class HBDropdown : HBElement<HBDropdown>
     {
         IsOpen = false;
         StateHasChanged();
+
+        OnClose.InvokeAsync(this);
     });
 
     /// <summary>

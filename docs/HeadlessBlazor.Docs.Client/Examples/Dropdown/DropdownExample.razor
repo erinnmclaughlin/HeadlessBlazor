@@ -1,5 +1,5 @@
 ﻿<div class="p-3">
-    <HBDropdown class="dropdown d-inline-block">
+    <HBDropdown OnOpen="LogEvent" OnClose="LogEvent" class="dropdown d-inline-block">
         <HBDropdownTrigger class="btn btn-primary dropdown-toggle">Click Me</HBDropdownTrigger>
         <HBDropdownMenu class="@(context.IsOpen ? "dropdown-menu show" : "dropdown-menu")">
             <HBDropdownItemButton class="dropdown-item">Option 1</HBDropdownItemButton>
@@ -8,3 +8,10 @@
         </HBDropdownMenu>
     </HBDropdown>
 </div>
+
+@code {
+    private void LogEvent(HBDropdown context)
+    {
+        Console.WriteLine($"Dropdown is {(context.IsOpen ? "open" : "closed")}");
+    }
+}
