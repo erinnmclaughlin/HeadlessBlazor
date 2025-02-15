@@ -12,7 +12,7 @@
   <PropertyGroup>
     <Title>HeadlessBlazor.FloatingElement</Title>
     <Description>A HeadlessBlazor package that enables support for dynamic floating elements such as popovers, tooltips, and dropdowns.</Description>
-    <Version>1.0.0-preview2</Version>
+    <Version>1.0.0-preview3</Version>
     <Authors>erinnmclaughlin</Authors>
     <PackageIcon>HeadlessBlazorLogo.png</PackageIcon>
     <PackageTags>Blazor, HeadlessUI, FloatingElement, Popover, Dropdown, Tooltip</PackageTags>

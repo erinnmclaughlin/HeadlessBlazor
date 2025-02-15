@@ -12,7 +12,7 @@
   <PropertyGroup>
     <Title>HeadlessBlazor.OutsideClick</Title>
     <Description>A HeadlessBlazor package that enables outside click event handling.</Description>
-    <Version>1.0.0-preview2</Version>
+    <Version>1.0.0-preview3</Version>
     <Authors>erinnmclaughlin</Authors>
     <PackageIcon>HeadlessBlazorLogo.png</PackageIcon>
     <PackageTags>Blazor, HeadlessUI, FloatingElement, OutsideClick</PackageTags>
