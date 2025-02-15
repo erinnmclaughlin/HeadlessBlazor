@@ -15,6 +15,16 @@ Install the bundle from [NuGet](https://www.nuget.org/packages/HeadlessBlazor):
 dotnet add package HeadlessBlazor
 ```
 
+Then add the following to your `Program.cs`:
+```csharp
+builder.Services.AddHeadlessBlazor();
+```
+
+And add a using to your `_Imports.razor` file:
+```razor
+@using HeadlessBlazor
+```
+
 ## Individual Packages
 
 > [!TIP]
