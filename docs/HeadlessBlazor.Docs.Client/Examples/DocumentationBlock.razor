@@ -1,4 +1,4 @@
-﻿<div class="mt-4">
+<div class="mt-4">
     <h3 id="@Type.Name">@Title</h3>
 
     <div class="hb-doc-block border">
@@ -17,6 +17,16 @@
                 </pre>
             }
         </div>
+
+        @foreach (var source in AdditionalCode)
+        {
+            <div class="hb-code-preview bg-light border-top">
+                <div class="px-3 pt-3 small text-muted">@source.Name</div>
+                <pre class="mb-0 p-3">
+                <code>@source.Code</code>
+                </pre>
+            </div>
+        }
     </div>
 </div>
 
@@ -33,13 +43,26 @@
     [Parameter, EditorRequired]
     public required Type Type { get; set; }
 
+    /// <summary>
+    /// Extra source files to display as read-only code beneath the main example - e.g. the modal
+    /// body a caller opens. These are shown as source only; they are not rendered as a live demo.
+    /// </summary>
+    [Parameter]
+    public Type[] AdditionalSources { get; set; } = [];
+
     public string CodeBlock { get; private set; } = string.Empty;
+
+    private List<(string Name, string Code)> AdditionalCode { get; } = [];
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
             CodeBlock = await FileProvider.ReadFileAsync(Type.Name);
+
+            foreach (var source in AdditionalSources)
+                AdditionalCode.Add(($"{source.Name}.razor", await FileProvider.ReadFileAsync(source.Name)));
+
             StateHasChanged();
 
             await JS.InvokeVoidAsync("hljs.highlightAll");

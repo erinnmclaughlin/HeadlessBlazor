@@ -21,8 +21,8 @@
 
         // Overlay/dialog styling comes from the global ModalOptions defaults configured in
         // AddSharedServices, so no per-call options are passed here.
-        // ShowAsync<TComponent, TResult> resolves once EditNameDialog calls Modal.CloseAsync(name)
-        // or Modal.CancelAsync() (via the Cancel button) - Canceled and Data are distinguishable.
+        // ShowAsync<TComponent, TResult> resolves once EditNameDialog calls CloseAsync(name)
+        // or CancelAsync() (via the Cancel button) - Canceled and Data are distinguishable.
         var result = await ModalService.ShowAsync<EditNameDialog, string>(parameters);
 
         if (!result.Canceled)

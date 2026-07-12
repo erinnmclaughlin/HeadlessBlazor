@@ -2,8 +2,7 @@ namespace HeadlessBlazor;
 
 /// <summary>
 /// A button that dismisses the enclosing modal when clicked (equivalent to calling
-/// <see cref="IModalInstance.CancelAsync"/>). To close the modal with a result instead,
-/// call <see cref="IModalInstance.CloseAsync"/> directly from the modal body component.
+/// <see cref="IModalInstance.CancelAsync"/>).
 /// </summary>
 public class HBModalClose : HBElement
 {

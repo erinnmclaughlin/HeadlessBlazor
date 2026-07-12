@@ -1,4 +1,4 @@
-@implements IModalComponent<bool>
+@inherits HBModal
 
 <HBModalTitle class="h5">Confirm action</HBModalTitle>
 <HBModalDescription class="text-muted">
@@ -6,12 +6,5 @@
 </HBModalDescription>
 <div class="d-flex justify-content-end gap-2 mt-3">
     <HBModalClose class="btn btn-secondary">Cancel</HBModalClose>
-    <button type="button" class="btn btn-primary" @onclick="Confirm">Confirm</button>
+    <button type="button" class="btn btn-primary" @onclick="CloseAsync">Confirm</button>
 </div>
-
-@code {
-    [CascadingParameter]
-    public IModalInstance<bool>? Modal { get; set; }
-
-    private Task Confirm() => Modal!.CloseAsync(true);
-}

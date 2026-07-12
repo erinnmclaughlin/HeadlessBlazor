@@ -1,7 +1,7 @@
-@implements IModalComponent<string>
+@inherits HBModal<string>
 
 <HBModalTitle class="h5">Edit name</HBModalTitle>
-<EditForm Model="_model" OnValidSubmit="Submit">
+<EditForm Model="_model" OnValidSubmit="() => CloseAsync(_model.Name)">
     <input class="form-control" @bind="_model.Name" @bind:event="oninput" />
     <div class="d-flex justify-content-end gap-2 mt-3">
         <HBModalClose class="btn btn-secondary">Cancel</HBModalClose>
@@ -12,9 +12,6 @@
 @code {
     private readonly NameModel _model = new();
 
-    [CascadingParameter]
-    public IModalInstance<string>? Modal { get; set; }
-
     [Parameter]
     public string? InitialName { get; set; }
 
@@ -22,8 +19,6 @@
     {
         _model.Name = InitialName ?? "";
     }
-
-    private Task Submit() => Modal!.CloseAsync(_model.Name);
 
     private class NameModel
     {
