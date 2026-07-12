@@ -18,6 +18,9 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
+      - name: dotnet build
+        run: dotnet build -c Release
+
       - name: dotnet pack
         run: |
           dotnet pack
