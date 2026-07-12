@@ -10,19 +10,6 @@
 </div>
 
 @code {
-    private static readonly ModalOptions Options = new()
-    {
-        OverlayAttributes = new Dictionary<string, object?>
-        {
-            ["style"] = "position:fixed;inset:0;background:rgba(0,0,0,.5);"
-        },
-        ContentAttributes = new Dictionary<string, object?>
-        {
-            ["class"] = "bg-white rounded shadow p-4",
-            ["style"] = "position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);max-width:28rem;width:90%;z-index:1;"
-        }
-    };
-
     private string? _savedName;
 
     private async Task OpenDialogAsync()
@@ -32,9 +19,11 @@
             [nameof(EditNameDialog.InitialName)] = _savedName
         };
 
+        // Overlay/dialog styling comes from the global ModalOptions defaults configured in
+        // AddSharedServices, so no per-call options are passed here.
         // ShowAsync<TComponent, TResult> resolves once EditNameDialog calls Modal.CloseAsync(name)
         // or Modal.CancelAsync() (via the Cancel button) - Cancelled and Data are distinguishable.
-        var result = await ModalService.ShowAsync<EditNameDialog, string>(parameters, Options);
+        var result = await ModalService.ShowAsync<EditNameDialog, string>(parameters);
 
         if (!result.Cancelled)
             _savedName = result.Data;

@@ -6,6 +6,12 @@ namespace HeadlessBlazor;
 internal sealed class ModalService : IModalService
 {
     private readonly List<ModalInstance> _instances = [];
+    private readonly ModalOptions _defaultOptions;
+
+    public ModalService(ModalOptions defaultOptions)
+    {
+        _defaultOptions = defaultOptions;
+    }
 
     /// <summary>
     /// Raised whenever a modal is shown, closed, or has its accessibility linkage updated.
@@ -25,7 +31,7 @@ internal sealed class ModalService : IModalService
     public Task<ModalResult> ShowAsync<TComponent>(IDictionary<string, object?> parameters, ModalOptions? options = null)
         where TComponent : IComponent
     {
-        var instance = new ModalInstance(this, typeof(TComponent), parameters, options ?? new ModalOptions());
+        var instance = new ModalInstance(this, typeof(TComponent), parameters, options ?? _defaultOptions);
         _instances.Add(instance);
         NotifyStateChanged();
         return instance.Result;

@@ -11,9 +11,17 @@ public static class ServiceCollectionExtensions
     /// <summary>
     /// Registers <see cref="IModalService"/> as a scoped service.
     /// </summary>
-    public static IServiceCollection AddHeadlessBlazorModal(this IServiceCollection services)
+    /// <param name="services">The <see cref="IServiceCollection"/> to add the service to.</param>
+    /// <param name="configureDefaults">
+    /// Optional configuration for the default <see cref="ModalOptions"/> applied to every modal opened
+    /// without its own options (e.g. shared overlay/dialog attributes or escape/outside-click behavior).
+    /// </param>
+    public static IServiceCollection AddHeadlessBlazorModal(this IServiceCollection services, Action<ModalOptions>? configureDefaults = null)
     {
-        services.TryAddScoped<ModalService>();
+        var defaultOptions = new ModalOptions();
+        configureDefaults?.Invoke(defaultOptions);
+
+        services.TryAddScoped<ModalService>(_ => new ModalService(defaultOptions));
         services.TryAddScoped<IModalService>(sp => sp.GetRequiredService<ModalService>());
         return services;
     }

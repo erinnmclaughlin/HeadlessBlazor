@@ -13,20 +13,23 @@ public class HBModalClose : HBElement
     /// The enclosing modal.
     /// </summary>
     [CascadingParameter]
-    public IModalInstance? Modal { get; set; }
+    public IModalInstance Modal { get; set; } = null!;
 
     /// <inheritdoc />
     [Parameter]
     public override string ElementName { get; set; } = "button";
 
     /// <inheritdoc />
+    protected override void OnBeforeInitialized()
+    {
+        if (Modal is null)
+            throw new InvalidOperationException($"{nameof(HBModalClose)} must be used within a modal body rendered by {nameof(HBModalHost)}.");
+    }
+
+    /// <inheritdoc />
     protected override void OnParametersSet()
     {
         UserAttributes.TryAdd("type", "button");
-
-        if (Modal is not null)
-        {
-            UserAttributes.TryAdd("onclick", new EventCallback(this, Modal.CancelAsync));
-        }
+        UserAttributes.TryAdd("onclick", new EventCallback(this, Modal.CancelAsync));
     }
 }

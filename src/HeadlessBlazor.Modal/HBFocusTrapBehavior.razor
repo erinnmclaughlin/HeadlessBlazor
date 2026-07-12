@@ -1,14 +1,13 @@
 @implements IAsyncDisposable
 @namespace HeadlessBlazor
 @using Microsoft.JSInterop
+@inject IJSRuntime JS
 
 @code {
-    private IJSObjectReference? handlerRef;
-    private bool initialized;
-    private bool disposed;
+    private IJSObjectReference? _handlerRef;
 
-    [Inject]
-    private IJSRuntime JS { get; set; } = default!;
+    private bool Initialized { get; set; }
+    private bool Disposed { get; set; }
 
     /// <summary>
     /// A reference to the element within which focus should be trapped.
@@ -19,17 +18,13 @@
     /// <inheritdoc />
     public async ValueTask DisposeAsync()
     {
-        // Set before awaiting anything below, so a disposal that races with an
-        // in-flight OnAfterRenderAsync (e.g. the modal is closed again before JS
-        // interop finishes initializing) is visible to that continuation before it
-        // touches Element - by then the underlying DOM node may already be gone.
-        disposed = true;
+        Disposed = true;
 
-        if (handlerRef is not null)
+        if (_handlerRef is not null)
         {
-            await handlerRef.InvokeVoidAsync("dispose");
-            await handlerRef.DisposeAsync();
-            handlerRef = null;
+            await _handlerRef.InvokeVoidAsync("dispose");
+            await _handlerRef.DisposeAsync();
+            _handlerRef = null;
         }
     }
 
@@ -38,13 +33,13 @@
     {
         // The captured element reference may not be populated on the first render,
         // so initialize as soon as it has a value rather than gating on firstRender.
-        if (!initialized && !string.IsNullOrEmpty(Element.Id))
+        if (!Initialized && !string.IsNullOrEmpty(Element.Id))
         {
-            initialized = true;
+            Initialized = true;
             const string moduleName = nameof(HBFocusTrapBehavior);
             var module = await JS.InvokeAsync<IJSObjectReference>("import", $"./_content/HeadlessBlazor.Modal/{moduleName}.razor.js");
 
-            if (disposed)
+            if (Disposed)
             {
                 await module.DisposeAsync();
                 return;
@@ -53,7 +48,7 @@
             var handler = await module.InvokeAsync<IJSObjectReference>($"{moduleName}.createInstance", Element);
             await module.DisposeAsync();
 
-            if (disposed)
+            if (Disposed)
             {
                 // Disposed while createInstance was in flight - don't hand off a
                 // handle nothing will ever dispose; tear it down immediately.
@@ -62,7 +57,7 @@
                 return;
             }
 
-            handlerRef = handler;
+            _handlerRef = handler;
         }
     }
 }

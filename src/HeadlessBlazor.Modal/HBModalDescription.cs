@@ -14,7 +14,7 @@ public class HBModalDescription : HBElement
     /// The registrar for the enclosing modal's dialog element.
     /// </summary>
     [CascadingParameter]
-    protected IModalContentRegistrar? Content { get; set; }
+    protected IModalContentRegistrar Content { get; set; } = null!;
 
     /// <inheritdoc />
     [Parameter]
@@ -23,6 +23,9 @@ public class HBModalDescription : HBElement
     /// <inheritdoc />
     protected override void OnBeforeInitialized()
     {
+        if (Content is null)
+            throw new InvalidOperationException($"{nameof(HBModalDescription)} must be used within a modal body rendered by {nameof(HBModalHost)}.");
+
         UserAttributes.TryAdd("id", _generatedId);
     }
 
@@ -30,6 +33,6 @@ public class HBModalDescription : HBElement
     protected override void OnAfterInitialized()
     {
         var id = UserAttributes.TryGetValue("id", out var value) && value is string s ? s : _generatedId;
-        Content?.RegisterDescribedBy(id);
+        Content.RegisterDescribedBy(id);
     }
 }
