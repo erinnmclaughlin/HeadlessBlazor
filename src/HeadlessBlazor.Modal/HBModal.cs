@@ -36,16 +36,3 @@ public abstract class HBModal<TResult> : ComponentBase, IModalComponent<TResult>
     /// </summary>
     public Task CancelAsync() => Modal.CancelAsync();
 }
-
-/// <summary>
-/// A modal that produces a <see cref="bool"/> result.
-/// </summary>
-public abstract class HBModal : HBModal<bool>
-{
-    /// <summary>
-    /// Closes the modal, resolving the <see cref="IModalService.ShowAsync{TComponent, TResult}(ModalOptions?)"/>
-    /// call that opened it with <see langword="true"/>.
-    /// </summary>
-    /// <returns></returns>
-    public Task CloseAsync() => CloseAsync(true);
-}
