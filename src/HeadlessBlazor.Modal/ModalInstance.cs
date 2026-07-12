@@ -1,19 +1,21 @@
+using Microsoft.AspNetCore.Components.Rendering;
+
 namespace HeadlessBlazor;
 
 /// <summary>
-/// Tracks a single open modal: what to render, its options, its accessibility linkage, and
-/// the pending result to hand back to whoever called <see cref="IModalService.ShowAsync{TComponent}(ModalOptions?)"/>.
-/// Constructed exclusively by <see cref="ModalService"/> and rendered by <see cref="HBModalHost"/> -
-/// not meant to be created directly.
+/// Tracks a single open modal: what to render, its options, its accessibility linkage, and its
+/// transition phase. The result value it hands back to the caller is typed, so this base is
+/// abstract and the concrete instance is <see cref="ModalInstance{TResult}"/>. Constructed
+/// exclusively by <see cref="HeadlessBlazor.ModalService"/> and rendered by <see cref="HBModalHost"/> - not
+/// meant to be created directly.
 /// </summary>
-public sealed class ModalInstance : IModalInstance, IModalContentRegistrar
+public abstract class ModalInstance : IModalInstance, IModalContentRegistrar
 {
-    private readonly ModalService _service;
-    private readonly TaskCompletionSource<ModalResult> _resultSource = new(TaskCreationOptions.RunContinuationsAsynchronously);
+    private protected readonly ModalService ModalService;
 
-    internal ModalInstance(ModalService service, Type componentType, IDictionary<string, object?> parameters, ModalOptions options)
+    private protected ModalInstance(ModalService modalService, Type componentType, IDictionary<string, object?> parameters, ModalOptions options)
     {
-        _service = service;
+        ModalService = modalService;
         ComponentType = componentType;
         Parameters = parameters;
         Options = options;
@@ -77,25 +79,72 @@ public sealed class ModalInstance : IModalInstance, IModalContentRegistrar
     /// </summary>
     public string? DescribedBy { get; private set; }
 
-    internal Task<ModalResult> Result => _resultSource.Task;
-
     /// <inheritdoc />
-    public Task CloseAsync(object? result = null) => _service.CloseAsync(this, ModalResult.Ok(result));
+    public Task CancelAsync() => ModalService.CloseAsync(this, CompleteCanceled);
 
-    /// <inheritdoc />
-    public Task CancelAsync() => _service.CloseAsync(this, ModalResult.Cancel());
+    /// <summary>
+    /// Completes the pending result with a canceled outcome. Implemented by the typed subclass,
+    /// which owns the <see cref="TaskCompletionSource{TResult}"/>.
+    /// </summary>
+    private protected abstract void CompleteCanceled();
+
+    /// <summary>
+    /// Renders the body component wrapped in a cascade of the typed <see cref="IModalInstance{TResult}"/>,
+    /// so the body (which knows its own result type) can close itself with a strongly-typed value.
+    /// The typed cascade also satisfies non-generic <see cref="IModalInstance"/> consumers such as
+    /// <see cref="HBModalClose"/>. Implemented by the typed subclass, which knows <c>TResult</c>.
+    /// </summary>
+    internal abstract RenderFragment RenderBody();
 
     void IModalContentRegistrar.RegisterLabelledBy(string id)
     {
         LabelledBy = id;
-        _service.NotifyStateChanged();
+        ModalService.NotifyStateChanged();
     }
 
     void IModalContentRegistrar.RegisterDescribedBy(string id)
     {
         DescribedBy = id;
-        _service.NotifyStateChanged();
+        ModalService.NotifyStateChanged();
+    }
+}
+
+/// <summary>
+/// A concrete open modal whose body resolves with a value of type <typeparamref name="TResult"/>.
+/// </summary>
+/// <typeparam name="TResult">The type of the modal's result value.</typeparam>
+public sealed class ModalInstance<TResult> : ModalInstance, IModalInstance<TResult>
+{
+    private readonly TaskCompletionSource<ModalResult<TResult>> _resultSource = new(TaskCreationOptions.RunContinuationsAsynchronously);
+
+    internal ModalInstance(ModalService modalService, Type componentType, IDictionary<string, object?> parameters, ModalOptions options)
+        : base(modalService, componentType, parameters, options)
+    {
     }
 
-    internal void SetResult(ModalResult result) => _resultSource.TrySetResult(result);
+    internal Task<ModalResult<TResult>> Result => _resultSource.Task;
+
+    /// <inheritdoc />
+    public Task CloseAsync(TResult result)
+        => ModalService.CloseAsync(this, () => _resultSource.TrySetResult(ModalResult<TResult>.Ok(result)));
+
+    private protected override void CompleteCanceled()
+        => _resultSource.TrySetResult(ModalResult<TResult>.Cancel());
+
+    internal override RenderFragment RenderBody() => builder =>
+    {
+        builder.OpenComponent<CascadingValue<IModalInstance<TResult>>>(0);
+        builder.AddComponentParameter(1, "Value", this);
+        builder.AddComponentParameter(2, "IsFixed", true);
+        builder.AddComponentParameter(3, "ChildContent", (RenderFragment)RenderDynamicBody);
+        builder.CloseComponent();
+    };
+
+    private void RenderDynamicBody(RenderTreeBuilder builder)
+    {
+        builder.OpenComponent<DynamicComponent>(0);
+        builder.AddComponentParameter(1, nameof(DynamicComponent.Type), ComponentType);
+        builder.AddComponentParameter(2, nameof(DynamicComponent.Parameters), Parameters);
+        builder.CloseComponent();
+    }
 }

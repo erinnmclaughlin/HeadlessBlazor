@@ -1,3 +1,5 @@
+@implements IModalComponent<bool>
+
 <HBModalTitle class="h5">Confirm action</HBModalTitle>
 <HBModalDescription class="text-muted">
     Are you sure you want to continue? This is a fully headless, accessible dialog.
@@ -9,7 +11,7 @@
 
 @code {
     [CascadingParameter]
-    public IModalInstance? Modal { get; set; }
+    public IModalInstance<bool>? Modal { get; set; }
 
     private Task Confirm() => Modal!.CloseAsync(true);
 }

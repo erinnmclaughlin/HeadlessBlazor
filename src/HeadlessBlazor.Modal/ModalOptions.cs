@@ -8,13 +8,13 @@ namespace HeadlessBlazor;
 public class ModalOptions
 {
     /// <summary>
-    /// When <see langword="true"/>, the modal is cancelled when the escape key is pressed.
+    /// When <see langword="true"/>, the modal is canceled when the escape key is pressed.
     /// Default is <see langword="true"/>.
     /// </summary>
     public bool CloseOnEscape { get; set; } = true;
 
     /// <summary>
-    /// When <see langword="true"/>, the modal is cancelled when the overlay (backdrop) is clicked.
+    /// When <see langword="true"/>, the modal is canceled when the overlay (backdrop) is clicked.
     /// Default is <see langword="true"/>.
     /// </summary>
     public bool CloseOnOutsideClick { get; set; } = true;

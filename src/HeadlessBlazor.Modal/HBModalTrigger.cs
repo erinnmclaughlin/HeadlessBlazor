@@ -2,10 +2,12 @@ namespace HeadlessBlazor;
 
 /// <summary>
 /// A button that opens <typeparamref name="TComponent"/> as a modal via <see cref="IModalService"/>
-/// when clicked.
+/// when clicked. <typeparamref name="TResult"/> is the result type declared by
+/// <typeparamref name="TComponent"/> via <see cref="IModalComponent{TResult}"/>.
 /// </summary>
 /// <typeparam name="TComponent">The component to render as the modal's body.</typeparam>
-public class HBModalTrigger<TComponent> : HBElement where TComponent : IComponent
+/// <typeparam name="TResult">The type of value the modal resolves with.</typeparam>
+public class HBModalTrigger<TComponent, TResult> : HBElement where TComponent : IComponent, IModalComponent<TResult>
 {
     [Inject]
     private IModalService ModalService { get; set; } = null!;
@@ -26,7 +28,7 @@ public class HBModalTrigger<TComponent> : HBElement where TComponent : IComponen
     /// Invoked after the modal closes or is canceled, with its result.
     /// </summary>
     [Parameter]
-    public EventCallback<ModalResult> OnClosed { get; set; }
+    public EventCallback<ModalResult<TResult>> OnClosed { get; set; }
 
     /// <inheritdoc />
     [Parameter]
@@ -41,8 +43,8 @@ public class HBModalTrigger<TComponent> : HBElement where TComponent : IComponen
     private async Task HandleClickAsync()
     {
         var result = Parameters is null
-            ? await ModalService.ShowAsync<TComponent>(Options)
-            : await ModalService.ShowAsync<TComponent>(Parameters, Options);
+            ? await ModalService.ShowAsync<TComponent, TResult>(Options)
+            : await ModalService.ShowAsync<TComponent, TResult>(Parameters, Options);
 
         await OnClosed.InvokeAsync(result);
     }

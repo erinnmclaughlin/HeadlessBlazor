@@ -76,7 +76,7 @@ Then show it from anywhere with `IModalService`:
     {
         var result = await ModalService.ShowAsync<ConfirmDialog, bool>();
 
-        if (!result.Cancelled && result.Data)
+        if (!result.Canceled && result.Data)
         {
             // deleted
         }
@@ -212,10 +212,10 @@ but the animation itself is entirely yours - use any properties and easing you l
 ## Results
 
 `ModalResult` (and the strongly-typed `ModalResult<TResult>` returned by
-`ShowAsync<TComponent, TResult>()`) distinguishes `Cancelled` from `Data`: a modal
+`ShowAsync<TComponent, TResult>()`) distinguishes `Canceled` from `Data`: a modal
 dismissed via `CancelAsync()`, the escape key, `HBModalClose`, or an outside click resolves
-with `Cancelled = true`, which is not the same as `Modal.CloseAsync(false)` resolving with
-`Cancelled = false, Data = false`. This matters for confirm dialogs in particular - you can
+with `Canceled = true`, which is not the same as `Modal.CloseAsync(false)` resolving with
+`Canceled = false, Data = false`. This matters for confirm dialogs in particular - you can
 tell "the user explicitly said no" apart from "the user dismissed the dialog without
 deciding."
 

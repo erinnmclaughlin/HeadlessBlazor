@@ -1,62 +1,38 @@
 namespace HeadlessBlazor;
 
 /// <summary>
-/// The outcome of a modal shown via <see cref="IModalService"/>.
-/// </summary>
-public sealed class ModalResult
-{
-    /// <summary>
-    /// Indicates whether the modal was dismissed without producing a result (e.g. via
-    /// <see cref="IModalInstance.CancelAsync"/>, the escape key, or an outside click) rather
-    /// than closed with <see cref="IModalInstance.CloseAsync"/>. Kept distinct from
-    /// <c>Data is null</c> so a "Cancel" button can be told apart from an explicit
-    /// <c>Modal.CloseAsync(false)</c>.
-    /// </summary>
-    public bool Cancelled { get; }
-
-    /// <summary>
-    /// The value passed to <see cref="IModalInstance.CloseAsync"/>, if any.
-    /// </summary>
-    public object? Data { get; }
-
-    private ModalResult(bool cancelled, object? data)
-    {
-        Cancelled = cancelled;
-        Data = data;
-    }
-
-    /// <summary>
-    /// Creates a result representing a modal that was closed with an optional value.
-    /// </summary>
-    public static ModalResult Ok(object? data = null) => new(false, data);
-
-    /// <summary>
-    /// Creates a result representing a modal that was dismissed without a value.
-    /// </summary>
-    public static ModalResult Cancel() => new(true, null);
-}
-
-/// <summary>
-/// The strongly-typed outcome of a modal shown via <see cref="ModalServiceExtensions"/>.
+/// The outcome of a modal shown via <see cref="IModalService.ShowAsync{TComponent, TResult}(ModalOptions?)"/>.
 /// </summary>
 /// <typeparam name="TResult">The type of the modal's result value.</typeparam>
 public readonly struct ModalResult<TResult>
 {
-    /// <inheritdoc cref="ModalResult.Cancelled" />
-    public bool Cancelled { get; }
+    /// <summary>
+    /// Indicates whether the modal was dismissed without producing a result (e.g. via
+    /// <see cref="IModalInstance.CancelAsync"/>, the escape key, or an outside click) rather than
+    /// closed with <see cref="IModalInstance{TResult}.CloseAsync"/>. Kept distinct from
+    /// <c>Data is null</c> so a "Cancel" button can be told apart from an explicit <c>CloseAsync(null)</c>.
+    /// </summary>
+    public bool Canceled { get; }
 
-    /// <inheritdoc cref="ModalResult.Data" />
+    /// <summary>
+    /// The value passed to <see cref="IModalInstance{TResult}.CloseAsync"/>. Only meaningful when
+    /// <see cref="Canceled"/> is <see langword="false"/>; otherwise <see langword="default"/>.
+    /// </summary>
     public TResult? Data { get; }
 
-    internal ModalResult(bool cancelled, TResult? data)
+    private ModalResult(bool canceled, TResult? data)
     {
-        Cancelled = cancelled;
+        Canceled = canceled;
         Data = data;
     }
 
-    /// <inheritdoc cref="ModalResult.Ok" />
+    /// <summary>
+    /// Creates a result representing a modal that was closed with <paramref name="data"/>.
+    /// </summary>
     public static ModalResult<TResult> Ok(TResult data) => new(false, data);
 
-    /// <inheritdoc cref="ModalResult.Cancel" />
+    /// <summary>
+    /// Creates a result representing a modal that was dismissed without a value.
+    /// </summary>
     public static ModalResult<TResult> Cancel() => new(true, default);
 }

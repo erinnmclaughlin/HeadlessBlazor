@@ -22,20 +22,26 @@ internal sealed class ModalService : IModalService
     /// </summary>
     internal IReadOnlyList<ModalInstance> Instances => _instances;
 
-    public Task<ModalResult> ShowAsync<TComponent>(ModalOptions? options = null)
-        where TComponent : IComponent
-        => ShowAsync<TComponent>(new Dictionary<string, object?>(), options);
+    public Task<ModalResult<TResult>> ShowAsync<TComponent, TResult>(ModalOptions? options = null)
+        where TComponent : IComponent, IModalComponent<TResult>
+        => ShowAsync<TComponent, TResult>(new Dictionary<string, object?>(), options);
 
-    public Task<ModalResult> ShowAsync<TComponent>(IDictionary<string, object?> parameters, ModalOptions? options = null)
-        where TComponent : IComponent
+    public Task<ModalResult<TResult>> ShowAsync<TComponent, TResult>(IDictionary<string, object?> parameters, ModalOptions? options = null)
+        where TComponent : IComponent, IModalComponent<TResult>
     {
-        var instance = new ModalInstance(this, typeof(TComponent), parameters, options ?? _defaultOptions);
+        var instance = new ModalInstance<TResult>(this, typeof(TComponent), parameters, options ?? _defaultOptions);
         _instances.Add(instance);
         NotifyStateChanged();
         return instance.Result;
     }
 
-    internal async Task CloseAsync(ModalInstance instance, ModalResult result)
+    /// <summary>
+    /// Removes <paramref name="instance"/> (playing its exit transition first, if enabled) and then
+    /// runs <paramref name="complete"/> to resolve its pending result. The result value itself is
+    /// typed and owned by the instance, so it is captured in <paramref name="complete"/> and this
+    /// orchestration stays result-type-agnostic.
+    /// </summary>
+    internal async Task CloseAsync(ModalInstance instance, Action complete)
     {
         // Guard against a double close (e.g. Escape and the close button both firing, or a
         // second close arriving while the exit transition is still playing).
@@ -54,7 +60,7 @@ internal sealed class ModalService : IModalService
         if (_instances.Remove(instance))
             NotifyStateChanged();
 
-        instance.SetResult(result);
+        complete();
     }
 
     internal void NotifyStateChanged() => StateChanged?.Invoke();

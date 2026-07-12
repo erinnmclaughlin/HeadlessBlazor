@@ -1,7 +1,8 @@
 @* Renders a single open modal: the overlay and dialog content as siblings (so a
    click inside the dialog never bubbles into the overlay's close handler),
-   cascades IModalInstance/IModalContentRegistrar into the dynamically-rendered
-   body component, and traps focus within the dialog while it's mounted.
+   cascades the typed IModalInstance<TResult> (via Instance.RenderBody) and
+   IModalContentRegistrar into the dynamically-rendered body component, and traps
+   focus within the dialog while it's mounted.
    The content div uses the native `autofocus` attribute (not JS interop) so it
    already has focus - and @onkeydown="HandleKeyDown" is already live - the
    instant it's inserted, with no async gap during which Escape silently does
@@ -29,10 +30,12 @@
      aria-labelledby="@Instance.LabelledBy"
      aria-describedby="@Instance.DescribedBy"
      @onkeydown="HandleKeyDown">
-    <CascadingValue Value="(IModalInstance)Instance" IsFixed="true">
-        <CascadingValue Value="(IModalContentRegistrar)Instance" IsFixed="true">
-            <DynamicComponent Type="Instance.ComponentType" Parameters="Instance.Parameters" />
-        </CascadingValue>
+    <CascadingValue Value="(IModalContentRegistrar)Instance" IsFixed="true">
+        @* RenderBody wraps the body component in a cascade of the typed IModalInstance<TResult>
+           (which also satisfies non-generic IModalInstance consumers like HBModalClose), so the
+           body can close itself with a strongly-typed value. The typed cascade lives on the
+           instance because this host item only knows the non-generic ModalInstance base. *@
+        @Instance.RenderBody()
     </CascadingValue>
 </div>
 

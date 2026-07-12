@@ -1,3 +1,5 @@
+@implements IModalComponent<string>
+
 <HBModalTitle class="h5">Edit name</HBModalTitle>
 <EditForm Model="_model" OnValidSubmit="Submit">
     <input class="form-control" @bind="_model.Name" @bind:event="oninput" />
@@ -11,7 +13,7 @@
     private readonly NameModel _model = new();
 
     [CascadingParameter]
-    public IModalInstance? Modal { get; set; }
+    public IModalInstance<string>? Modal { get; set; }
 
     [Parameter]
     public string? InitialName { get; set; }
