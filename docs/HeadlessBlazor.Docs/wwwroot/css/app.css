@@ -3,6 +3,38 @@
     width: 100%
 }
 
+/* Modal example styling. HeadlessBlazor.Modal ships no CSS; these classes are supplied by
+   the consumer (here, globally via ModalOptions). The data-state attribute is set by the host
+   while ModalOptions.TransitionDuration is configured, so the enter/exit animations play. */
+.hb-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .5);
+    opacity: 0;
+    transition: opacity .2s ease;
+}
+
+.hb-modal-overlay[data-state="open"] {
+    opacity: 1;
+}
+
+.hb-modal-dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    max-width: 28rem;
+    width: 90%;
+    z-index: 1;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(.96);
+    transition: opacity .2s ease, transform .2s ease;
+}
+
+.hb-modal-dialog[data-state="open"] {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
 h1:focus {
     outline: none
 }

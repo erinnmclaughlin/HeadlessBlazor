@@ -5,18 +5,20 @@ public static class SharedServiceConfiguration
     public static IServiceCollection AddSharedServices(this IServiceCollection services)
     {
         // Modal styling is applied once here as global defaults, so individual call sites
-        // don't have to pass ModalOptions of their own.
+        // don't have to pass ModalOptions of their own. The classes below live in app.css and
+        // transition off the data-state attribute the host sets while TransitionDuration is set.
         return services.AddHeadlessBlazor(configureModalDefaults: options =>
         {
+            options.TransitionDuration = TimeSpan.FromMilliseconds(200);
+
             options.OverlayAttributes = new Dictionary<string, object?>
             {
-                ["style"] = "position:fixed;inset:0;background:rgba(0,0,0,.5);"
+                ["class"] = "hb-modal-overlay"
             };
 
             options.ContentAttributes = new Dictionary<string, object?>
             {
-                ["class"] = "bg-white rounded shadow p-4",
-                ["style"] = "position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);max-width:28rem;width:90%;z-index:1;"
+                ["class"] = "hb-modal-dialog bg-white rounded shadow p-4"
             };
         });
     }

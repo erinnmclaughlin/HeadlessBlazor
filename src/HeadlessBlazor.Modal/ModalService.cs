@@ -35,13 +35,26 @@ internal sealed class ModalService : IModalService
         return instance.Result;
     }
 
-    internal Task CloseAsync(ModalInstance instance, ModalResult result)
+    internal async Task CloseAsync(ModalInstance instance, ModalResult result)
     {
+        // Guard against a double close (e.g. Escape and the close button both firing, or a
+        // second close arriving while the exit transition is still playing).
+        if (instance.Phase == ModalPhase.Leaving || !_instances.Contains(instance))
+            return;
+
+        if (instance.TransitionsEnabled)
+        {
+            // Keep the instance mounted and flip it back to its closed state so the exit
+            // transition can play, then remove it once the configured duration elapses.
+            instance.MarkLeaving();
+            NotifyStateChanged();
+            await Task.Delay(instance.Options.TransitionDuration!.Value);
+        }
+
         if (_instances.Remove(instance))
             NotifyStateChanged();
 
         instance.SetResult(result);
-        return Task.CompletedTask;
     }
 
     internal void NotifyStateChanged() => StateChanged?.Invoke();

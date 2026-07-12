@@ -30,4 +30,14 @@ public class ModalOptions
     /// element rendered by <see cref="HBModalHost"/>.
     /// </summary>
     public IDictionary<string, object?>? ContentAttributes { get; set; }
+
+    /// <summary>
+    /// When set, enables enter/exit transitions. The overlay and dialog elements are given a
+    /// <c>data-state</c> attribute (<c>"closed"</c> then <c>"open"</c> on enter, and back to
+    /// <c>"closed"</c> on close) that CSS can transition off, and the modal stays mounted for
+    /// this duration after it is closed so the exit transition can play before the element is
+    /// removed. Set it to match the duration of your CSS transition. Default is
+    /// <see langword="null"/> (no transitions; the modal opens and closes instantly).
+    /// </summary>
+    public TimeSpan? TransitionDuration { get; set; }
 }

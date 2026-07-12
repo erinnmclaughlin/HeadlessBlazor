@@ -26,6 +26,38 @@ public sealed class ModalInstance : IModalInstance, IModalContentRegistrar
     public ModalOptions Options { get; }
 
     /// <summary>
+    /// Whether enter/exit transitions are enabled for this modal (i.e. a positive
+    /// <see cref="ModalOptions.TransitionDuration"/> was supplied).
+    /// </summary>
+    internal bool TransitionsEnabled => Options.TransitionDuration is { } duration && duration > TimeSpan.Zero;
+
+    /// <summary>
+    /// The current transition phase, used to drive the rendered <c>data-state</c> attribute.
+    /// </summary>
+    internal ModalPhase Phase { get; private set; } = ModalPhase.Entering;
+
+    /// <summary>
+    /// The value rendered as the <c>data-state</c> attribute on the overlay and dialog elements:
+    /// <c>"open"</c> once entered, otherwise <c>"closed"</c> (both while entering and while leaving).
+    /// </summary>
+    internal string DataState => Phase == ModalPhase.Entered ? "open" : "closed";
+
+    /// <summary>
+    /// Advances from <see cref="ModalPhase.Entering"/> to <see cref="ModalPhase.Entered"/> so the
+    /// enter transition plays. No-op once the modal has left <see cref="ModalPhase.Entering"/>.
+    /// </summary>
+    internal void MarkEntered()
+    {
+        if (Phase == ModalPhase.Entering)
+            Phase = ModalPhase.Entered;
+    }
+
+    /// <summary>
+    /// Moves the modal into <see cref="ModalPhase.Leaving"/> so the exit transition plays.
+    /// </summary>
+    internal void MarkLeaving() => Phase = ModalPhase.Leaving;
+
+    /// <summary>
     /// The type of the component rendered as the modal's body.
     /// </summary>
     public Type ComponentType { get; }

@@ -100,6 +100,7 @@ Behavior and attribute passthrough are controlled by `ModalOptions`:
 | `CloseOnOutsideClick` | `true` | Cancel the modal when the overlay (backdrop) is clicked. |
 | `OverlayAttributes` | `null` | Attributes (e.g. `class`, `style`) applied to the overlay element. |
 | `ContentAttributes` | `null` | Attributes (e.g. `class`, `style`) applied to the dialog content element. |
+| `TransitionDuration` | `null` | When set, enables enter/exit transitions (see [Transitions](#transitions)). |
 
 Since HeadlessBlazor.Modal ships no styling of its own, `OverlayAttributes`/`ContentAttributes`
 are how you position and style the backdrop and dialog.
@@ -161,6 +162,52 @@ await ModalService.ShowAsync<ConfirmDialog>();
 > re-specify any overlay/dialog styling you still want. (Merging is intentionally avoided:
 > the `bool` options can't distinguish "explicitly set to `false`" from "left unset", so a
 > merge could silently clobber an intentional `false`.)
+
+## Transitions
+
+By default a modal appears and disappears instantly. Set `TransitionDuration` to animate it in
+and out. When set, the overlay and dialog elements each get a `data-state` attribute that you
+transition off of in CSS:
+
+- On open, `data-state` starts at `"closed"` and flips to `"open"` on the next frame, so a CSS
+  transition plays the modal in.
+- On close, `data-state` returns to `"closed"` and the modal stays mounted for
+  `TransitionDuration` so the exit transition can play before the element is removed.
+
+Set `TransitionDuration` to match your CSS transition duration:
+
+```csharp
+builder.Services.AddHeadlessBlazorModal(configureDefaults: options =>
+{
+    options.TransitionDuration = TimeSpan.FromMilliseconds(200);
+    options.OverlayAttributes = new Dictionary<string, object?> { ["class"] = "modal-overlay" };
+    options.ContentAttributes = new Dictionary<string, object?> { ["class"] = "modal-dialog" };
+});
+```
+
+```css
+.modal-overlay {
+    opacity: 0;
+    transition: opacity .2s ease;
+}
+.modal-overlay[data-state="open"] {
+    opacity: 1;
+}
+
+.modal-dialog {
+    opacity: 0;
+    transform: scale(.96);
+    transition: opacity .2s ease, transform .2s ease;
+}
+.modal-dialog[data-state="open"] {
+    opacity: 1;
+    transform: scale(1);
+}
+```
+
+The library owns the timing (mounting, the enter flip, and holding the element through the exit),
+but the animation itself is entirely yours - use any properties and easing you like. No
+`data-state` attribute is rendered at all when `TransitionDuration` is `null`.
 
 ## Results
 
