@@ -20,12 +20,12 @@ public class HBModalOverlay : HBElement
     /// The parent <see cref="HBModal"/> component.
     /// </summary>
     [CascadingParameter]
-    protected HBModal Modal { get; set; } = default!;
+    protected HBModal? Modal { get; set; }
 
     /// <inheritdoc />
     protected override void OnParametersSet()
     {
-        if (Modal.CloseOnOutsideClick)
+        if (Modal?.CloseOnOutsideClick ?? false)
             UserAttributes.TryAdd("onclick", new EventCallback(this, Modal.CloseAsync));
     }
 
