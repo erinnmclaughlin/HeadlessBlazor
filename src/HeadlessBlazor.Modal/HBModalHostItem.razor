@@ -1,0 +1,44 @@
+@* Renders a single open modal: the overlay and dialog content as siblings (so a
+   click inside the dialog never bubbles into the overlay's close handler),
+   cascades IModalInstance/IModalContentRegistrar into the dynamically-rendered
+   body component, and traps focus within the dialog while it's mounted.
+   Rendered exclusively by HBModalHost - not meant to be used directly. *@
+
+<div @attributes="Instance.Options.OverlayAttributes" @onclick="HandleOverlayClick"></div>
+<div @ref="_contentElement" @attributes="Instance.Options.ContentAttributes"
+     role="dialog" aria-modal="true" tabindex="-1"
+     aria-labelledby="@Instance.LabelledBy" aria-describedby="@Instance.DescribedBy"
+     @onkeydown="HandleKeyDown">
+    <CascadingValue Value="(IModalInstance)Instance" IsFixed="true">
+        <CascadingValue Value="(IModalContentRegistrar)Instance" IsFixed="true">
+            <DynamicComponent Type="Instance.ComponentType" Parameters="Instance.Parameters" />
+        </CascadingValue>
+    </CascadingValue>
+</div>
+
+<HBFocusTrapBehavior Element="_contentElement" />
+
+@code {
+    private ElementReference _contentElement;
+
+    /// <summary>
+    /// The modal to render.
+    /// </summary>
+    [Parameter, EditorRequired]
+    public required ModalInstance Instance { get; set; }
+
+    /// <inheritdoc />
+    protected override void OnAfterRender(bool firstRender)
+    {
+        // See HBModalHost.OnAfterRender - forces a second render so
+        // HBFocusTrapBehavior sees a populated Element.
+        if (firstRender)
+            StateHasChanged();
+    }
+
+    private Task HandleOverlayClick()
+        => Instance.Options.CloseOnOutsideClick ? Instance.CancelAsync() : Task.CompletedTask;
+
+    private Task HandleKeyDown(KeyboardEventArgs args)
+        => Instance.Options.CloseOnEscape && args.Key == "Escape" ? Instance.CancelAsync() : Task.CompletedTask;
+}

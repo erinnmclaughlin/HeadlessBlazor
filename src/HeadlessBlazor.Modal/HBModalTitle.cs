@@ -3,18 +3,18 @@ using Microsoft.AspNetCore.Components;
 namespace HeadlessBlazor;
 
 /// <summary>
-/// The accessible title of the modal. Registers its <c>id</c> with the parent
-/// <see cref="HBModalContent"/> so the dialog is labelled via <c>aria-labelledby</c>.
+/// The accessible title of the modal. Registers its <c>id</c> with the enclosing modal's
+/// dialog element so the dialog is labelled via <c>aria-labelledby</c>.
 /// </summary>
 public class HBModalTitle : HBElement
 {
     private readonly string _generatedId = $"hb-modal-title-{Guid.NewGuid():N}";
 
     /// <summary>
-    /// The parent <see cref="HBModalContent"/> component.
+    /// The registrar for the enclosing modal's dialog element.
     /// </summary>
     [CascadingParameter]
-    protected HBModalContent? Content { get; set; }
+    protected IModalContentRegistrar? Content { get; set; }
 
     /// <inheritdoc />
     [Parameter]

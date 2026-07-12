@@ -1,0 +1,44 @@
+@* Renders every modal currently open via IModalService. Add exactly one of these
+   somewhere in the app (e.g. the main layout) - it portals itself to the end of
+   <body>, so it doesn't matter where in the tree it's placed. *@
+@implements IDisposable
+
+<div @ref="_element">
+    @foreach (var instance in Service.Instances)
+    {
+        <HBModalHostItem @key="instance.Id" Instance="instance" />
+    }
+</div>
+
+<HBPortalBehavior Element="_element" />
+
+@code {
+    private ElementReference _element;
+
+    [Inject]
+    internal ModalService Service { get; set; } = default!;
+
+    /// <inheritdoc />
+    protected override void OnInitialized()
+    {
+        Service.StateChanged += HandleStateChanged;
+    }
+
+    /// <inheritdoc />
+    protected override void OnAfterRender(bool firstRender)
+    {
+        // The captured element reference isn't populated until after this first
+        // render, so force one more render to hand HBPortalBehavior a non-empty
+        // Element (mirrors the pattern used by HBModalHostItem/HBFocusTrapBehavior).
+        if (firstRender)
+            StateHasChanged();
+    }
+
+    private void HandleStateChanged() => InvokeAsync(StateHasChanged);
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        Service.StateChanged -= HandleStateChanged;
+    }
+}

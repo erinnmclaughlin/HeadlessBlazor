@@ -5,6 +5,7 @@
 @code {
     private IJSObjectReference? handlerRef;
     private bool initialized;
+    private bool disposed;
 
     [Inject]
     private IJSRuntime JS { get; set; } = default!;
@@ -18,6 +19,12 @@
     /// <inheritdoc />
     public async ValueTask DisposeAsync()
     {
+        // Set before awaiting anything below, so a disposal that races with an
+        // in-flight OnAfterRenderAsync (e.g. the modal is closed again before JS
+        // interop finishes initializing) is visible to that continuation before it
+        // touches Element - by then the underlying DOM node may already be gone.
+        disposed = true;
+
         if (handlerRef is not null)
         {
             await handlerRef.InvokeVoidAsync("dispose");
@@ -36,8 +43,26 @@
             initialized = true;
             const string moduleName = nameof(HBFocusTrapBehavior);
             var module = await JS.InvokeAsync<IJSObjectReference>("import", $"./_content/HeadlessBlazor.Modal/{moduleName}.razor.js");
-            handlerRef = await module.InvokeAsync<IJSObjectReference>($"{moduleName}.createInstance", Element);
+
+            if (disposed)
+            {
+                await module.DisposeAsync();
+                return;
+            }
+
+            var handler = await module.InvokeAsync<IJSObjectReference>($"{moduleName}.createInstance", Element);
             await module.DisposeAsync();
+
+            if (disposed)
+            {
+                // Disposed while createInstance was in flight - don't hand off a
+                // handle nothing will ever dispose; tear it down immediately.
+                await handler.InvokeVoidAsync("dispose");
+                await handler.DisposeAsync();
+                return;
+            }
+
+            handlerRef = handler;
         }
     }
 }

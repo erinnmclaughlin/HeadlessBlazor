@@ -1,0 +1,15 @@
+<HBModalTitle class="h5">Confirm action</HBModalTitle>
+<HBModalDescription class="text-muted">
+    Are you sure you want to continue? This is a fully headless, accessible dialog.
+</HBModalDescription>
+<div class="d-flex justify-content-end gap-2 mt-3">
+    <HBModalClose class="btn btn-secondary">Cancel</HBModalClose>
+    <button type="button" class="btn btn-primary" @onclick="Confirm">Confirm</button>
+</div>
+
+@code {
+    [CascadingParameter]
+    public IModalInstance? Modal { get; set; }
+
+    private Task Confirm() => Modal!.CloseAsync(true);
+}
