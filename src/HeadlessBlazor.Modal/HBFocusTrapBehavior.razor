@@ -22,8 +22,17 @@
 
         if (_handlerRef is not null)
         {
-            await _handlerRef.InvokeVoidAsync("dispose");
-            await _handlerRef.DisposeAsync();
+            try
+            {
+                await _handlerRef.InvokeVoidAsync("dispose");
+                await _handlerRef.DisposeAsync();
+            }
+            catch (JSDisconnectedException)
+            {
+                // The Blazor Server circuit was already torn down (e.g. page refresh), so the
+                // JS-side handle is gone too - nothing to dispose. Safe to ignore.
+            }
+
             _handlerRef = null;
         }
     }
@@ -37,27 +46,37 @@
         {
             Initialized = true;
             const string moduleName = nameof(HBFocusTrapBehavior);
-            var module = await JS.InvokeAsync<IJSObjectReference>("import", $"./_content/HeadlessBlazor.Modal/{moduleName}.razor.js");
 
-            if (Disposed)
+            try
             {
+                var module = await JS.InvokeAsync<IJSObjectReference>("import", $"./_content/HeadlessBlazor.Modal/{moduleName}.razor.js");
+
+                if (Disposed)
+                {
+                    await module.DisposeAsync();
+                    return;
+                }
+
+                var handler = await module.InvokeAsync<IJSObjectReference>($"{moduleName}.createInstance", Element);
                 await module.DisposeAsync();
-                return;
+
+                if (Disposed)
+                {
+                    // Disposed while createInstance was in flight - don't hand off a
+                    // handle nothing will ever dispose; tear it down immediately.
+                    await handler.InvokeVoidAsync("dispose");
+                    await handler.DisposeAsync();
+                    return;
+                }
+
+                _handlerRef = handler;
             }
-
-            var handler = await module.InvokeAsync<IJSObjectReference>($"{moduleName}.createInstance", Element);
-            await module.DisposeAsync();
-
-            if (Disposed)
+            catch (JSDisconnectedException)
             {
-                // Disposed while createInstance was in flight - don't hand off a
-                // handle nothing will ever dispose; tear it down immediately.
-                await handler.InvokeVoidAsync("dispose");
-                await handler.DisposeAsync();
-                return;
+                // The Blazor Server circuit disconnected mid-initialization (e.g. a refresh
+                // landing between renders). There's nothing to wire up or clean up - the JS
+                // side is gone with the circuit. Safe to ignore.
             }
-
-            _handlerRef = handler;
         }
     }
 }

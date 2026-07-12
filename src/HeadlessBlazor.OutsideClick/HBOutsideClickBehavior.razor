@@ -1,4 +1,4 @@
-﻿@implements IAsyncDisposable
+@implements IAsyncDisposable
 @namespace HeadlessBlazor
 @using Microsoft.AspNetCore.Components.Rendering
 @using Microsoft.JSInterop
@@ -27,8 +27,17 @@
     {
         if (handlerRef is not null)
         {
-            await handlerRef.InvokeVoidAsync("dispose");
-            await handlerRef.DisposeAsync();
+            try
+            {
+                await handlerRef.InvokeVoidAsync("dispose");
+                await handlerRef.DisposeAsync();
+            }
+            catch (JSDisconnectedException)
+            {
+                // The Blazor Server circuit was already torn down (e.g. page refresh), so the
+                // JS-side handle is gone too - nothing to dispose. Safe to ignore.
+            }
+
             handlerRef = null;
         }
 
@@ -51,9 +60,19 @@
         {
             dotNetObjRef ??= DotNetObjectReference.Create(this);
             var moduleName = nameof(HBOutsideClickBehavior);
-            var module = await JS.InvokeAsync<IJSObjectReference>("import", $"./_content/HeadlessBlazor.OutsideClick/{moduleName}.razor.js");
-            handlerRef = await module.InvokeAsync<IJSObjectReference>($"{moduleName}.createInstance", Container, dotNetObjRef);
-            await module.DisposeAsync();
+
+            try
+            {
+                var module = await JS.InvokeAsync<IJSObjectReference>("import", $"./_content/HeadlessBlazor.OutsideClick/{moduleName}.razor.js");
+                handlerRef = await module.InvokeAsync<IJSObjectReference>($"{moduleName}.createInstance", Container, dotNetObjRef);
+                await module.DisposeAsync();
+            }
+            catch (JSDisconnectedException)
+            {
+                // The Blazor Server circuit disconnected mid-initialization (e.g. a refresh
+                // landing between renders). There's nothing to wire up or clean up - the JS
+                // side is gone with the circuit. Safe to ignore.
+            }
         }
     }
 }

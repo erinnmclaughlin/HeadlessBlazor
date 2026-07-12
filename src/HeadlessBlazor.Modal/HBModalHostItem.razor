@@ -73,16 +73,27 @@
             // that state before flipping to "open" - otherwise the two states collapse into a
             // single frame and the CSS enter transition never runs.
             const string moduleName = nameof(HBModalHostItem);
-            var module = await JS.InvokeAsync<IJSObjectReference>("import", $"./_content/HeadlessBlazor.Modal/{moduleName}.razor.js");
 
-            if (Disposed)
+            try
             {
+                var module = await JS.InvokeAsync<IJSObjectReference>("import", $"./_content/HeadlessBlazor.Modal/{moduleName}.razor.js");
+
+                if (Disposed)
+                {
+                    await module.DisposeAsync();
+                    return;
+                }
+
+                await module.InvokeVoidAsync($"{moduleName}.nextFrame");
                 await module.DisposeAsync();
+            }
+            catch (JSDisconnectedException)
+            {
+                // The Blazor Server circuit disconnected before the enter transition could be
+                // kicked off (e.g. a refresh landing between renders). The modal is going away
+                // with the circuit, so there's nothing to animate. Safe to ignore.
                 return;
             }
-
-            await module.InvokeVoidAsync($"{moduleName}.nextFrame");
-            await module.DisposeAsync();
 
             if (Disposed)
                 return;

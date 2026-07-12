@@ -35,8 +35,17 @@
     {
         if (popover is not null)
         {
-            await popover.InvokeVoidAsync("dispose");
-            await popover.DisposeAsync();
+            try
+            {
+                await popover.InvokeVoidAsync("dispose");
+                await popover.DisposeAsync();
+            }
+            catch (JSDisconnectedException)
+            {
+                // The Blazor Server circuit was already torn down (e.g. page refresh), so the
+                // JS-side handle is gone too - nothing to dispose. Safe to ignore.
+            }
+
             popover = null;
         }
     }
@@ -46,11 +55,20 @@
     {
         if (popover is not null)
         {
-            await popover.InvokeVoidAsync("updateOptions", new HBFloatOptions
+            try
             {
-                Alignment = Alignment,
-                Side = Side
-            });
+                await popover.InvokeVoidAsync("updateOptions", new HBFloatOptions
+                {
+                    Alignment = Alignment,
+                    Side = Side
+                });
+            }
+            catch (JSDisconnectedException)
+            {
+                // The Blazor Server circuit disconnected before this update could be applied
+                // (e.g. a refresh landing between renders). The JS side is gone with the
+                // circuit, so there's nothing to update. Safe to ignore.
+            }
         }
     }
 
@@ -60,13 +78,23 @@
         if (firstRender)
         {
             var moduleName = nameof(HBFloatBehavior);
-            var module = await JS.InvokeAsync<IJSObjectReference>("import", $"./_content/HeadlessBlazor.FloatingElement/{moduleName}.razor.js");
-            popover = await module.InvokeAsync<IJSObjectReference>($"{moduleName}.createInstance", Anchor, Content, new HBFloatOptions
+
+            try
             {
-                Alignment = Alignment,
-                Side = Side
-            });
-            await module.DisposeAsync();
+                var module = await JS.InvokeAsync<IJSObjectReference>("import", $"./_content/HeadlessBlazor.FloatingElement/{moduleName}.razor.js");
+                popover = await module.InvokeAsync<IJSObjectReference>($"{moduleName}.createInstance", Anchor, Content, new HBFloatOptions
+                {
+                    Alignment = Alignment,
+                    Side = Side
+                });
+                await module.DisposeAsync();
+            }
+            catch (JSDisconnectedException)
+            {
+                // The Blazor Server circuit disconnected mid-initialization (e.g. a refresh
+                // landing between renders). There's nothing to wire up or clean up - the JS
+                // side is gone with the circuit. Safe to ignore.
+            }
         }
     }
 }
