@@ -38,8 +38,7 @@ public class HBModalTrigger<TComponent> : HBElement
     /// <inheritdoc />
     protected override void OnParametersSet()
     {
-        if (!OnClickPreventDefault)
-            UserAttributes.TryAdd("onclick", new EventCallback(this, HandleClickAsync));
+        UserAttributes.TryAdd("onclick", new EventCallback(this, HandleClickAsync));
     }
 
     private async Task HandleClickAsync()
