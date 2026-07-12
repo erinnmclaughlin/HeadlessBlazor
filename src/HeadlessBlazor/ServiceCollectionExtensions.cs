@@ -14,7 +14,7 @@ public static class ServiceCollectionExtensions
     /// <returns>A reference to this instance after the operation has completed.</returns>
     public static IServiceCollection AddHeadlessBlazor(this IServiceCollection services)
     {
-        // made ya look. there will be stuff here eventually
+        services.AddHeadlessBlazorModal();
         return services;
     }
 }

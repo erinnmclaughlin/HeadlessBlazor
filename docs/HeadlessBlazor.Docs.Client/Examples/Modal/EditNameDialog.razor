@@ -1,0 +1,30 @@
+<HBModalTitle class="h5">Edit name</HBModalTitle>
+<EditForm Model="_model" OnValidSubmit="Submit">
+    <input class="form-control" @bind="_model.Name" @bind:event="oninput" />
+    <div class="d-flex justify-content-end gap-2 mt-3">
+        <HBModalClose class="btn btn-secondary">Cancel</HBModalClose>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+</EditForm>
+
+@code {
+    private readonly NameModel _model = new();
+
+    [CascadingParameter]
+    public IModalInstance? Modal { get; set; }
+
+    [Parameter]
+    public string? InitialName { get; set; }
+
+    protected override void OnInitialized()
+    {
+        _model.Name = InitialName ?? "";
+    }
+
+    private Task Submit() => Modal!.CloseAsync(_model.Name);
+
+    private class NameModel
+    {
+        public string Name { get; set; } = "";
+    }
+}

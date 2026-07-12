@@ -5,9 +5,10 @@
 
 @code {
     private IJSObjectReference? _handlerRef;
-    
+    private bool _disposed;
+
     private bool Initialized { get; set; }
-    
+
     /// <summary>
     /// A reference to the element to relocate to the end of the document body.
     /// </summary>
@@ -17,6 +18,12 @@
     /// <inheritdoc />
     public async ValueTask DisposeAsync()
     {
+        // Set before awaiting anything below, so a disposal that races with an
+        // in-flight OnAfterRenderAsync (e.g. the modal is closed again before JS
+        // interop finishes initializing) is visible to that continuation before it
+        // touches Element - by then the underlying DOM node may already be gone.
+        _disposed = true;
+
         if (_handlerRef is not null)
         {
             await _handlerRef.InvokeVoidAsync("dispose");
@@ -35,8 +42,26 @@
             Initialized = true;
             var moduleName = nameof(HBPortalBehavior);
             var module = await JS.InvokeAsync<IJSObjectReference>("import", $"./_content/HeadlessBlazor.Modal/{moduleName}.razor.js");
-            _handlerRef = await module.InvokeAsync<IJSObjectReference>($"{moduleName}.createInstance", Element);
+
+            if (_disposed)
+            {
+                await module.DisposeAsync();
+                return;
+            }
+
+            var handler = await module.InvokeAsync<IJSObjectReference>($"{moduleName}.createInstance", Element);
             await module.DisposeAsync();
+
+            if (_disposed)
+            {
+                // Disposed while createInstance was in flight - don't hand off a
+                // handle nothing will ever dispose; tear it down immediately.
+                await handler.InvokeVoidAsync("dispose");
+                await handler.DisposeAsync();
+                return;
+            }
+
+            _handlerRef = handler;
         }
     }
 }

@@ -3,15 +3,33 @@ using Microsoft.AspNetCore.Components;
 namespace HeadlessBlazor;
 
 /// <summary>
-/// The modal trigger. Toggles the modal open and closed when clicked.
+/// A button that opens <typeparamref name="TComponent"/> as a modal via <see cref="IModalService"/>
+/// when clicked.
 /// </summary>
-public class HBModalTrigger : HBElement
+/// <typeparam name="TComponent">The component to render as the modal's body.</typeparam>
+public class HBModalTrigger<TComponent> : HBElement
+    where TComponent : IComponent
 {
+    [Inject]
+    private IModalService ModalService { get; set; } = default!;
+
     /// <summary>
-    /// The parent <see cref="HBModal"/> component.
+    /// Parameter values to bind to <typeparamref name="TComponent"/>, keyed by parameter name.
     /// </summary>
-    [CascadingParameter]
-    public HBModal? Modal { get; set; }
+    [Parameter]
+    public IDictionary<string, object?>? Parameters { get; set; }
+
+    /// <summary>
+    /// Behavioral options for the modal.
+    /// </summary>
+    [Parameter]
+    public ModalOptions? Options { get; set; }
+
+    /// <summary>
+    /// Invoked after the modal closes or is cancelled, with its result.
+    /// </summary>
+    [Parameter]
+    public EventCallback<ModalResult> OnClosed { get; set; }
 
     /// <inheritdoc />
     [Parameter]
@@ -20,7 +38,16 @@ public class HBModalTrigger : HBElement
     /// <inheritdoc />
     protected override void OnParametersSet()
     {
-        if (Modal is not null && !OnClickPreventDefault)
-            UserAttributes.TryAdd("onclick", new EventCallback(this, Modal.ToggleAsync));
+        if (!OnClickPreventDefault)
+            UserAttributes.TryAdd("onclick", new EventCallback(this, HandleClickAsync));
+    }
+
+    private async Task HandleClickAsync()
+    {
+        var result = Parameters is null
+            ? await ModalService.ShowAsync<TComponent>(Options)
+            : await ModalService.ShowAsync<TComponent>(Parameters, Options);
+
+        await OnClosed.InvokeAsync(result);
     }
 }
