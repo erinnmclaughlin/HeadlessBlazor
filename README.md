@@ -1,6 +1,6 @@
-[![Headless Blazor Header Image](assets/HeadlessBlazorHeader.svg)](https://headlessblazor.org)
+[![Headless Blazor Header Image](https://raw.githubusercontent.com/erinnmclaughlin/HeadlessBlazor/refs/heads/main/assets/HeadlessBlazorHeader.svg)](https://www.nuget.org/packages/HeadlessBlazor)
 
-[Headless Blazor](https://headlessblazor.org) is a style-agnostic component library for Blazor. Inspired by [Headless UI](https://headlessui.com).
+[Headless Blazor](https://www.nuget.org/packages/HeadlessBlazor) is a style-agnostic component library for Blazor. Inspired by [Headless UI](https://headlessui.com).
 
 ## Installation
 
