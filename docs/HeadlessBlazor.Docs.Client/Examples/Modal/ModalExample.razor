@@ -1,0 +1,14 @@
+<div class="p-3">
+    <HBModalTrigger TComponent="ConfirmDialog" TResult="bool" OnClosed="HandleClosed" class="btn btn-primary">
+        Open Modal
+    </HBModalTrigger>
+</div>
+
+@code {
+    // Overlay/dialog styling is configured globally via AddHeadlessBlazor(configureModalDefaults: ...),
+    // so no per-call ModalOptions are needed here.
+    private void HandleClosed(ModalResult<bool> result)
+    {
+        Console.WriteLine(result.Canceled ? "Modal canceled" : $"Modal confirmed: {result.Data}");
+    }
+}

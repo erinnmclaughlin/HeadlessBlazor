@@ -1,0 +1,63 @@
+@implements IAsyncDisposable
+@namespace HeadlessBlazor
+@using Microsoft.JSInterop
+@inject IJSRuntime JS
+
+@code {
+    private IJSObjectReference? _handlerRef;
+
+    private bool Initialized { get; set; }
+    private bool Disposed { get; set; }
+
+    /// <summary>
+    /// A reference to the element within which focus should be trapped.
+    /// </summary>
+    [Parameter, EditorRequired]
+    public required ElementReference Element { get; set; }
+
+    /// <inheritdoc />
+    public async ValueTask DisposeAsync()
+    {
+        Disposed = true;
+
+        if (_handlerRef is not null)
+        {
+            await _handlerRef.InvokeVoidAsync("dispose");
+            await _handlerRef.DisposeAsync();
+            _handlerRef = null;
+        }
+    }
+
+    /// <inheritdoc />
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        // The captured element reference may not be populated on the first render,
+        // so initialize as soon as it has a value rather than gating on firstRender.
+        if (!Initialized && !string.IsNullOrEmpty(Element.Id))
+        {
+            Initialized = true;
+            const string moduleName = nameof(HBFocusTrapBehavior);
+            var module = await JS.InvokeAsync<IJSObjectReference>("import", $"./_content/HeadlessBlazor.Modal/{moduleName}.razor.js");
+
+            if (Disposed)
+            {
+                await module.DisposeAsync();
+                return;
+            }
+
+            var handler = await module.InvokeAsync<IJSObjectReference>($"{moduleName}.createInstance", Element);
+            await module.DisposeAsync();
+
+            if (Disposed)
+            {
+                // Disposed while createInstance was in flight - don't hand off a
+                // handle nothing will ever dispose; tear it down immediately.
+                await handler.InvokeVoidAsync("dispose");
+                await handler.DisposeAsync();
+                return;
+            }
+
+            _handlerRef = handler;
+        }
+    }
+}

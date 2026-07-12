@@ -19,7 +19,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="**\*Example.razor">
+    <!-- Source shown in the docs' code previews is read back from these files at runtime, so they
+         must be copied to output. Covers both the *Example.razor callers and the modal body
+         components displayed alongside them via DocumentationBlock.AdditionalSources. -->
+    <Content Update="Examples\**\*.razor">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

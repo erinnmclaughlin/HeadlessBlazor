@@ -11,13 +11,13 @@
   <PropertyGroup>
     <Title>HeadlessBlazor</Title>
     <Description>A bundle of Blazor components, completely free of styling. Inspired by HeadlessUI.</Description>
-    <Version>1.0.0-preview3</Version>
+    <Version>1.0.0-preview4</Version>
     <Authors>erinnmclaughlin</Authors>
     <PackageIcon>HeadlessBlazorLogo.png</PackageIcon>
     <PackageTags>Blazor, HeadlessUI, Components</PackageTags>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/erinnmclaughlin/HeadlessBlazor</RepositoryUrl>
-    <Copyright>2024 Erin McLaughlin</Copyright>
+    <Copyright>2026 Erin McLaughlin</Copyright>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -45,6 +45,7 @@
   <ItemGroup>
     <ProjectReference Include="..\HeadlessBlazor.Dropdown\HeadlessBlazor.Dropdown.csproj" />
     <ProjectReference Include="..\HeadlessBlazor.FloatingElement\HeadlessBlazor.FloatingElement.csproj" />
+    <ProjectReference Include="..\HeadlessBlazor.Modal\HeadlessBlazor.Modal.csproj" />
     <ProjectReference Include="..\HeadlessBlazor.OutsideClick\HeadlessBlazor.OutsideClick.csproj" />
   </ItemGroup>
 

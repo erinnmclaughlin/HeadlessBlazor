@@ -1,9 +1,13 @@
 ﻿@page "/"
 @using HeadlessBlazor.Docs.Client.Examples.Dropdown
+@using HeadlessBlazor.Docs.Client.Examples.Modal
 
 <PageTitle>Home</PageTitle>
 
 <div class="hb-content pt-4 pb-5 container">
     <h2 id="Dropdown">Dropdown</h2>
     <DropdownExamples @rendermode="InteractiveWebAssembly" />
+
+    <h2 id="Modal" class="mt-5">Modal</h2>
+    <ModalExamples @rendermode="InteractiveWebAssembly" />
 </div>

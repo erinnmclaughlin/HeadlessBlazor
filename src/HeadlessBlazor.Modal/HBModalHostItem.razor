@@ -1,0 +1,101 @@
+@* Renders a single open modal: the overlay and dialog content as siblings (so a
+   click inside the dialog never bubbles into the overlay's close handler),
+   cascades the typed IModalInstance<TResult> (via Instance.RenderBody) and
+   IModalContentRegistrar into the dynamically-rendered body component, and traps
+   focus within the dialog while it's mounted.
+   The content div uses the native `autofocus` attribute (not JS interop) so it
+   already has focus - and @onkeydown="HandleKeyDown" is already live - the
+   instant it's inserted, with no async gap during which Escape silently does
+   nothing. HBFocusTrapBehavior refines that into "focus the first focusable
+   descendant" and adds Tab-cycling once its JS interop catches up a moment later.
+   When ModalOptions.TransitionDuration is set, both elements get a data-state
+   attribute ("closed" -> "open" on enter, "open" -> "closed" on close) that CSS
+   can transition off of; see OnAfterRenderAsync for the enter flip.
+   Rendered exclusively by HBModalHost - not meant to be used directly. *@
+@implements IDisposable
+@using Microsoft.JSInterop
+@inject IJSRuntime JS
+
+<div @attributes="Instance.Options.OverlayAttributes"
+     data-state="@DataState"
+     @onclick="HandleOverlayClick"></div>
+
+<div @ref="_contentElement"
+     @attributes="Instance.Options.ContentAttributes"
+     role="dialog"
+     aria-modal="true"
+     tabindex="-1"
+     autofocus
+     data-state="@DataState"
+     aria-labelledby="@Instance.LabelledBy"
+     aria-describedby="@Instance.DescribedBy"
+     @onkeydown="HandleKeyDown">
+    <CascadingValue Value="(IModalContentRegistrar)Instance" IsFixed="true">
+        @* RenderBody wraps the body component in a cascade of the typed IModalInstance<TResult>
+           (which also satisfies non-generic IModalInstance consumers like HBModalClose), so the
+           body can close itself with a strongly-typed value. The typed cascade lives on the
+           instance because this host item only knows the non-generic ModalInstance base. *@
+        @Instance.RenderBody()
+    </CascadingValue>
+</div>
+
+<HBFocusTrapBehavior Element="_contentElement" />
+
+@code {
+    private ElementReference _contentElement;
+
+    /// <summary>
+    /// The modal to render.
+    /// </summary>
+    [Parameter, EditorRequired]
+    public required ModalInstance Instance { get; set; }
+
+    // Only emitted when transitions are enabled; a null attribute value is omitted by Blazor,
+    // so non-transitioning modals render no data-state at all.
+    private string? DataState => Instance.TransitionsEnabled ? Instance.DataState : null;
+
+    private bool Disposed { get; set; }
+    
+    /// <inheritdoc />
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+            return;
+
+        // Force a second render so HBFocusTrapBehavior sees a populated Element (see HBModalHost).
+        StateHasChanged();
+
+        if (Instance.TransitionsEnabled)
+        {
+            // The element was just inserted in its "closed" state. Wait for the browser to paint
+            // that state before flipping to "open" - otherwise the two states collapse into a
+            // single frame and the CSS enter transition never runs.
+            const string moduleName = nameof(HBModalHostItem);
+            var module = await JS.InvokeAsync<IJSObjectReference>("import", $"./_content/HeadlessBlazor.Modal/{moduleName}.razor.js");
+
+            if (Disposed)
+            {
+                await module.DisposeAsync();
+                return;
+            }
+
+            await module.InvokeVoidAsync($"{moduleName}.nextFrame");
+            await module.DisposeAsync();
+
+            if (Disposed)
+                return;
+
+            Instance.MarkEntered();
+            StateHasChanged();
+        }
+    }
+
+    private Task HandleOverlayClick()
+        => Instance.Options.CloseOnOutsideClick ? Instance.CancelAsync() : Task.CompletedTask;
+
+    private Task HandleKeyDown(KeyboardEventArgs args)
+        => Instance.Options.CloseOnEscape && args.Key == "Escape" ? Instance.CancelAsync() : Task.CompletedTask;
+
+    /// <inheritdoc />
+    public void Dispose() => Disposed = true;
+}

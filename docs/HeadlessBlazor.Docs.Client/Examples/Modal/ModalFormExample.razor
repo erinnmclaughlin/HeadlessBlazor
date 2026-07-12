@@ -1,0 +1,31 @@
+@inject IModalService ModalService
+
+<div class="p-3">
+    <button type="button" class="btn btn-primary" @onclick="OpenDialogAsync">Edit name</button>
+
+    @if (_savedName is not null)
+    {
+        <p class="mt-2">Saved name: <strong>@_savedName</strong></p>
+    }
+</div>
+
+@code {
+    private string? _savedName;
+
+    private async Task OpenDialogAsync()
+    {
+        var parameters = new Dictionary<string, object?>
+        {
+            [nameof(EditNameDialog.InitialName)] = _savedName
+        };
+
+        // Overlay/dialog styling comes from the global ModalOptions defaults configured in
+        // AddSharedServices, so no per-call options are passed here.
+        // ShowAsync<TComponent, TResult> resolves once EditNameDialog calls CloseAsync(name)
+        // or CancelAsync() (via the Cancel button) - Canceled and Data are distinguishable.
+        var result = await ModalService.ShowAsync<EditNameDialog, string>(parameters);
+
+        if (!result.Canceled)
+            _savedName = result.Data;
+    }
+}

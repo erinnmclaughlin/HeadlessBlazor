@@ -56,23 +56,21 @@ public class HBDropdown : HBElement<HBDropdown>
     /// <summary>
     /// Opens the dropdown menu.
     /// </summary>
-    public async Task OpenAsync() => await InvokeAsync(() =>
+    public async Task OpenAsync() => await InvokeAsync(async () =>
     {
         IsOpen = true;
         StateHasChanged();
-
-        OnOpen.InvokeAsync(this);
+        await OnOpen.InvokeAsync(this);
     });
 
     /// <summary>
     /// Closes the dropdown menu.
     /// </summary>
-    public async Task CloseAsync() => await InvokeAsync(() =>
+    public async Task CloseAsync() => await InvokeAsync(async () =>
     {
         IsOpen = false;
         StateHasChanged();
-
-        OnClose.InvokeAsync(this);
+        await OnClose.InvokeAsync(this);
     });
 
     /// <summary>
