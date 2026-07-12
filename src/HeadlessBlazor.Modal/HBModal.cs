@@ -45,23 +45,23 @@ public class HBModal : HBElement<HBModal>
     /// <summary>
     /// Opens the modal.
     /// </summary>
-    public async Task OpenAsync() => await InvokeAsync(() =>
+    public async Task OpenAsync() => await InvokeAsync(async () =>
     {
         IsOpen = true;
         StateHasChanged();
 
-        OnOpen.InvokeAsync(this);
+        await OnOpen.InvokeAsync(this);
     });
 
     /// <summary>
     /// Closes the modal.
     /// </summary>
-    public async Task CloseAsync() => await InvokeAsync(() =>
+    public async Task CloseAsync() => await InvokeAsync(async () =>
     {
         IsOpen = false;
         StateHasChanged();
 
-        OnClose.InvokeAsync(this);
+        await OnClose.InvokeAsync(this);
     });
 
     /// <summary>

@@ -14,7 +14,7 @@ public class HBModalDescription : HBElement
     /// The parent <see cref="HBModalContent"/> component.
     /// </summary>
     [CascadingParameter]
-    protected HBModalContent Content { get; set; } = default!;
+    protected HBModalContent? Content { get; set; }
 
     /// <inheritdoc />
     [Parameter]
