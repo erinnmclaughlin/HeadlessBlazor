@@ -29,8 +29,17 @@ public static class ModalServiceExtensions
 
     private static ModalResult<TResult> ToTypedResult<TResult>(ModalResult result)
     {
-        return result.Cancelled
-            ? ModalResult<TResult>.Cancel()
-            : ModalResult<TResult>.Ok((TResult)result.Data!);
+        if (result.Cancelled)
+            return ModalResult<TResult>.Cancel();
+
+        if (result.Data is null && typeof(TResult).IsValueType && Nullable.GetUnderlyingType(typeof(TResult)) is null)
+        {
+            throw new InvalidOperationException(
+                $"The modal was closed without a result (e.g. by calling CloseAsync() with no argument), but a " +
+                $"non-nullable result of type '{typeof(TResult)}' was expected. Pass a value to CloseAsync(result), " +
+                $"or change TResult to a nullable type.");
+        }
+
+        return ModalResult<TResult>.Ok((TResult)result.Data!);
     }
 }
