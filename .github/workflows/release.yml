@@ -21,6 +21,9 @@ jobs:
       - name: dotnet build
         run: dotnet build -c Release
         
+      - name: dotnet pack
+        run: dotnet pack -c Release -o artifacts/package/release
+        
       - name: NuGet login (OIDC → temp API key)
         uses: NuGet/login@v1
         id: login
