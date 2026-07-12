@@ -1,0 +1,43 @@
+@implements IAsyncDisposable
+@namespace HeadlessBlazor
+@using Microsoft.JSInterop
+
+@code {
+    private IJSObjectReference? handlerRef;
+    private bool initialized;
+
+    [Inject]
+    private IJSRuntime JS { get; set; } = default!;
+
+    /// <summary>
+    /// A reference to the element within which focus should be trapped.
+    /// </summary>
+    [Parameter, EditorRequired]
+    public required ElementReference Element { get; set; }
+
+    /// <inheritdoc />
+    public async ValueTask DisposeAsync()
+    {
+        if (handlerRef is not null)
+        {
+            await handlerRef.InvokeVoidAsync("dispose");
+            await handlerRef.DisposeAsync();
+            handlerRef = null;
+        }
+    }
+
+    /// <inheritdoc />
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        // The captured element reference may not be populated on the first render,
+        // so initialize as soon as it has a value rather than gating on firstRender.
+        if (!initialized && !string.IsNullOrEmpty(Element.Id))
+        {
+            initialized = true;
+            const string moduleName = nameof(HBFocusTrapBehavior);
+            var module = await JS.InvokeAsync<IJSObjectReference>("import", $"./_content/HeadlessBlazor.Modal/{moduleName}.razor.js");
+            handlerRef = await module.InvokeAsync<IJSObjectReference>($"{moduleName}.createInstance", Element);
+            await module.DisposeAsync();
+        }
+    }
+}

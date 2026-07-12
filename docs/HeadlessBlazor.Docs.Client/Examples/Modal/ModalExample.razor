@@ -1,0 +1,28 @@
+<div class="p-3">
+    <HBModal OnOpen="LogEvent" OnClose="LogEvent">
+        <HBModalTrigger class="btn btn-primary">Open Modal</HBModalTrigger>
+
+        @if (context.IsOpen)
+        {
+            <HBModalOverlay style="position:fixed;inset:0;background:rgba(0,0,0,.5);" />
+            <HBModalContent class="bg-white rounded shadow p-4"
+                            style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);max-width:28rem;width:90%;z-index:1;">
+                <HBModalTitle class="h5">Confirm action</HBModalTitle>
+                <HBModalDescription class="text-muted">
+                    Are you sure you want to continue? This is a fully headless, accessible dialog.
+                </HBModalDescription>
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <HBModalClose class="btn btn-secondary">Cancel</HBModalClose>
+                    <HBModalClose class="btn btn-primary">Confirm</HBModalClose>
+                </div>
+            </HBModalContent>
+        }
+    </HBModal>
+</div>
+
+@code {
+    private void LogEvent(HBModal context)
+    {
+        Console.WriteLine($"Modal is {(context.IsOpen ? "open" : "closed")}");
+    }
+}
