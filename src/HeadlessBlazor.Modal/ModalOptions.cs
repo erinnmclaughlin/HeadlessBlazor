@@ -23,13 +23,18 @@ public class ModalOptions
     /// Additional attributes (e.g. <c>class</c>, <c>style</c>) applied to the overlay element
     /// rendered by <see cref="HBModalHost"/>.
     /// </summary>
-    public IDictionary<string, object?>? OverlayAttributes { get; set; }
+    public IDictionary<string, object?> OverlayAttributes { get; set; } = new Dictionary<string, object?>();
+
+    /// <summary>
+    /// Additional attributes (e.g. <c>class</c>, <c>style</c>) applied to the modal container element.
+    /// </summary>
+    public IDictionary<string, object?> ContainerAttributes { get; set; } = new Dictionary<string, object?>();
 
     /// <summary>
     /// Additional attributes (e.g. <c>class</c>, <c>style</c>) applied to the dialog content
     /// element rendered by <see cref="HBModalHost"/>.
     /// </summary>
-    public IDictionary<string, object?>? ContentAttributes { get; set; }
+    public IDictionary<string, object?> ContentAttributes { get; set; } = new Dictionary<string, object?>();
 
     /// <summary>
     /// When set, enables enter/exit transitions. The overlay and dialog elements are given a

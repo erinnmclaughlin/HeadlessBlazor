@@ -20,23 +20,25 @@
      data-state="@DataState"
      @onclick="HandleOverlayClick"></div>
 
-<div @ref="_contentElement"
-     @attributes="Instance.Options.ContentAttributes"
-     role="dialog"
-     aria-modal="true"
-     tabindex="-1"
-     autofocus
-     data-state="@DataState"
-     aria-labelledby="@Instance.LabelledBy"
-     aria-describedby="@Instance.DescribedBy"
-     @onkeydown="HandleKeyDown">
-    <CascadingValue Value="(IModalContentRegistrar)Instance" IsFixed="true">
-        @* RenderBody wraps the body component in a cascade of the typed IModalInstance<TResult>
+<div @attributes="Instance.Options.ContainerAttributes">
+    <div @ref="_contentElement"
+         @attributes="Instance.Options.ContentAttributes"
+         role="dialog"
+         aria-modal="true"
+         tabindex="-1"
+         autofocus
+         data-state="@DataState"
+         aria-labelledby="@Instance.LabelledBy"
+         aria-describedby="@Instance.DescribedBy"
+         @onkeydown="HandleKeyDown">
+        <CascadingValue Value="(IModalContentRegistrar)Instance" IsFixed="true">
+            @* RenderBody wraps the body component in a cascade of the typed IModalInstance<TResult>
            (which also satisfies non-generic IModalInstance consumers like HBModalClose), so the
            body can close itself with a strongly-typed value. The typed cascade lives on the
            instance because this host item only knows the non-generic ModalInstance base. *@
-        @Instance.RenderBody()
-    </CascadingValue>
+            @Instance.RenderBody()
+        </CascadingValue>
+    </div>
 </div>
 
 <HBFocusTrapBehavior Element="_contentElement" />
