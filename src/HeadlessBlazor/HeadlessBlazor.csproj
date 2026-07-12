@@ -12,7 +12,7 @@
   <PropertyGroup>
     <Title>HeadlessBlazor</Title>
     <Description>A bundle of Blazor components, completely free of styling. Inspired by HeadlessUI.</Description>
-    <Version>1.0.0-preview6</Version>
+    <Version>1.0.0-preview7</Version>
     <Authors>erinnmclaughlin</Authors>
     <PackageIcon>HeadlessBlazorLogo.png</PackageIcon>
     <PackageTags>Blazor, HeadlessUI, Components</PackageTags>
@@ -48,6 +48,7 @@
     <ProjectReference Include="..\HeadlessBlazor.FloatingElement\HeadlessBlazor.FloatingElement.csproj" />
     <ProjectReference Include="..\HeadlessBlazor.Modal\HeadlessBlazor.Modal.csproj" />
     <ProjectReference Include="..\HeadlessBlazor.OutsideClick\HeadlessBlazor.OutsideClick.csproj" />
+    <ProjectReference Include="..\HeadlessBlazor.Toast\HeadlessBlazor.Toast.csproj" />
   </ItemGroup>
 
 </Project>

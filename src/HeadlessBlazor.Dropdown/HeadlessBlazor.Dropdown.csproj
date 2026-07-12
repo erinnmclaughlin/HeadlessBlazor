@@ -13,7 +13,7 @@
     <PropertyGroup>
         <Title>HeadlessBlazor.Dropdown</Title>
         <Description>A headless dropdown componenet for Blazor.</Description>
-        <Version>1.0.0-preview6</Version>
+        <Version>1.0.0-preview7</Version>
         <Authors>erinnmclaughlin</Authors>
         <PackageIcon>HeadlessBlazorLogo.png</PackageIcon>
         <PackageTags>Blazor, Headless UI, Components, Dropdown, Menu</PackageTags>

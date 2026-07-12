@@ -1,0 +1,71 @@
+@* Renders a single shown toast: applies ToastOptions.Attributes and cascades IToastInstance
+   into the dynamically-rendered body component (via Instance.RenderBody), so the body can
+   dismiss itself. Unlike a modal, a toast has no overlay, no focus trap, and no escape/outside-
+   click handling - it dismisses itself after ToastOptions.Duration or via DismissAsync.
+   When ToastOptions.TransitionDuration is set, the element gets a data-state attribute
+   ("closed" -> "open" on show, "open" -> "closed" on dismiss) that CSS can transition off of;
+   see OnAfterRenderAsync for the enter flip.
+   Rendered exclusively by HBToastHost - not meant to be used directly. *@
+@implements IDisposable
+@using Microsoft.JSInterop
+@inject IJSRuntime JS
+
+<div @attributes="Instance.Options.Attributes" data-state="@DataState">
+    @Instance.RenderBody()
+</div>
+
+@code {
+    /// <summary>
+    /// The toast to render.
+    /// </summary>
+    [Parameter, EditorRequired]
+    public required ToastInstance Instance { get; set; }
+
+    // Only emitted when transitions are enabled; a null attribute value is omitted by Blazor,
+    // so non-transitioning toasts render no data-state at all.
+    private string? DataState => Instance.TransitionsEnabled ? Instance.DataState : null;
+
+    private bool Disposed { get; set; }
+
+    /// <inheritdoc />
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender || !Instance.TransitionsEnabled)
+            return;
+
+        // The element was just inserted in its "closed" state. Wait for the browser to paint
+        // that state before flipping to "open" - otherwise the two states collapse into a
+        // single frame and the CSS enter transition never runs.
+        const string moduleName = nameof(HBToastHostItem);
+
+        try
+        {
+            var module = await JS.InvokeAsync<IJSObjectReference>("import", $"./_content/HeadlessBlazor.Toast/{moduleName}.razor.js");
+
+            if (Disposed)
+            {
+                await module.DisposeAsync();
+                return;
+            }
+
+            await module.InvokeVoidAsync($"{moduleName}.nextFrame");
+            await module.DisposeAsync();
+        }
+        catch (JSDisconnectedException)
+        {
+            // The Blazor Server circuit disconnected before the enter transition could be
+            // kicked off (e.g. a refresh landing between renders). The toast is going away
+            // with the circuit, so there's nothing to animate. Safe to ignore.
+            return;
+        }
+
+        if (Disposed)
+            return;
+
+        Instance.MarkEntered();
+        StateHasChanged();
+    }
+
+    /// <inheritdoc />
+    public void Dispose() => Disposed = true;
+}
