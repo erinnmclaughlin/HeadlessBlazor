@@ -22,6 +22,8 @@ public class HBModalClose : HBElement
     /// <inheritdoc />
     protected override void OnParametersSet()
     {
+        UserAttributes.TryAdd("type", "button");
+
         if (Modal is not null)
         {
             UserAttributes.TryAdd("onclick", new EventCallback(this, Modal.CancelAsync));
