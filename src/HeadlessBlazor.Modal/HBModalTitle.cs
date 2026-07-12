@@ -1,10 +1,8 @@
-using Microsoft.AspNetCore.Components;
-
 namespace HeadlessBlazor;
 
 /// <summary>
 /// The accessible title of the modal. Registers its <c>id</c> with the enclosing modal's
-/// dialog element so the dialog is labelled via <c>aria-labelledby</c>.
+/// dialog element so the dialog is labeled via <c>aria-labelledby</c>.
 /// </summary>
 public class HBModalTitle : HBElement
 {

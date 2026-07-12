@@ -1,5 +1,4 @@
 @implements IDisposable
-@inject ModalService ModalService
 
 <div @ref="_element">
     @foreach (var instance in ModalService.Instances)
@@ -12,6 +11,10 @@
 
 @code {
     private ElementReference _element;
+    
+    // Injected via [Inject] to scope as internal
+    [Inject]
+    internal ModalService ModalService { get; set; } = null!;
     
     /// <inheritdoc />
     public void Dispose()

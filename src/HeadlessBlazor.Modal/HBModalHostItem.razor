@@ -10,9 +10,15 @@
    Rendered exclusively by HBModalHost - not meant to be used directly. *@
 
 <div @attributes="Instance.Options.OverlayAttributes" @onclick="HandleOverlayClick"></div>
-<div @ref="_contentElement" @attributes="Instance.Options.ContentAttributes"
-     role="dialog" aria-modal="true" tabindex="-1" autofocus
-     aria-labelledby="@Instance.LabelledBy" aria-describedby="@Instance.DescribedBy"
+
+<div @ref="_contentElement" 
+     @attributes="Instance.Options.ContentAttributes"
+     role="dialog" 
+     aria-modal="true" 
+     tabindex="-1" 
+     autofocus
+     aria-labelledby="@Instance.LabelledBy" 
+     aria-describedby="@Instance.DescribedBy"
      @onkeydown="HandleKeyDown">
     <CascadingValue Value="(IModalInstance)Instance" IsFixed="true">
         <CascadingValue Value="(IModalContentRegistrar)Instance" IsFixed="true">

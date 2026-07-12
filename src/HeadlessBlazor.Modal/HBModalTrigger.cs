@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Components;
-
 namespace HeadlessBlazor;
 
 /// <summary>
@@ -7,11 +5,10 @@ namespace HeadlessBlazor;
 /// when clicked.
 /// </summary>
 /// <typeparam name="TComponent">The component to render as the modal's body.</typeparam>
-public class HBModalTrigger<TComponent> : HBElement
-    where TComponent : IComponent
+public class HBModalTrigger<TComponent> : HBElement where TComponent : IComponent
 {
     [Inject]
-    private IModalService ModalService { get; set; } = default!;
+    private IModalService ModalService { get; set; } = null!;
 
     /// <summary>
     /// Parameter values to bind to <typeparamref name="TComponent"/>, keyed by parameter name.
@@ -26,7 +23,7 @@ public class HBModalTrigger<TComponent> : HBElement
     public ModalOptions? Options { get; set; }
 
     /// <summary>
-    /// Invoked after the modal closes or is cancelled, with its result.
+    /// Invoked after the modal closes or is canceled, with its result.
     /// </summary>
     [Parameter]
     public EventCallback<ModalResult> OnClosed { get; set; }

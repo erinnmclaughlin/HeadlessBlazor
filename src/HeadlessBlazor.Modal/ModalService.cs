@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Components;
-
 namespace HeadlessBlazor;
 
 /// <inheritdoc cref="IModalService" />
