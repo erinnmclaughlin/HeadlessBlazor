@@ -1,0 +1,11 @@
+@inherits HBToast
+
+<div class="d-flex align-items-start gap-3">
+    <div class="flex-grow-1">@Message</div>
+    <HBToastClose class="btn-close" aria-label="Dismiss"></HBToastClose>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public required string Message { get; set; }
+}

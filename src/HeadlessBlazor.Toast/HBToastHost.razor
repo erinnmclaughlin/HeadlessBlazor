@@ -1,0 +1,48 @@
+@implements IDisposable
+
+<div @ref="_element" @attributes="UserAttributes">
+    @foreach (var instance in ToastService.Instances)
+    {
+        <HBToastHostItem @key="instance.Id" Instance="instance" />
+    }
+</div>
+
+<HBPortalBehavior Element="_element" />
+
+@code {
+    private ElementReference _element;
+
+    /// <summary>
+    /// Additional attributes (e.g. <c>class</c>, <c>style</c>) applied to the toast stack
+    /// container, e.g. to position it in a corner of the viewport.
+    /// </summary>
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IDictionary<string, object?> UserAttributes { get; set; } = new Dictionary<string, object?>();
+
+    // Injected via [Inject] to scope as internal
+    [Inject]
+    internal ToastService ToastService { get; set; } = null!;
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        ToastService.StateChanged -= HandleStateChanged;
+    }
+
+    /// <inheritdoc />
+    protected override void OnInitialized()
+    {
+        ToastService.StateChanged += HandleStateChanged;
+    }
+
+    /// <inheritdoc />
+    protected override void OnAfterRender(bool firstRender)
+    {
+        // The captured element reference isn't populated until after this first render,
+        // so force one more render to hand HBPortalBehavior a non-empty Element
+        if (firstRender)
+            StateHasChanged();
+    }
+
+    private void HandleStateChanged() => InvokeAsync(StateHasChanged);
+}

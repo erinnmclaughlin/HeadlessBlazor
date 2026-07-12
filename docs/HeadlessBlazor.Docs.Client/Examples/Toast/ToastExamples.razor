@@ -1,0 +1,10 @@
+<p class="mt-3">
+    Toasts are shown imperatively through <code>IToastService.Show&lt;TComponent&gt;</code>, which
+    renders any component as the toast body and auto-dismisses it after
+    <code>ToastOptions.Duration</code> (5 seconds by default). A body declares itself as a toast
+    by inheriting <code>HBToast</code> - that base exposes <code>DismissAsync()</code> directly, so
+    a close button can dismiss the toast early with no cascading parameter or wiring required.
+    Showing a toast never blocks the caller - unlike a modal, there's no result to await.
+</p>
+
+<DocumentationBlock Title="Simple Toast" Type="typeof(ToastExample)" AdditionalSources="[typeof(SuccessToast)]" />

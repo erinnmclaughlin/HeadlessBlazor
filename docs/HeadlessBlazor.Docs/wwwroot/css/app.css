@@ -35,6 +35,32 @@
     transform: translate(-50%, -50%) scale(1);
 }
 
+/* Toast example styling. HeadlessBlazor.Toast ships no CSS; these classes are supplied by
+   the consumer (here, globally via ToastOptions and on HBToastHost). The data-state attribute
+   is set by the host while ToastOptions.TransitionDuration is configured, so the enter/exit
+   animations play. */
+.hb-toast-stack {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.hb-toast {
+    min-width: 16rem;
+    opacity: 0;
+    transform: translateY(.5rem);
+    transition: opacity .2s ease, transform .2s ease;
+}
+
+.hb-toast[data-state="open"] {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 h1:focus {
     outline: none
 }

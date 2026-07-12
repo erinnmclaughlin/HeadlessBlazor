@@ -15,10 +15,18 @@ public static class ServiceCollectionExtensions
     /// Optional configuration for the default <see cref="ModalOptions"/> applied to every modal opened
     /// without its own options.
     /// </param>
+    /// <param name="configureToastDefaults">
+    /// Optional configuration for the default <see cref="ToastOptions"/> applied to every toast shown
+    /// without its own options.
+    /// </param>
     /// <returns>A reference to this instance after the operation has completed.</returns>
-    public static IServiceCollection AddHeadlessBlazor(this IServiceCollection services, Action<ModalOptions>? configureModalDefaults = null)
+    public static IServiceCollection AddHeadlessBlazor(
+        this IServiceCollection services,
+        Action<ModalOptions>? configureModalDefaults = null,
+        Action<ToastOptions>? configureToastDefaults = null)
     {
         services.AddHeadlessBlazorModal(configureModalDefaults);
+        services.AddHeadlessBlazorToast(configureToastDefaults);
         return services;
     }
 }

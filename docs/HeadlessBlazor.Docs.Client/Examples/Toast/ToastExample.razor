@@ -1,0 +1,21 @@
+@inject IToastService ToastService
+
+<div class="p-3">
+    <button type="button" class="btn btn-primary" @onclick="ShowToast">Show toast</button>
+</div>
+
+@code {
+    private int _count;
+
+    // Attributes/transitions come from the global ToastOptions defaults configured in
+    // AddSharedServices, so no per-call options are needed here.
+    private void ShowToast()
+    {
+        _count++;
+
+        ToastService.Show<SuccessToast>(new Dictionary<string, object?>
+        {
+            [nameof(SuccessToast.Message)] = $"Saved successfully! ({_count})"
+        });
+    }
+}
