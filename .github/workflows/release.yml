@@ -1,7 +1,6 @@
 name: BuildAndPack
 on:
   push:
-    branches: [main]
     tags: ['*']
   pull_request:
 
