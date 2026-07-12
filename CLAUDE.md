@@ -28,7 +28,7 @@ Each component family is its own NuGet package (project under `src/`), independe
 
 - `HeadlessBlazor.Core` — shared base classes (`HBElement`, `HBElementBase`), no component-specific logic. Everything else depends on this.
 - `HeadlessBlazor.Dropdown`, `HeadlessBlazor.Modal`, `HeadlessBlazor.FloatingElement`, `HeadlessBlazor.OutsideClick` — individually installable component packages.
-- `HeadlessBlazor` (assembly name `HeadlessBlazor.Bundle`) — meta-package that references all of the above for a single-install experience. `AddHeadlessBlazor()` in `ServiceCollectionExtensions.cs` registers each package's own DI extension (currently just `AddHeadlessBlazorModal()`); most packages still need no DI registration at all.
+- `HeadlessBlazor` (assembly name `HeadlessBlazor.Bundle`) — meta-package that references all of the above for a single-install experience. `AddHeadlessBlazor()` in `ServiceCollectionExtensions.cs` registers each package's own DI extension (currently just `AddHeadlessBlazorModal()`).
 
 `docs/HeadlessBlazor.Docs` (server, WASM host) + `docs/HeadlessBlazor.Docs.Client` (WASM client, holds the actual example `.razor` files under `Examples/`) together form the documentation site at headlessblazor.org, built with `AddInteractiveWebAssemblyComponents()`.
 
