@@ -1,43 +1,44 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
-  <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>HeadlessBlazor</RootNamespace>
-    <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <RootNamespace>HeadlessBlazor</RootNamespace>
+        <GenerateDocumentationFile>True</GenerateDocumentationFile>
+        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+        <IsPackable>true</IsPackable>
+    </PropertyGroup>
 
- <PropertyGroup>
-    <Title>HeadlessBlazor.Core</Title>
-    <Description>Core services used by HeadlessBlazor libraries.</Description>
-    <Version>1.0.0-preview4</Version>
-    <Authors>erinnmclaughlin</Authors>
-    <PackageIcon>HeadlessBlazorLogo.png</PackageIcon>
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/erinnmclaughlin/HeadlessBlazor</RepositoryUrl>
-    <Copyright>2026 Erin McLaughlin</Copyright>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-  </PropertyGroup>
+    <PropertyGroup>
+        <Title>HeadlessBlazor.Core</Title>
+        <Description>Core services used by HeadlessBlazor libraries.</Description>
+        <Version>1.0.0-preview4</Version>
+        <Authors>erinnmclaughlin</Authors>
+        <PackageIcon>HeadlessBlazorLogo.png</PackageIcon>
+        <RepositoryType>git</RepositoryType>
+        <RepositoryUrl>https://github.com/erinnmclaughlin/HeadlessBlazor</RepositoryUrl>
+        <Copyright>2026 Erin McLaughlin</Copyright>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <None Include="..\..\assets\HeadlessBlazorLogo.png" Pack="true" Visible="false" PackagePath="" />
-    <None Include="..\..\LICENSE" Pack="true" Visible="false" PackagePath="" />
-    <None Include="..\..\README.md" Pack="true" Visible="false" PackagePath="" />
-  </ItemGroup>
+    <ItemGroup>
+        <None Include="..\..\assets\HeadlessBlazorLogo.png" Pack="true" Visible="false" PackagePath="" />
+        <None Include="..\..\LICENSE" Pack="true" Visible="false" PackagePath="" />
+        <None Include="..\..\README.md" Pack="true" Visible="false" PackagePath="" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <SupportedPlatform Include="browser" />
-  </ItemGroup>
+    <ItemGroup>
+        <SupportedPlatform Include="browser" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.*" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.*" />
+    </ItemGroup>
 
 </Project>
