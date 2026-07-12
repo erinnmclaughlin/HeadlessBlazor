@@ -90,6 +90,78 @@ Or use `HBModalTrigger<TComponent>` as sugar for the common "open this on click"
 <HBModalTrigger TComponent="ConfirmDialog">Delete</HBModalTrigger>
 ```
 
+## Options
+
+Behavior and attribute passthrough are controlled by `ModalOptions`:
+
+| Property | Default | Description |
+| --- | --- | --- |
+| `CloseOnEscape` | `true` | Cancel the modal when the escape key is pressed. |
+| `CloseOnOutsideClick` | `true` | Cancel the modal when the overlay (backdrop) is clicked. |
+| `OverlayAttributes` | `null` | Attributes (e.g. `class`, `style`) applied to the overlay element. |
+| `ContentAttributes` | `null` | Attributes (e.g. `class`, `style`) applied to the dialog content element. |
+
+Since HeadlessBlazor.Modal ships no styling of its own, `OverlayAttributes`/`ContentAttributes`
+are how you position and style the backdrop and dialog.
+
+### Per-modal options
+
+Pass a `ModalOptions` at the call site to configure a single modal:
+
+```csharp
+var options = new ModalOptions
+{
+    CloseOnOutsideClick = false,
+    ContentAttributes = new Dictionary<string, object?>
+    {
+        ["class"] = "dialog"
+    }
+};
+
+await ModalService.ShowAsync<ConfirmDialog>(options);
+```
+
+`HBModalTrigger<TComponent>` accepts the same object via its `Options` parameter:
+
+```razor
+<HBModalTrigger TComponent="ConfirmDialog" Options="_options">Delete</HBModalTrigger>
+```
+
+### Global default options
+
+Most apps want one consistent overlay/dialog look everywhere. Configure defaults once at
+registration and every modal opened without its own options inherits them:
+
+```csharp
+// Full HeadlessBlazor package:
+builder.Services.AddHeadlessBlazor(configureModalDefaults: options =>
+{
+    options.OverlayAttributes = new Dictionary<string, object?>
+    {
+        ["style"] = "position:fixed;inset:0;background:rgba(0,0,0,.5);"
+    };
+    options.ContentAttributes = new Dictionary<string, object?>
+    {
+        ["class"] = "modal-dialog"
+    };
+});
+
+// Or just the modal component:
+builder.Services.AddHeadlessBlazorModal(configureDefaults: options => { /* ... */ });
+```
+
+With defaults configured, call sites can omit options entirely:
+
+```csharp
+await ModalService.ShowAsync<ConfirmDialog>();
+```
+
+> **Note:** per-call options *replace* the global defaults rather than merging with them.
+> A `ModalOptions` passed to `ShowAsync`/`HBModalTrigger` is used verbatim, so it must
+> re-specify any overlay/dialog styling you still want. (Merging is intentionally avoided:
+> the `bool` options can't distinguish "explicitly set to `false`" from "left unset", so a
+> merge could silently clobber an intentional `false`.)
+
 ## Results
 
 `ModalResult` (and the strongly-typed `ModalResult<TResult>` returned by
