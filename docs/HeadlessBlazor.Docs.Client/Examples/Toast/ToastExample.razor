@@ -13,9 +13,11 @@
     {
         _count++;
 
-        ToastService.Show<SuccessToast>(new Dictionary<string, object?>
+        var parameters = new Dictionary<string, object?>
         {
             [nameof(SuccessToast.Message)] = $"Saved successfully! ({_count})"
-        });
+        };
+        
+        ToastService.Show<SuccessToast>(parameters);
     }
 }
