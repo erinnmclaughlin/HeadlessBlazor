@@ -34,8 +34,8 @@ public class HBValidationMessageStore<TModel> where TModel : notnull
     /// <param name="errorMessage">The validation message to add.</param>
     public void Add(Expression<Func<TModel, object>> fieldExpression, string errorMessage)
     {
-        var fieldName = GetFieldName(fieldExpression);
-        Add(fieldName, errorMessage);
+        var fieldIdentifier = GetFieldIdentifier(fieldExpression);
+        Add(fieldIdentifier, errorMessage);
     }
 
     /// <summary>
@@ -66,8 +66,8 @@ public class HBValidationMessageStore<TModel> where TModel : notnull
     /// <param name="errorMessages">The validation messages to add.</param>
     public void AddRange(Expression<Func<TModel, object>> fieldExpression, IEnumerable<string> errorMessages)
     {
-        var fieldName = GetFieldName(fieldExpression);
-        AddRange(fieldName, errorMessages);
+        var fieldIdentifier = GetFieldIdentifier(fieldExpression);
+        AddRange(fieldIdentifier, errorMessages);
     }
 
     /// <summary>
@@ -105,8 +105,8 @@ public class HBValidationMessageStore<TModel> where TModel : notnull
     /// <param name="fieldExpression">A member-access expression identifying the field, e.g. <c>m => m.Name</c>.</param>
     public void Clear(Expression<Func<TModel, object>> fieldExpression)
     {
-        var fieldName = GetFieldName(fieldExpression);
-        Clear(fieldName);
+        var fieldIdentifier = GetFieldIdentifier(fieldExpression);
+        Clear(fieldIdentifier);
     }
 
     /// <summary>
@@ -128,19 +128,19 @@ public class HBValidationMessageStore<TModel> where TModel : notnull
         Store.Clear(fieldIdentifier);
     }
 
-    private static string GetFieldName(Expression<Func<TModel, object>> fieldExpression)
+    private FieldIdentifier GetFieldIdentifier(Expression<Func<TModel, object>> fieldExpression)
     {
-        if (fieldExpression.Body is MemberExpression memberExpression)
+        var model = (TModel)_editContext.Model;
+        var fieldName = HBExpressionUtils.GetFieldName(fieldExpression);
+        var fieldOwner = HBExpressionUtils.GetFieldOwner(model, fieldExpression);
+
+        if (fieldName is null || fieldOwner is null)
         {
-            return memberExpression.Member.Name;
+            throw new ArgumentException(
+                $"'{fieldExpression}' is not a supported member-access expression, e.g. 'm => m.Name' or 'm => m.Address.City'.",
+                nameof(fieldExpression));
         }
-        else if (fieldExpression.Body is UnaryExpression unaryExpression && unaryExpression.Operand is MemberExpression memberOperand)
-        {
-            return memberOperand.Member.Name;
-        }
-        else
-        {
-            throw new ArgumentException("Invalid field expression", nameof(fieldExpression));
-        }
+
+        return new FieldIdentifier(fieldOwner, fieldName);
     }
 }

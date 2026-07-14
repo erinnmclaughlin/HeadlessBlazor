@@ -41,4 +41,13 @@
         <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.*" />
     </ItemGroup>
 
+	<ItemGroup>
+		<InternalsVisibleTo Include="HeadlessBlazor.Dropdown"/>
+		<InternalsVisibleTo Include="HeadlessBlazor.FloatingElement"/>
+		<InternalsVisibleTo Include="HeadlessBlazor.Forms"/>
+		<InternalsVisibleTo Include="HeadlessBlazor.Modal"/>
+		<InternalsVisibleTo Include="HeadlessBlazor.OutsideClick"/>
+		<InternalsVisibleTo Include="HeadlessBlazor.Toast"/>
+	</ItemGroup>
+	
 </Project>
