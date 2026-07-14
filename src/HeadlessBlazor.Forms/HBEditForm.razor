@@ -78,7 +78,7 @@
     /// <summary>
     /// An optional validation callback invoked on submit after built-in validation passes. Receives the
     /// <see cref="HBEditContext{TModel}"/> so it can add cross-field errors via
-    /// <see cref="HBEditContext{TModel}.AddError"/>; any errors it adds mark the submit invalid.
+    /// <see cref="HBEditContext{TModel}.ValidationErrors"/>; any errors it adds mark the submit invalid.
     /// </summary>
     [Parameter]
     public Func<HBEditContext<TModel>, Task>? Validation { get; set; }
