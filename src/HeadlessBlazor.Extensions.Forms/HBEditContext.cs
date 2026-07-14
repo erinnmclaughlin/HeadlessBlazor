@@ -23,10 +23,10 @@ public class HBEditContext<TModel> where TModel : notnull
     public EditContext Context => field ??= new EditContext(Model);
 
     /// <summary>
-    /// The store that holds the custom validation messages added through <see cref="AddError"/> and
-    /// <see cref="AddErrors"/>, backed by <see cref="Context"/>. Created on first access.
+    /// The <see cref="ValidationMessageStore"/> that can be used to add custom validation messages for
+    /// <see cref="Model"/>. Created on first access.
     /// </summary>
-    public ValidationMessageStore ValidationMessageStore => field ??= new ValidationMessageStore(Context);
+    public HBValidationMessageStore<TModel> ValidationErrors => field ??= new HBValidationMessageStore<TModel>(Context);
 
     /// <summary>
     /// Initializes a new <see cref="HBEditContext{TModel}"/> for the given model.
@@ -35,29 +35,6 @@ public class HBEditContext<TModel> where TModel : notnull
     public HBEditContext(TModel model)
     {
         Model = model;
-    }
-
-    /// <summary>
-    /// Adds a single validation error message for the specified field. The message is surfaced through
-    /// the usual <see cref="ValidationMessage{TValue}"/> / <c>ValidationSummary</c> components.
-    /// </summary>
-    /// <param name="fieldName">The name of the field the error applies to (typically <c>nameof(model.Property)</c>).</param>
-    /// <param name="errorMessage">The error message to display.</param>
-    public void AddError(string fieldName, string errorMessage)
-    {
-        var fieldId = Context.Field(fieldName);
-        ValidationMessageStore.Add(fieldId, errorMessage);
-    }
-
-    /// <summary>
-    /// Adds multiple validation error messages for the specified field.
-    /// </summary>
-    /// <param name="fieldName">The name of the field the errors apply to (typically <c>nameof(model.Property)</c>).</param>
-    /// <param name="errorMessages">The error messages to display.</param>
-    public void AddErrors(string fieldName, IEnumerable<string> errorMessages)
-    {
-        var fieldId = Context.Field(fieldName);
-        ValidationMessageStore.Add(fieldId, errorMessages);
     }
 
     /// <summary>
@@ -77,7 +54,7 @@ public class HBEditContext<TModel> where TModel : notnull
     /// <returns><see langword="true"/> if the model is valid after validation; otherwise <see langword="false"/>.</returns>
     public bool Revalidate()
     {
-        ValidationMessageStore.Clear();
+        ValidationErrors.Clear();
         return Context.Validate();
     }
 

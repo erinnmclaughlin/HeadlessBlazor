@@ -42,7 +42,8 @@
     {
         if (context.Model.StartDate > context.Model.EndDate)
         {
-            context.AddError(nameof(context.Model.EndDate), "End date cannot be before start date.");
+            context.ValidationErrors.Add(x => x.StartDate, "Start date cannot be after end date.");
+            context.ValidationErrors.Add(x => x.EndDate, "End date cannot be before start date.");
         }
         
         return Task.CompletedTask;
