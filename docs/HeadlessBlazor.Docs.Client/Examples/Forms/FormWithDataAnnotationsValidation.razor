@@ -1,0 +1,27 @@
+﻿@using System.ComponentModel.DataAnnotations
+
+<HBEditForm TModel="Person" Model="@FormModel">
+    <DataAnnotationsValidator />
+    <div class="p-3">
+        <div class="mb-3">
+            <label class="form-label" for="@($"{nameof(FormWithDataAnnotationsValidation)}_name")">Name</label>
+            <InputText class="form-control" @bind-Value="FormModel.Name" id="@($"{nameof(FormWithDataAnnotationsValidation)}_name")"/>
+            <ValidationMessage class="text-danger small" For="() => FormModel.Name"/>
+        </div>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Submit</button>
+    
+</HBEditForm>
+
+@code {
+    private Person FormModel { get; } = new();
+
+    private sealed class Person
+    {
+        [Required(ErrorMessage = "Name is required.")]
+        [MinLength(3, ErrorMessage = "Name must be at least 3 characters long.")]
+        [MaxLength(10, ErrorMessage = "Name must be at most 10 characters long.")]
+        public string Name { get; set; } = "";
+    }
+}

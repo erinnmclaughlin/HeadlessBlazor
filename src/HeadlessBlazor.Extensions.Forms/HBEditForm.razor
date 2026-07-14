@@ -1,17 +1,19 @@
-﻿@using System.Linq.Expressions
-@using Microsoft.AspNetCore.Components.Forms
-@inherits HBElement<HBEditForm<TModel>>
+﻿@using Microsoft.AspNetCore.Components.Forms
 @typeparam TModel where TModel : notnull
 
-<EditForm EditContext="EditContext.Context" OnSubmit="HandleSubmit">
-    <fieldset disabled="@_disabled" style="display: contents">
+<EditForm EditContext="EditContext.Context" OnSubmit="@HandleSubmit" @attributes="UserAttributes">
+    <fieldset disabled="@Disabled" style="display: contents">
         @ChildContent?.Invoke(this)
     </fieldset>
 </EditForm>
 
 @code {
 
-    private bool _disabled;
+    private HBEditContext<TModel> EditContext
+    {
+        get => field ??= new HBEditContext<TModel>(Model);
+        set;
+    }
 
     public bool IsSubmitting
     {
@@ -22,19 +24,18 @@
 
             if (DisableWhileSubmitting)
             {
+                Disabled = value;
+                
                 if (OnDisabledChanged.HasDelegate)
                 {
                     _ = OnDisabledChanged.InvokeAsync(value);
-                }
-                else
-                {
-                    _disabled = value;
                 }
             }
         }
     }
     
-    private HBEditContext<TModel> EditContext => field ??= new(Model);
+    [Parameter]
+    public RenderFragment<HBEditForm<TModel>>? ChildContent { get; set; }
     
     [Parameter]
     public bool Disabled { get; set; }
@@ -49,7 +50,7 @@
     public TModel Model { get; set; } = default!;
     
     [Parameter]
-    public Expression<Func<TModel, IDictionary<string, string[]>>>? Validation { get; set; }
+    public Func<HBEditContext<TModel>, Task>? Validation { get; set; }
 
     [Parameter]
     public EventCallback<TModel> OnValidSubmit { get; set; }
@@ -57,6 +58,17 @@
     [Parameter]
     public EventCallback<TModel> OnInvalidSubmit { get; set; }
     
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IDictionary<string, object?> UserAttributes { get; set; } = new Dictionary<string, object?>();
+
+    protected override void OnParametersSet()
+    {
+        if (!ReferenceEquals(EditContext.Model, Model))
+        {
+            EditContext = new HBEditContext<TModel>(Model);
+        }
+    }
+
     private async Task HandleSubmit()
     {
         if (IsSubmitting)
@@ -65,33 +77,26 @@
         IsSubmitting = true;
         await InvokeAsync(StateHasChanged);
 
-        if (!EditContext.Revalidate())
+        try
         {
-            IsSubmitting = false;
-            await OnInvalidSubmit.InvokeAsync(Model);
-            return;
-        }
-
-        if (Validation is not null)
-        {
-            var result = Validation.Compile().Invoke(Model);
-
-            if (result.Count > 0)
+            if (!EditContext.Revalidate())
             {
-                foreach (var (key, value) in result)
-                {
-                    EditContext.AddErrors(key, value);
-                }
-                
-                EditContext.NotifyValidationStateChanged();
-                IsSubmitting = false;
                 await OnInvalidSubmit.InvokeAsync(Model);
                 return;
             }
-        }
+            
+            if (Validation is not null)
+            {
+                await Validation.Invoke(EditContext);
+                EditContext.NotifyValidationStateChanged();
 
-        try
-        {
+                if (!EditContext.IsValid())
+                {
+                    await OnInvalidSubmit.InvokeAsync(Model);
+                    return;
+                }
+            }
+            
             await OnValidSubmit.InvokeAsync(Model);
         }
         finally

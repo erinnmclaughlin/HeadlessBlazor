@@ -1,8 +1,8 @@
 <HBEditForm TModel="MyModel" 
-            Model="FormModel"
-            Validation="model => Validate(model)"
-            OnValidSubmit="HandleValidSubmit" OnInvalidSubmit="HandleInvalidSubmit">
-
+            Model="FormModel" 
+            Validation="@Validate"
+            OnValidSubmit="@HandleValidSubmit" 
+            OnInvalidSubmit="@HandleInvalidSubmit">
     <div class="p-3">
         <div class="mb-3">
             <label class="form-label" for="startDate">Start Date</label>
@@ -27,7 +27,6 @@
             <p class="mt-3 mb-0 text-danger">Form is invalid. :(</p>
         }
     </div>
-
 </HBEditForm>
 
 @code {
@@ -39,16 +38,14 @@
         EndDate = DateTime.Today.AddDays(7)
     };
 
-    private IDictionary<string, string[]> Validate(MyModel model)
+    private Task Validate(HBEditContext<MyModel> context)
     {
-        var errors = new Dictionary<string, string[]>();
-
-        if (model.StartDate > model.EndDate)
+        if (context.Model.StartDate > context.Model.EndDate)
         {
-            errors.Add(nameof(model.EndDate), ["End date cannot be before start date."]);
+            context.AddError(nameof(context.Model.EndDate), "End date cannot be before start date.");
         }
-
-        return errors;
+        
+        return Task.CompletedTask;
     }
 
     private void HandleValidSubmit(MyModel model)

@@ -2,17 +2,18 @@
    OnValidSubmit, so inputs and the submit button can't be re-triggered mid-flight. The child
    content receives the form itself as context, so the button can read IsSubmitting to show a
    spinner and swap its label. *@
-<HBEditForm TModel="ContactModel" Context="form" Model="FormModel" DisableWhileSubmitting
+<HBEditForm TModel="ContactModel"
+            Model="FormModel" 
+            DisableWhileSubmitting
             OnValidSubmit="HandleValidSubmitAsync">
-
     <div class="p-3">
         <div class="mb-3">
             <label class="form-label" for="email">Email</label>
             <InputText class="form-control" @bind-Value="FormModel.Email" id="email" />
         </div>
 
-        <button type="submit" class="btn btn-primary" disabled="@form.IsSubmitting">
-            @if (form.IsSubmitting)
+        <button type="submit" class="btn btn-primary" disabled="@context.IsSubmitting">
+            @if (context.IsSubmitting)
             {
                 <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
                 <span>Saving...</span>
@@ -28,7 +29,6 @@
             <p class="mt-3 mb-0 text-success">Saved!</p>
         }
     </div>
-
 </HBEditForm>
 
 @code {

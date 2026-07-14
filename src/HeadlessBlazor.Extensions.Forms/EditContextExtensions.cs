@@ -6,8 +6,8 @@ public class HBEditContext<TModel> where TModel : notnull
 {
     public TModel Model { get; }
 
-    internal EditContext Context => field ??= new EditContext(Model);
-    internal ValidationMessageStore ValidationMessageStore => field ??= new ValidationMessageStore(Context);
+    public EditContext Context => field ??= new EditContext(Model);
+    public ValidationMessageStore ValidationMessageStore => field ??= new ValidationMessageStore(Context);
     
     public HBEditContext(TModel model)
     {
@@ -26,6 +26,11 @@ public class HBEditContext<TModel> where TModel : notnull
         ValidationMessageStore.Add(fieldId, errorMessages);
     }
 
+    public bool IsValid()
+    {
+        return !Context.GetValidationMessages().Any();
+    }
+    
     public bool Revalidate()
     {
         ValidationMessageStore.Clear();
