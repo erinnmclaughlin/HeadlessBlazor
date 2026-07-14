@@ -1,31 +1,30 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>HeadlessBlazor</RootNamespace>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <IsPackable>true</IsPackable>
   </PropertyGroup>
 
   <PropertyGroup>
-    <Title>HeadlessBlazor</Title>
-    <Description>A bundle of Blazor components, completely free of styling. Inspired by HeadlessUI.</Description>
+    <Title>HeadlessBlazor.DarkMode</Title>
+    <Description>A HeadlessBlazor package that detects and reacts to the user's OS dark mode preference.</Description>
     <Authors>erinnmclaughlin</Authors>
     <PackageIcon>HeadlessBlazorLogo.png</PackageIcon>
-    <PackageTags>Blazor, HeadlessUI, Components</PackageTags>
+    <PackageTags>Blazor, HeadlessUI, DarkMode</PackageTags>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/erinnmclaughlin/HeadlessBlazor</RepositoryUrl>
     <Copyright>2026 Erin McLaughlin</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <AssemblyName>$(MSBuildProjectName).Bundle</AssemblyName>
-    <PackageId>HeadlessBlazor</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -43,13 +42,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HeadlessBlazor.DarkMode\HeadlessBlazor.DarkMode.csproj" />
-    <ProjectReference Include="..\HeadlessBlazor.Dropdown\HeadlessBlazor.Dropdown.csproj" />
-    <ProjectReference Include="..\HeadlessBlazor.FloatingElement\HeadlessBlazor.FloatingElement.csproj" />
-    <ProjectReference Include="..\HeadlessBlazor.Forms\HeadlessBlazor.Forms.csproj" />
-    <ProjectReference Include="..\HeadlessBlazor.Modal\HeadlessBlazor.Modal.csproj" />
-    <ProjectReference Include="..\HeadlessBlazor.OutsideClick\HeadlessBlazor.OutsideClick.csproj" />
-    <ProjectReference Include="..\HeadlessBlazor.Toast\HeadlessBlazor.Toast.csproj" />
+    <ProjectReference Include="..\HeadlessBlazor.Core\HeadlessBlazor.Core.csproj" />
   </ItemGroup>
 
 </Project>

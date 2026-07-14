@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\HeadlessBlazor.Core\HeadlessBlazor.Core.csproj" />
+    <ProjectReference Include="..\..\src\HeadlessBlazor.DarkMode\HeadlessBlazor.DarkMode.csproj" />
     <ProjectReference Include="..\..\src\HeadlessBlazor.Modal\HeadlessBlazor.Modal.csproj" />
   </ItemGroup>
 
