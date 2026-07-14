@@ -133,7 +133,7 @@
         {
             if (!FormContext.Revalidate())
             {
-                await OnInvalidSubmit.InvokeAsync(new HBFormSubmitEventArgs<TModel>(Model, cancellationToken));
+                await OnInvalidSubmit.InvokeAsync(new HBFormSubmitEventArgs<TModel>(FormContext, cancellationToken));
                 return;
             }
 
@@ -144,12 +144,12 @@
 
                 if (!FormContext.IsValid())
                 {
-                    await OnInvalidSubmit.InvokeAsync(new HBFormSubmitEventArgs<TModel>(Model, cancellationToken));
+                    await OnInvalidSubmit.InvokeAsync(new HBFormSubmitEventArgs<TModel>(FormContext, cancellationToken));
                     return;
                 }
             }
 
-            await OnValidSubmit.InvokeAsync(new HBFormSubmitEventArgs<TModel>(Model, cancellationToken));
+            await OnValidSubmit.InvokeAsync(new HBFormSubmitEventArgs<TModel>(FormContext, cancellationToken));
         }
         finally
         {

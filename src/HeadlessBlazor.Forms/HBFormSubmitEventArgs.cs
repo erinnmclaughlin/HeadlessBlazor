@@ -9,4 +9,4 @@ namespace HeadlessBlazor;
 /// <see cref="HBEditForm{TModel}.CancellationTokenSource"/>'s token if the caller supplied one, otherwise
 /// <see cref="System.Threading.CancellationToken.None"/>.
 /// </param>
-public readonly record struct HBFormSubmitEventArgs<TModel>(TModel Model, CancellationToken CancellationToken);
+public readonly record struct HBFormSubmitEventArgs<TModel>(HBEditContext<TModel> Context, CancellationToken CancellationToken) where TModel : notnull;

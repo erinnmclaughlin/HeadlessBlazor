@@ -49,12 +49,12 @@
         return Task.CompletedTask;
     }
 
-    private void HandleValidSubmit(HBFormSubmitEventArgs<MyModel> args)
+    private void HandleValidSubmit(HBFormSubmitEventArgs<MyModel> _)
     {
         IsFormValid = true;
     }
 
-    private void HandleInvalidSubmit(HBFormSubmitEventArgs<MyModel> args)
+    private void HandleInvalidSubmit(HBFormSubmitEventArgs<MyModel> _)
     {
         IsFormValid = false;
     }
