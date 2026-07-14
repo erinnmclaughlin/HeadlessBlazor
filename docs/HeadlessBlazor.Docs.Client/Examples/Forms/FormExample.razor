@@ -1,0 +1,67 @@
+<HBEditForm TModel="MyModel" 
+            Model="FormModel" 
+            Validation="@Validate"
+            OnValidSubmit="@HandleValidSubmit" 
+            OnInvalidSubmit="@HandleInvalidSubmit">
+    <div class="p-3">
+        <div class="mb-3">
+            <label class="form-label" for="startDate">Start Date</label>
+            <InputDate class="form-control" @bind-Value="FormModel.StartDate" id="startDate" />
+            <ValidationMessage class="text-danger small" For="() => FormModel.StartDate" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="endDate">End Date</label>
+            <InputDate class="form-control" @bind-Value="FormModel.EndDate" id="endDate" />
+            <ValidationMessage class="text-danger small" For="() => FormModel.EndDate" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+
+        @if (IsFormValid is true)
+        {
+            <p class="mt-3 mb-0 text-success">Form is valid! :)</p>
+        }
+        else if (IsFormValid is false)
+        {
+            <p class="mt-3 mb-0 text-danger">Form is invalid. :(</p>
+        }
+    </div>
+</HBEditForm>
+
+@code {
+    private bool? IsFormValid { get; set; }
+
+    private MyModel FormModel { get; } = new()
+    {
+        StartDate = DateTime.Today,
+        EndDate = DateTime.Today.AddDays(7)
+    };
+
+    private Task Validate(HBEditContext<MyModel> context, CancellationToken _)
+    {
+        if (context.Model.StartDate > context.Model.EndDate)
+        {
+            context.ValidationErrors.Add(x => x.StartDate, "Start date cannot be after end date.");
+            context.ValidationErrors.Add(x => x.EndDate, "End date cannot be before start date.");
+        }
+        
+        return Task.CompletedTask;
+    }
+
+    private void HandleValidSubmit(HBFormSubmitEventArgs<MyModel> args)
+    {
+        IsFormValid = true;
+    }
+
+    private void HandleInvalidSubmit(HBFormSubmitEventArgs<MyModel> args)
+    {
+        IsFormValid = false;
+    }
+
+    public class MyModel
+    {
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+    }
+}

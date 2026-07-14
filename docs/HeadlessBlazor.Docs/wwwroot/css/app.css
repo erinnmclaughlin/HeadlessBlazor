@@ -3,6 +3,10 @@
     width: 100%
 }
 
+input.invalid {
+    border-color: var(--bs-danger);
+}
+
 /* Modal example styling. HeadlessBlazor.Modal ships no CSS; these classes are supplied by
    the consumer (here, globally via ModalOptions). The data-state attribute is set by the host
    while ModalOptions.TransitionDuration is configured, so the enter/exit animations play. */

@@ -1,0 +1,53 @@
+@* With DisableWhileSubmitting, HBEditForm disables its <fieldset> for the duration of an async
+   OnValidSubmit, so inputs and the submit button can't be re-triggered mid-flight. The child
+   content receives the form itself as context, so the button can read IsSubmitting to show a
+   spinner and swap its label. *@
+<HBEditForm TModel="ContactModel"
+            Model="FormModel" 
+            DisableWhileSubmitting
+            OnValidSubmit="HandleValidSubmitAsync">
+    <div class="p-3">
+        <div class="mb-3">
+            <label class="form-label" for="email">Email</label>
+            <InputText class="form-control" @bind-Value="FormModel.Email" id="email" />
+        </div>
+
+        <button type="submit" class="btn btn-primary" disabled="@context.IsSubmitting">
+            @if (context.IsSubmitting)
+            {
+                <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                <span>Saving...</span>
+            }
+            else
+            {
+                <span>Save</span>
+            }
+        </button>
+
+        @if (_saved)
+        {
+            <p class="mt-3 mb-0 text-success">Saved!</p>
+        }
+    </div>
+</HBEditForm>
+
+@code {
+    private bool _saved;
+
+    private ContactModel FormModel { get; } = new();
+
+    private async Task HandleValidSubmitAsync(HBFormSubmitEventArgs<ContactModel> args)
+    {
+        _saved = false;
+
+        // Simulate a slow server round-trip; the fieldset stays disabled until this returns.
+        await Task.Delay(1500, args.CancellationToken);
+
+        _saved = true;
+    }
+
+    public class ContactModel
+    {
+        public string Email { get; set; } = "";
+    }
+}
