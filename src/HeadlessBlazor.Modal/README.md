@@ -35,12 +35,22 @@ builder.Services.AddHeadlessBlazor();
 builder.Services.AddHeadlessBlazorModal();
 ```
 
-Add an `HBModalHost` to your `MainLayout.razor` (or somewhere global):
+Add an `HBModalHost` directly to your host page (`App.razor`, or the equivalent for your hosting
+model), as a sibling of `<Routes>`/`<HeadOutlet>`
 
 ```razor
-@* MainLayout.razor *@
-<HBModalHost />
-@Body
+@* App.razor *@
+@using HeadlessBlazor
+
+<html>
+<head>
+    <HeadOutlet />
+</head>
+<body>
+    <Routes />
+    <HBModalHost @rendermode="InteractiveServer" @* or InteractiveWebAssembly / InteractiveAuto *@ />
+</body>
+</html>
 ```
 
 ## Usage

@@ -1,40 +1,31 @@
+@* Rendered once, directly in the host page (e.g. App.razor) as a sibling of <Routes>/<HeadOutlet> -
+   NOT inside MainLayout. This mirrors how HeadOutlet is mounted: its element is a genuine child of
+   <body> from the moment Blazor inserts it, so it never needs to be relocated with raw JS afterward.
+   (An earlier version portaled a wrapper div to the end of <body> via JS `appendChild`, but moving a
+   Blazor-owned node with plain DOM calls desyncs the renderer's internal parent tracking from the real
+   DOM, which could crash a later re-render with "Cannot read properties of null (reading 'removeChild')".) *@
 @implements IDisposable
 
-<div @ref="_element">
-    @foreach (var instance in ModalService.Instances)
-    {
-        <HBModalHostItem @key="instance.Id" Instance="instance" />
-    }
-</div>
-
-<HBPortalBehavior Element="_element" />
+@foreach (var instance in ModalService.Instances)
+{
+    <HBModalHostItem @key="instance.Id" Instance="instance" />
+}
 
 @code {
-    private ElementReference _element;
-    
     // Injected via [Inject] to scope as internal
     [Inject]
     internal ModalService ModalService { get; set; } = null!;
-    
+
     /// <inheritdoc />
     public void Dispose()
     {
         ModalService.StateChanged -= HandleStateChanged;
     }
-    
+
     /// <inheritdoc />
     protected override void OnInitialized()
     {
         ModalService.StateChanged += HandleStateChanged;
-    }
-
-    /// <inheritdoc />
-    protected override void OnAfterRender(bool firstRender)
-    {
-        // The captured element reference isn't populated until after this first render,
-        // so force one more render to hand HBPortalBehavior a non-empty Element
-        if (firstRender)
-            StateHasChanged();
     }
 
     private void HandleStateChanged() => InvokeAsync(StateHasChanged);
