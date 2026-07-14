@@ -45,4 +45,8 @@
     <ProjectReference Include="..\HeadlessBlazor.Core\HeadlessBlazor.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="HeadlessBlazor.Tests" />
+  </ItemGroup>
+
 </Project>

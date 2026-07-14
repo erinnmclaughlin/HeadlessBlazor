@@ -24,8 +24,11 @@ jobs:
           dotnet-version: '10.x'
           include-prerelease: true
 
-      - name: Build with dotnet
+      - name: Build
         run: dotnet build --configuration Release
+
+      - name: Test
+        run: dotnet test --no-build
 
  #     - name: dotnet publish
  #       run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp

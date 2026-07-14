@@ -12,7 +12,16 @@ Headless Blazor is a style-agnostic Blazor component library (inspired by Headle
 dotnet build HeadlessBlazor.sln
 ```
 
-There is no test project in the solution — verification is done by running the docs site and exercising components in the browser.
+## Tests
+
+```cmd
+dotnet test tests/HeadlessBlazor.Tests/HeadlessBlazor.Tests.csproj
+```
+
+`tests/HeadlessBlazor.Tests` (xUnit + bUnit, `net10.0`) holds the unit/component tests. It lives under `tests/` — **not** `src/` — so it does not inherit `src/Directory.Build.props` (MinVer, packaging). Two layers of tests live here:
+
+- **Pure logic** (plain xUnit): services and value types like `ModalService`, `ModalResult`, `ModalBuilder`. `ModalService` and its internals are reached via `<InternalsVisibleTo Include="HeadlessBlazor.Tests" />` in the Modal `.csproj`; add the same line to any other package whose internals you need to assert on.
+- **Rendered components** (bUnit, `BunitContext`): the `RenderTreeBuilder` pipeline (`HBElementBase`/`HBElement`, element name, attribute passthrough, click modifiers, child content). bUnit **stubs `IJSRuntime`**, so it cannot verify the real effects of the JS-interop behaviors (focus trap, floating, outside-click, portal) — assert their .NET-side contract (attributes rendered, disposal, guard flags), not the DOM outcome. Those JS behaviors are still verified manually in the browser via the docs site (below), or with an E2E runner if one is added.
 
 Run the docs/demo site (interactive WebAssembly host with a matching `.Client` project):
 
