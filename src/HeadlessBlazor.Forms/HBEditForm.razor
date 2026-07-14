@@ -73,21 +73,36 @@
     /// An optional validation callback invoked on submit after built-in validation passes. Receives the
     /// <see cref="HBEditContext{TModel}"/> so it can add cross-field errors via
     /// <see cref="HBEditContext{TModel}.ValidationErrors"/>; any errors it adds mark the submit invalid.
+    /// Also receives a <see cref="CancellationToken"/> - <see cref="CancellationTokenSource"/>'s token if
+    /// supplied, otherwise <see cref="CancellationToken.None"/> - so a long-running check (e.g. a remote
+    /// uniqueness lookup) can be cancelled.
     /// </summary>
     [Parameter]
-    public Func<HBEditContext<TModel>, Task>? Validation { get; set; }
+    public Func<HBEditContext<TModel>, CancellationToken, Task>? Validation { get; set; }
 
     /// <summary>
-    /// Invoked with the <see cref="Model"/> when the form is submitted and passes validation.
+    /// An optional <see cref="System.Threading.CancellationTokenSource"/> whose token is passed to
+    /// <see cref="Validation"/> on each submit. The caller owns this instance - it is never created,
+    /// cancelled, or disposed by <see cref="HBEditForm{TModel}"/> - so cancelling it (e.g. because the
+    /// caller is navigating away or the form is being torn down) is entirely up to the caller.
     /// </summary>
     [Parameter]
-    public EventCallback<TModel> OnValidSubmit { get; set; }
+    public CancellationTokenSource? CancellationTokenSource { get; set; }
 
     /// <summary>
-    /// Invoked with the <see cref="Model"/> when the form is submitted but fails validation.
+    /// Invoked when the form is submitted and passes validation. Receives the <see cref="Model"/> and the
+    /// same <see cref="CancellationToken"/> passed to <see cref="Validation"/>, so a slow save can be
+    /// cancelled the same way.
     /// </summary>
     [Parameter]
-    public EventCallback<TModel> OnInvalidSubmit { get; set; }
+    public EventCallback<HBFormSubmitEventArgs<TModel>> OnValidSubmit { get; set; }
+
+    /// <summary>
+    /// Invoked when the form is submitted but fails validation. Receives the <see cref="Model"/> and the
+    /// same <see cref="CancellationToken"/> passed to <see cref="Validation"/>.
+    /// </summary>
+    [Parameter]
+    public EventCallback<HBFormSubmitEventArgs<TModel>> OnInvalidSubmit { get; set; }
 
     /// <summary>
     /// Additional attributes applied to the rendered <c>form</c> element, e.g. <c>class</c> or <c>id</c>.
@@ -112,31 +127,34 @@
         IsSubmitting = true;
         await InvokeAsync(StateHasChanged);
 
+        var cancellationToken = CancellationTokenSource?.Token ?? CancellationToken.None;
+
         try
         {
             if (!FormContext.Revalidate())
             {
-                await OnInvalidSubmit.InvokeAsync(Model);
+                await OnInvalidSubmit.InvokeAsync(new HBFormSubmitEventArgs<TModel>(Model, cancellationToken));
                 return;
             }
 
             if (Validation is not null)
             {
-                await Validation.Invoke(FormContext);
+                await Validation.Invoke(FormContext, cancellationToken);
                 FormContext.NotifyValidationStateChanged();
 
                 if (!FormContext.IsValid())
                 {
-                    await OnInvalidSubmit.InvokeAsync(Model);
+                    await OnInvalidSubmit.InvokeAsync(new HBFormSubmitEventArgs<TModel>(Model, cancellationToken));
                     return;
                 }
             }
 
-            await OnValidSubmit.InvokeAsync(Model);
+            await OnValidSubmit.InvokeAsync(new HBFormSubmitEventArgs<TModel>(Model, cancellationToken));
         }
         finally
         {
             IsSubmitting = false;
+            await InvokeAsync(StateHasChanged);
         }
     }
 }

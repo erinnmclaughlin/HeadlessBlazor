@@ -4,8 +4,8 @@
     rules that data annotations can't express (returning a dictionary of field names to error
     messages, which are surfaced through the usual <code>&lt;ValidationMessage&gt;</code>),
     strongly-typed <code>OnValidSubmit</code>/<code>OnInvalidSubmit</code> callbacks that receive
-    the model, and <code>DisableWhileSubmitting</code>, which disables the form while an async
-    submit is in flight. The child content receives the form itself as context, so controls can
+    the model and a cancellation token, and <code>DisableWhileSubmitting</code>, which disables the
+    form while an async submit is in flight. The child content receives the form itself as context, so controls can
     read <code>IsSubmitting</code> to reflect that state.
 </p>
 

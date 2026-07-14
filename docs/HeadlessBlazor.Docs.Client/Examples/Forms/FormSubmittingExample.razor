@@ -36,12 +36,12 @@
 
     private ContactModel FormModel { get; } = new();
 
-    private async Task HandleValidSubmitAsync(ContactModel model)
+    private async Task HandleValidSubmitAsync(HBFormSubmitEventArgs<ContactModel> args)
     {
         _saved = false;
 
         // Simulate a slow server round-trip; the fieldset stays disabled until this returns.
-        await Task.Delay(1500);
+        await Task.Delay(1500, args.CancellationToken);
 
         _saved = true;
     }

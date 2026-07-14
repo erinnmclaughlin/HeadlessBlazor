@@ -38,7 +38,7 @@
         EndDate = DateTime.Today.AddDays(7)
     };
 
-    private Task Validate(HBEditContext<MyModel> context)
+    private Task Validate(HBEditContext<MyModel> context, CancellationToken _)
     {
         if (context.Model.StartDate > context.Model.EndDate)
         {
@@ -49,12 +49,12 @@
         return Task.CompletedTask;
     }
 
-    private void HandleValidSubmit(MyModel model)
+    private void HandleValidSubmit(HBFormSubmitEventArgs<MyModel> args)
     {
         IsFormValid = true;
     }
 
-    private void HandleInvalidSubmit(MyModel model)
+    private void HandleInvalidSubmit(HBFormSubmitEventArgs<MyModel> args)
     {
         IsFormValid = false;
     }
