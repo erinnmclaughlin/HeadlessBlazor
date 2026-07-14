@@ -1,5 +1,7 @@
 using System.Collections.Concurrent;
 using System.Linq.Expressions;
+using System.Reflection;
+using Microsoft.AspNetCore.Components;
 
 namespace HeadlessBlazor;
 
@@ -56,6 +58,47 @@ internal static class HBExpressionUtils
             : CompileOwnerDelegate<T>(parentExpression, fieldExpression.Parameters);
 
         return ownerDelegate(model);
+    }
+
+    /// <summary>
+    /// Returns the name of the component parameter selected by <paramref name="parameterExpression"/>
+    /// (e.g. <c>"Title"</c> for <c>x => x.Title</c>), for use as a key in a parameter dictionary.
+    /// Unlike <see cref="GetFieldName{T, TProperty}"/>, an unsupported shape throws rather than
+    /// returning <see langword="null"/>: the only shape that yields a usable key is a
+    /// <see cref="ParameterAttribute"/>-marked property accessed directly on the lambda's own
+    /// parameter, so anything else is a call-site mistake, and throwing reports it there instead of
+    /// as an obscure failure when the component is later rendered.
+    /// </summary>
+    /// <exception cref="ArgumentException">
+    /// <paramref name="parameterExpression"/> does not access a property directly on its own lambda
+    /// parameter, or that property is not marked with <see cref="ParameterAttribute"/>.
+    /// </exception>
+    public static string GetComponentParameterName<TComponent, TValue>(Expression<Func<TComponent, TValue>> parameterExpression)
+    {
+        // Unwrap the conversion the compiler inserts when TValue is not the property's exact type
+        // (e.g. `x => x.Count` where the value is supplied as object), so it reads as a bare access.
+        var body = parameterExpression.Body is UnaryExpression { NodeType: ExpressionType.Convert } conversion
+            ? conversion.Operand
+            : parameterExpression.Body;
+
+        // Requiring the owner to be the lambda's own parameter rejects the shapes whose member name
+        // would be a misleading key: a nested access (x => x.Foo.Bar, whose name is Bar), a static
+        // member, and a captured variable.
+        if (body is not MemberExpression member || member.Expression != parameterExpression.Parameters[0])
+        {
+            throw new ArgumentException(
+                $"Expected a parameter of {typeof(TComponent).Name} to be accessed directly (for example, x => x.Title), but found '{parameterExpression}'.",
+                nameof(parameterExpression));
+        }
+
+        if (member.Member is not PropertyInfo property || !property.IsDefined(typeof(ParameterAttribute), inherit: true))
+        {
+            throw new ArgumentException(
+                $"'{typeof(TComponent).Name}.{member.Member.Name}' is not a component parameter. Mark it with [Parameter] to bind a value to it.",
+                nameof(parameterExpression));
+        }
+
+        return property.Name;
     }
 
     private static Func<T, object> CompileOwnerDelegate<T>(Expression parentExpression, IReadOnlyCollection<ParameterExpression> parameters)

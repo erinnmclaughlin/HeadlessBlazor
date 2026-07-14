@@ -21,10 +21,17 @@ internal sealed class ToastService : IToastService
     /// </summary>
     internal IReadOnlyList<ToastInstance> Instances => _instances;
 
+    /// <inheritdoc />
+    public ToastBuilder<TComponent> Create<TComponent>()
+        where TComponent : IComponent
+        => new(this);
+
+    /// <inheritdoc />
     public IToastInstance Show<TComponent>(ToastOptions? options = null)
         where TComponent : IComponent
         => Show<TComponent>(new Dictionary<string, object?>(), options);
 
+    /// <inheritdoc />
     public IToastInstance Show<TComponent>(IDictionary<string, object?> parameters, ToastOptions? options = null)
         where TComponent : IComponent
     {

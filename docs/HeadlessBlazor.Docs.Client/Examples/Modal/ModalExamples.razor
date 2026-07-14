@@ -1,11 +1,21 @@
 <p class="mt-3">
-    Modals are opened imperatively through <code>IModalService.ShowAsync&lt;TComponent, TResult&gt;</code>,
-    which renders any component as the dialog body. A body declares the type it resolves with by
-    inheriting <code>HBModal&lt;TResult&gt;</code> - that base satisfies the
+    Modals are opened imperatively through <code>IModalService</code>, which renders any component as
+    the dialog body. A body declares the type it resolves with by inheriting
+    <code>HBModal&lt;TResult&gt;</code> - that base satisfies the
     <code>IModalComponent&lt;TResult&gt;</code> contract and exposes <code>CloseAsync(result)</code>
     and <code>CancelAsync()</code> directly, so no cascading parameter or wiring is needed. A confirm
     dialog is just <code>HBModal&lt;bool&gt;</code> - close with <code>CloseAsync(true)</code> to
     confirm, or let <code>CancelAsync()</code> resolve a canceled result.
+</p>
+
+<p>
+    <code>Create&lt;TComponent, TResult&gt;()</code> starts a fluent chain: bind parameters with
+    <code>WithParam(x =&gt; x.Title, "My Title")</code>, then open it with <code>ShowAsync()</code>,
+    optionally passing a <code>ModalOptions</code> for that one modal. Parameters are selected by
+    expression, so a renamed or mistyped parameter is a compile error rather than a dictionary key
+    that silently binds nothing.
+    <code>ShowAsync&lt;TComponent, TResult&gt;(parameters)</code> still takes a dictionary directly
+    when the parameters are only known at runtime.
 </p>
 
 <DocumentationBlock Title="Simple Modal" Type="typeof(ModalExample)" AdditionalSources="[typeof(ConfirmDialog)]" />

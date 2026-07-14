@@ -21,13 +21,20 @@ internal sealed class ModalService : IModalService
     /// The currently open modals, oldest first.
     /// </summary>
     internal IReadOnlyList<ModalInstance> Instances => _instances;
+    
+    /// <inheritdoc/>
+    public ModalBuilder<TComponent, TResult> Create<TComponent, TResult>()
+        where TComponent : IModalComponent<TResult>
+        => new(this);
 
+    /// <inheritdoc/>
     public Task<ModalResult<TResult>> ShowAsync<TComponent, TResult>(ModalOptions? options = null)
-        where TComponent : IComponent, IModalComponent<TResult>
+        where TComponent : IModalComponent<TResult>
         => ShowAsync<TComponent, TResult>(new Dictionary<string, object?>(), options);
 
+    /// <inheritdoc/>
     public Task<ModalResult<TResult>> ShowAsync<TComponent, TResult>(IDictionary<string, object?> parameters, ModalOptions? options = null)
-        where TComponent : IComponent, IModalComponent<TResult>
+        where TComponent : IModalComponent<TResult>
     {
         var instance = new ModalInstance<TResult>(this, typeof(TComponent), parameters, options ?? _defaultOptions);
         _instances.Add(instance);

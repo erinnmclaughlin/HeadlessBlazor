@@ -14,16 +14,14 @@
 
     private async Task OpenDialogAsync()
     {
-        var parameters = new Dictionary<string, object?>
-        {
-            [nameof(EditNameDialog.InitialName)] = _savedName
-        };
-
         // Overlay/dialog styling comes from the global ModalOptions defaults configured in
         // AddSharedServices, so no per-call options are passed here.
-        // ShowAsync<TComponent, TResult> resolves once EditNameDialog calls CloseAsync(name)
-        // or CancelAsync() (via the Cancel button) - Canceled and Data are distinguishable.
-        var result = await ModalService.ShowAsync<EditNameDialog, string>(parameters);
+        // ShowAsync resolves once EditNameDialog calls CloseAsync(name) or CancelAsync()
+        // (via the Cancel button) - Canceled and Data are distinguishable.
+        var result = await ModalService
+            .Create<EditNameDialog, string>()
+            .WithParam(x => x.InitialName, _savedName)
+            .ShowAsync();
 
         if (!result.Canceled)
             _savedName = result.Data;

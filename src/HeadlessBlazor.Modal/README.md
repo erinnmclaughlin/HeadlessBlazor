@@ -94,6 +94,34 @@ Then show it from anywhere with `IModalService`:
 }
 ```
 
+### Binding parameters
+
+`Create<TComponent, TResult>()` starts a fluent chain that binds parameters by expression and opens
+the modal on `ShowAsync()`:
+
+```csharp
+var result = await ModalService
+    .Create<ConfirmDialog, bool>()
+    .WithParam(x => x.Title, "Delete file?")
+    .WithParam(x => x.Body, "This cannot be undone.")
+    .ShowAsync();
+```
+
+Because each parameter is selected with an expression rather than a string key, the compiler checks
+both the name and the value's type - a renamed parameter breaks the build instead of silently
+binding nothing. Selecting a property that isn't marked `[Parameter]` throws right at the
+`WithParam` call.
+
+Nothing is shown until `ShowAsync()` is called. When the parameters are only known at runtime,
+`ShowAsync<TComponent, TResult>(parameters)` still takes a dictionary directly:
+
+```csharp
+var result = await ModalService.ShowAsync<ConfirmDialog, bool>(new Dictionary<string, object?>
+{
+    [nameof(ConfirmDialog.Title)] = title
+});
+```
+
 Or use `HBModalTrigger<TComponent>` as sugar for the common "open this on click" case:
 
 ```razor
@@ -117,7 +145,16 @@ are how you position and style the backdrop and dialog.
 
 ### Per-modal options
 
-Pass a `ModalOptions` at the call site to configure a single modal:
+Pass a `ModalOptions` at the call site to configure a single modal. It replaces the global defaults
+outright rather than merging with them, so re-specify any styling you still want:
+
+```csharp
+await ModalService.Create<ConfirmDialog, bool>()
+    .WithParam(x => x.Title, "Delete file?")
+    .ShowAsync(new ModalOptions { CloseOnOutsideClick = false });
+```
+
+The same object works on the non-builder overloads:
 
 ```csharp
 var options = new ModalOptions
@@ -129,7 +166,7 @@ var options = new ModalOptions
     }
 };
 
-await ModalService.ShowAsync<ConfirmDialog>(options);
+await ModalService.ShowAsync<ConfirmDialog, bool>(options);
 ```
 
 `HBModalTrigger<TComponent>` accepts the same object via its `Options` parameter:
@@ -164,7 +201,7 @@ builder.Services.AddHeadlessBlazorModal(configureDefaults: options => { /* ... *
 With defaults configured, call sites can omit options entirely:
 
 ```csharp
-await ModalService.ShowAsync<ConfirmDialog>();
+await ModalService.ShowAsync<ConfirmDialog, bool>();
 ```
 
 > **Note:** per-call options *replace* the global defaults rather than merging with them.

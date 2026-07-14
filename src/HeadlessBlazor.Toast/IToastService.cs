@@ -8,6 +8,23 @@ namespace HeadlessBlazor;
 public interface IToastService
 {
     /// <summary>
+    /// Begins configuring a toast of <typeparamref name="TComponent"/>, so that its parameters can be
+    /// bound fluently and checked by the compiler:
+    /// <code>
+    /// ToastService.Create&lt;MyToast&gt;()
+    ///     .WithParam(x => x.Message, "Saved successfully!")
+    ///     .Show();
+    /// </code>
+    /// The toast is not shown until <see cref="ToastBuilder{TComponent}.Show"/> is called. For
+    /// parameters only known at runtime, <see cref="Show{TComponent}(IDictionary{string, object?}, ToastOptions?)"/>
+    /// still takes a dictionary directly.
+    /// </summary>
+    /// <typeparam name="TComponent">The component to render as the toast's body.</typeparam>
+    /// <returns>A builder for the toast.</returns>
+    ToastBuilder<TComponent> Create<TComponent>()
+        where TComponent : IComponent;
+
+    /// <summary>
     /// Shows <typeparamref name="TComponent"/> as a toast. Unlike a modal, a toast does not
     /// resolve with a result - it dismisses itself (after <see cref="ToastOptions.Duration"/>
     /// elapses, or via <see cref="IToastInstance.DismissAsync"/>) and is simply removed.

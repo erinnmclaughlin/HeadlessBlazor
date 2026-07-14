@@ -72,12 +72,27 @@ Then show it from anywhere with `IToastService`:
     {
         // ... save ...
 
-        ToastService.Show<SuccessToast>(new Dictionary<string, object?>
-        {
-            [nameof(SuccessToast.Message)] = "Saved successfully!"
-        });
+        ToastService.Create<SuccessToast>()
+            .WithParam(x => x.Message, "Saved successfully!")
+            .Show();
     }
 }
+```
+
+`Create<TComponent>()` starts a fluent chain that binds parameters by expression and shows the toast
+on `Show()`, which returns the `IToastInstance` handle. Because each parameter is selected with an
+expression rather than a string key, the compiler checks both the name and the value's type - a
+renamed parameter breaks the build instead of silently binding nothing. Selecting a property that
+isn't marked `[Parameter]` throws right at the `WithParam` call.
+
+Nothing is shown until `Show()` is called. When the parameters are only known at runtime,
+`Show<TComponent>(parameters)` still takes a dictionary directly:
+
+```csharp
+ToastService.Show<SuccessToast>(new Dictionary<string, object?>
+{
+    [nameof(SuccessToast.Message)] = message
+});
 ```
 
 Or use `HBToastTrigger<TComponent>` as sugar for the common "show this on click" case:
@@ -100,7 +115,16 @@ Since HeadlessBlazor.Toast ships no styling of its own, `Attributes` is how you 
 
 ### Per-toast options
 
-Pass a `ToastOptions` at the call site to configure a single toast:
+Pass a `ToastOptions` at the call site to configure a single toast. It replaces the global defaults
+outright rather than merging with them, so re-specify any styling you still want:
+
+```csharp
+ToastService.Create<SuccessToast>()
+    .WithParam(x => x.Message, "Saved successfully!")
+    .Show(new ToastOptions { Duration = TimeSpan.FromSeconds(10) });
+```
+
+The same object works on the non-builder overloads:
 
 ```csharp
 var options = new ToastOptions
