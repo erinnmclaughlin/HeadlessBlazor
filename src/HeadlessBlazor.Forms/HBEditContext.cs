@@ -26,7 +26,7 @@ public class HBEditContext<TModel> where TModel : notnull
     /// The <see cref="ValidationMessageStore"/> that can be used to add custom validation messages for
     /// <see cref="Model"/>. Created on first access.
     /// </summary>
-    public HBValidationMessageStore<TModel> ValidationErrors => field ??= new HBValidationMessageStore<TModel>(Context);
+    public HBValidationMessageStore<TModel> ValidationErrors => field ??= new HBValidationMessageStore<TModel>(this);
 
     /// <summary>
     /// Initializes a new <see cref="HBEditContext{TModel}"/> for the given model.

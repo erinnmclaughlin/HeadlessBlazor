@@ -1,69 +1,63 @@
 ﻿@using Microsoft.AspNetCore.Components.Forms
 @typeparam TModel where TModel : notnull
 
-<EditForm EditContext="EditContext.Context" OnSubmit="@HandleSubmit" @attributes="UserAttributes">
-    <fieldset disabled="@Disabled" style="display: contents">
+<EditForm EditContext="FormContext.Context" OnSubmit="@HandleSubmit" @attributes="UserAttributes">
+    <fieldset disabled="@IsDisabled" style="display: contents">
         @ChildContent?.Invoke(this)
     </fieldset>
 </EditForm>
 
 @code {
 
-    private HBEditContext<TModel> EditContext
+    /// <summary>
+    /// The <see cref="HBEditContext{TModel}"/> backing this form. Exposed so child content can add
+    /// validation errors outside of the <see cref="Validation"/> submit hook - e.g. from an async
+    /// remote-validation check on blur - via <c>context.FormContext.ValidationErrors</c>, followed by
+    /// <see cref="HBEditContext{TModel}.NotifyValidationStateChanged"/> to refresh bound
+    /// <c>ValidationMessage</c>s.
+    /// </summary>
+    public HBEditContext<TModel> FormContext
     {
         get => field ??= new HBEditContext<TModel>(Model);
-        set;
+        private set;
     }
 
     /// <summary>
     /// Whether a submit is currently in progress - that is, from the moment validation begins until
     /// the <see cref="OnValidSubmit"/> / <see cref="OnInvalidSubmit"/> handler completes. Child content
     /// can read this (via the form passed as context) to reflect the submitting state, e.g. showing a
-    /// spinner. When <see cref="DisableWhileSubmitting"/> is set, this also drives <see cref="Disabled"/>.
+    /// spinner. When <see cref="DisableWhileSubmitting"/> is set, this also feeds into <see cref="IsDisabled"/>.
     /// </summary>
-    public bool IsSubmitting
-    {
-        get;
-        private set
-        {
-            field = value;
+    public bool IsSubmitting { get; private set; }
 
-            if (DisableWhileSubmitting)
-            {
-                Disabled = value;
-
-                if (OnDisabledChanged.HasDelegate)
-                {
-                    _ = OnDisabledChanged.InvokeAsync(value);
-                }
-            }
-        }
-    }
+    /// <summary>
+    /// Whether the underlying <c>fieldset</c> is currently disabled - either because the caller set
+    /// <see cref="Disabled"/>, or because <see cref="DisableWhileSubmitting"/> is set and a submit is in
+    /// progress. Unlike <see cref="Disabled"/>, this is computed and never itself settable by the caller,
+    /// so a caller-supplied <see cref="Disabled"/> value is never overwritten once a submit completes.
+    /// </summary>
+    public bool IsDisabled => Disabled || (DisableWhileSubmitting && IsSubmitting);
 
     /// <summary>
     /// The form's content. Receives the <see cref="HBEditForm{TModel}"/> itself as context, so controls
-    /// can read state such as <see cref="IsSubmitting"/>. Place inputs, <c>ValidationMessage</c>s and a
-    /// submit button here; add a <c>DataAnnotationsValidator</c> to enable data-annotation validation.
+    /// can read state such as <see cref="IsSubmitting"/> and reach <see cref="FormContext"/> to add
+    /// validation errors. Place inputs, <c>ValidationMessage</c>s and a submit button here; add a
+    /// <c>DataAnnotationsValidator</c> to enable data-annotation validation.
     /// </summary>
     [Parameter]
     public RenderFragment<HBEditForm<TModel>>? ChildContent { get; set; }
 
     /// <summary>
-    /// Whether the form is disabled. When set, the underlying <c>fieldset</c> is disabled, blocking input
-    /// and submission. Supports two-way binding via <c>@bind-Disabled</c>; while
-    /// <see cref="DisableWhileSubmitting"/> is set, the form toggles this for the duration of a submit.
+    /// Whether the caller wants the form disabled, e.g. because it's read-only. When set, the underlying
+    /// <c>fieldset</c> is disabled, blocking input and submission. This value is entirely caller-owned -
+    /// the component never modifies it itself; see <see cref="IsDisabled"/> for the effective disabled
+    /// state, which also accounts for <see cref="DisableWhileSubmitting"/>.
     /// </summary>
     [Parameter]
     public bool Disabled { get; set; }
 
     /// <summary>
-    /// Raised when <see cref="Disabled"/> changes, enabling <c>@bind-Disabled</c>.
-    /// </summary>
-    [Parameter]
-    public EventCallback<bool> OnDisabledChanged { get; set; }
-
-    /// <summary>
-    /// When <see langword="true"/>, the form disables itself (see <see cref="Disabled"/>) for the
+    /// When <see langword="true"/>, the form disables itself (see <see cref="IsDisabled"/>) for the
     /// duration of each submit, preventing re-entrant submits and edits while an async handler runs.
     /// </summary>
     [Parameter]
@@ -104,9 +98,9 @@
     /// <inheritdoc />
     protected override void OnParametersSet()
     {
-        if (!ReferenceEquals(EditContext.Model, Model))
+        if (!ReferenceEquals(FormContext.Model, Model))
         {
-            EditContext = new HBEditContext<TModel>(Model);
+            FormContext = new HBEditContext<TModel>(Model);
         }
     }
 
@@ -114,30 +108,30 @@
     {
         if (IsSubmitting)
             return;
-        
+
         IsSubmitting = true;
         await InvokeAsync(StateHasChanged);
 
         try
         {
-            if (!EditContext.Revalidate())
+            if (!FormContext.Revalidate())
             {
                 await OnInvalidSubmit.InvokeAsync(Model);
                 return;
             }
-            
+
             if (Validation is not null)
             {
-                await Validation.Invoke(EditContext);
-                EditContext.NotifyValidationStateChanged();
+                await Validation.Invoke(FormContext);
+                FormContext.NotifyValidationStateChanged();
 
-                if (!EditContext.IsValid())
+                if (!FormContext.IsValid())
                 {
                     await OnInvalidSubmit.InvokeAsync(Model);
                     return;
                 }
             }
-            
+
             await OnValidSubmit.InvokeAsync(Model);
         }
         finally
