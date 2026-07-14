@@ -15,7 +15,7 @@
     [Parameter]
     public string? InitialName { get; set; }
 
-    protected override void OnInitialized()
+    protected override void OnBeforeInitialized()
     {
         _model.Name = InitialName ?? "";
     }

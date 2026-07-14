@@ -11,7 +11,7 @@ namespace HeadlessBlazor;
 /// type and the body's can never drift apart.
 /// </summary>
 /// <typeparam name="TResult">The type of value produced when the modal is closed with a result.</typeparam>
-public abstract class HBModal<TResult> : ComponentBase, IModalComponent<TResult>
+public abstract class HBModal<TResult> : HBElement, IModalComponent<TResult>
 {
     /// <summary>
     /// The enclosing modal, cascaded by <see cref="HBModalHost"/>.

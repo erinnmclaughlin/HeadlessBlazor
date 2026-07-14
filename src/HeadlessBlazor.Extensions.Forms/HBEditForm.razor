@@ -1,0 +1,102 @@
+﻿@using System.Linq.Expressions
+@using Microsoft.AspNetCore.Components.Forms
+@inherits HBElement<HBEditForm<TModel>>
+@typeparam TModel where TModel : notnull
+
+<EditForm EditContext="EditContext.Context" OnSubmit="HandleSubmit">
+    <fieldset disabled="@_disabled" style="display: contents">
+        @ChildContent?.Invoke(this)
+    </fieldset>
+</EditForm>
+
+@code {
+
+    private bool _disabled;
+
+    public bool IsSubmitting
+    {
+        get;
+        private set
+        {
+            field = value;
+
+            if (DisableWhileSubmitting)
+            {
+                if (OnDisabledChanged.HasDelegate)
+                {
+                    _ = OnDisabledChanged.InvokeAsync(value);
+                }
+                else
+                {
+                    _disabled = value;
+                }
+            }
+        }
+    }
+    
+    private HBEditContext<TModel> EditContext => field ??= new(Model);
+    
+    [Parameter]
+    public bool Disabled { get; set; }
+    
+    [Parameter]
+    public EventCallback<bool> OnDisabledChanged { get; set; }
+    
+    [Parameter]
+    public bool DisableWhileSubmitting { get; set; }
+    
+    [Parameter, EditorRequired]
+    public TModel Model { get; set; } = default!;
+    
+    [Parameter]
+    public Expression<Func<TModel, IDictionary<string, string[]>>>? Validation { get; set; }
+
+    [Parameter]
+    public EventCallback<TModel> OnValidSubmit { get; set; }
+    
+    [Parameter]
+    public EventCallback<TModel> OnInvalidSubmit { get; set; }
+    
+    private async Task HandleSubmit()
+    {
+        if (IsSubmitting)
+            return;
+        
+        IsSubmitting = true;
+        await InvokeAsync(StateHasChanged);
+
+        if (!EditContext.Revalidate())
+        {
+            IsSubmitting = false;
+            await OnInvalidSubmit.InvokeAsync(Model);
+            return;
+        }
+
+        if (Validation is not null)
+        {
+            var result = Validation.Compile().Invoke(Model);
+
+            if (result.Count > 0)
+            {
+                foreach (var (key, value) in result)
+                {
+                    EditContext.AddErrors(key, value);
+                }
+                
+                EditContext.NotifyValidationStateChanged();
+                IsSubmitting = false;
+                await OnInvalidSubmit.InvokeAsync(Model);
+                return;
+            }
+        }
+
+        try
+        {
+            await OnValidSubmit.InvokeAsync(Model);
+        }
+        finally
+        {
+            IsSubmitting = false;
+        }
+    }
+}

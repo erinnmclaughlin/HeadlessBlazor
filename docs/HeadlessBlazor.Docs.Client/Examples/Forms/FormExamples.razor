@@ -1,0 +1,13 @@
+<p class="mt-3">
+    <code>HBEditForm</code> wraps Blazor's <code>EditForm</code> and adds three things on top of the
+    standard model/validation flow: an optional <code>Validation</code> delegate for cross-field
+    rules that data annotations can't express (returning a dictionary of field names to error
+    messages, which are surfaced through the usual <code>&lt;ValidationMessage&gt;</code>),
+    strongly-typed <code>OnValidSubmit</code>/<code>OnInvalidSubmit</code> callbacks that receive
+    the model, and <code>DisableWhileSubmitting</code>, which disables the form while an async
+    submit is in flight. The child content receives the form itself as context, so controls can
+    read <code>IsSubmitting</code> to reflect that state.
+</p>
+
+<DocumentationBlock Title="Cross-Field Validation" Type="typeof(FormExample)" />
+<DocumentationBlock Title="Disable While Submitting" Type="typeof(FormSubmittingExample)" />
