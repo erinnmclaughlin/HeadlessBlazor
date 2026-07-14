@@ -13,7 +13,7 @@
     <PropertyGroup>
         <Title>HeadlessBlazor.Core</Title>
         <Description>Core services used by HeadlessBlazor libraries.</Description>
-        <Version>1.0.0-preview8</Version>
+        <Version>1.0.0-preview9</Version>
         <Authors>erinnmclaughlin</Authors>
         <PackageIcon>HeadlessBlazorLogo.png</PackageIcon>
         <RepositoryType>git</RepositoryType>
