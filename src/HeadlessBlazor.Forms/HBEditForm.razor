@@ -31,7 +31,7 @@
             if (DisableWhileSubmitting)
             {
                 Disabled = value;
-                
+
                 if (OnDisabledChanged.HasDelegate)
                 {
                     _ = OnDisabledChanged.InvokeAsync(value);
@@ -39,7 +39,7 @@
             }
         }
     }
-    
+
     /// <summary>
     /// The form's content. Receives the <see cref="HBEditForm{TModel}"/> itself as context, so controls
     /// can read state such as <see cref="IsSubmitting"/>. Place inputs, <c>ValidationMessage</c>s and a
@@ -101,6 +101,7 @@
     [Parameter(CaptureUnmatchedValues = true)]
     public IDictionary<string, object?> UserAttributes { get; set; } = new Dictionary<string, object?>();
 
+    /// <inheritdoc />
     protected override void OnParametersSet()
     {
         if (!ReferenceEquals(EditContext.Model, Model))
