@@ -24,7 +24,7 @@ Target framework is `net10.0`. `src/HeadlessBlazor.DarkMode`, `src/HeadlessBlazo
 
 ## Package layout
 
-Each component family is its own NuGet package (project under `src/`), independently versioned in its `.csproj`:
+Each component family is its own NuGet package (project under `src/`). All packages are versioned together in lockstep — the version is derived from the git tag by MinVer (configured in `src/Directory.Build.props`), so no `.csproj` carries a `<Version>` element and releasing is just `git tag v1.0.1-preview.1 && git push --tags`. Prerelease numbers must be dot-separated (`-preview.11`, not `-preview11`) — only an all-digit identifier compares numerically under SemVer, so `1.0.0-preview10` sorts *below* `1.0.0-preview2` on nuget.org. Versions `1.0.0-preview2` through `1.0.0-preview10` are published with that flaw; `1.0.0-preview9` is the highest-sorting of them, which is why the line moved to `1.0.1-preview.*`.
 
 - `HeadlessBlazor.Core` — shared base classes (`HBElement`, `HBElementBase`), no component-specific logic. Everything else depends on this.
 - `HeadlessBlazor.Dropdown`, `HeadlessBlazor.Modal`, `HeadlessBlazor.FloatingElement`, `HeadlessBlazor.OutsideClick` — individually installable component packages.

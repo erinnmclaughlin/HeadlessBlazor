@@ -1,0 +1,13 @@
+<Project>
+
+  <!-- All packages under src/ are versioned together from a single git tag (e.g. v1.0.1-preview.1).
+       Do not add <Version> to an individual .csproj - it would override MinVer for that package only. -->
+  <PropertyGroup>
+    <MinVerTagPrefix>v</MinVerTagPrefix>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MinVer" Version="7.0.0" PrivateAssets="all" />
+  </ItemGroup>
+
+</Project>

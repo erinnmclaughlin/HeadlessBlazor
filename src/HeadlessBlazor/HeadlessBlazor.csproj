@@ -12,7 +12,6 @@
   <PropertyGroup>
     <Title>HeadlessBlazor</Title>
     <Description>A bundle of Blazor components, completely free of styling. Inspired by HeadlessUI.</Description>
-    <Version>1.0.0-preview10</Version>
     <Authors>erinnmclaughlin</Authors>
     <PackageIcon>HeadlessBlazorLogo.png</PackageIcon>
     <PackageTags>Blazor, HeadlessUI, Components</PackageTags>

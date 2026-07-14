@@ -12,7 +12,6 @@
   <PropertyGroup>
     <Title>HeadlessBlazor.Toast</Title>
     <Description>A headless toast / snackbar component for Blazor.</Description>
-    <Version>1.0.0-preview10</Version>
     <Authors>erinnmclaughlin</Authors>
     <PackageIcon>HeadlessBlazorLogo.png</PackageIcon>
     <PackageTags>Blazor, Headless UI, Components, Toast, Snackbar, Notification</PackageTags>

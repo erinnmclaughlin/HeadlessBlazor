@@ -13,6 +13,10 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # MinVer reads the version from the nearest git tag. The default shallow
+          # clone fetches no tags, which would silently pack 0.0.0-alpha.0.x.
+          fetch-depth: 0
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 10.0.x
