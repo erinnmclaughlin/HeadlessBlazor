@@ -35,13 +35,33 @@ builder.Services.AddHeadlessBlazor();
 builder.Services.AddHeadlessBlazorModal();
 ```
 
-Add an `HBModalHost` to your `MainLayout.razor` (or somewhere global):
+Add an `HBModalHost` directly to your host page (`App.razor`, or the equivalent for your hosting
+model), as a sibling of `<Routes>`/`<HeadOutlet>` - **not** inside `MainLayout.razor` or any other
+component nested under `<Routes>`:
 
 ```razor
-@* MainLayout.razor *@
-<HBModalHost />
-@Body
+@* App.razor *@
+@using HeadlessBlazor
+
+<html>
+<head>
+    <HeadOutlet />
+</head>
+<body>
+    <Routes />
+    <HBModalHost @rendermode="InteractiveServer" @* or InteractiveWebAssembly / InteractiveAuto *@ />
+</body>
+</html>
 ```
+
+> **Why not `MainLayout`?** `HBModalHost` needs its overlay/dialog elements to render as direct
+> children of `<body>` so they can't be clipped or mis-stacked by an ancestor's `overflow`/`transform`/
+> `z-index`. Earlier versions achieved this by rendering `HBModalHost` anywhere and relocating it to
+> the end of `<body>` with JS (`appendChild`). That relocation desynced Blazor's internal DOM tracking
+> from the real DOM and could crash a later render with `Cannot read properties of null (reading
+> 'removeChild')`. Mounting `HBModalHost` directly in the host page - the same way `HeadOutlet` is
+> mounted directly in `<head>` - means its element is a genuine child of `<body>` from the moment
+> Blazor inserts it, so nothing ever needs to move it after the fact.
 
 ## Usage
 

@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using HeadlessBlazor
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -16,6 +17,7 @@
 
 <body>
     <Routes />
+    <HBModalHost @rendermode="InteractiveWebAssembly" />
     <script src="_framework/blazor.web.js"></script>
     <script type="text/javascript" src="highlightjs/highlight.min.js" defer></script>
     <script type="text/javascript" src="highlightjs/cshtml-razor.min.js" defer></script>
