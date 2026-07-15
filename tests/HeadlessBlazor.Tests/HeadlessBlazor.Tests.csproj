@@ -24,7 +24,13 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\HeadlessBlazor.Core\HeadlessBlazor.Core.csproj" />
     <ProjectReference Include="..\..\src\HeadlessBlazor.DarkMode\HeadlessBlazor.DarkMode.csproj" />
+    <ProjectReference Include="..\..\src\HeadlessBlazor.Dropdown\HeadlessBlazor.Dropdown.csproj" />
+    <ProjectReference Include="..\..\src\HeadlessBlazor.FloatingElement\HeadlessBlazor.FloatingElement.csproj" />
+    <ProjectReference Include="..\..\src\HeadlessBlazor.Forms\HeadlessBlazor.Forms.csproj" />
     <ProjectReference Include="..\..\src\HeadlessBlazor.Modal\HeadlessBlazor.Modal.csproj" />
+    <ProjectReference Include="..\..\src\HeadlessBlazor.OutsideClick\HeadlessBlazor.OutsideClick.csproj" />
+    <ProjectReference Include="..\..\src\HeadlessBlazor.Toast\HeadlessBlazor.Toast.csproj" />
+    <ProjectReference Include="..\..\src\HeadlessBlazor\HeadlessBlazor.csproj" />
   </ItemGroup>
 
 </Project>
