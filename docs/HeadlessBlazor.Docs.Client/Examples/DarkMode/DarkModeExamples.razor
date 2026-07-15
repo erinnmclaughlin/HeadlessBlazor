@@ -1,0 +1,20 @@
+<p class="mt-3">
+    <code>HBDarkModeBehavior</code> reports the user's OS-level dark mode preference from the
+    browser's <code>(prefers-color-scheme: dark)</code> media query. It renders no element of its
+    own - it passes the current preference to its child content as <code>context</code>, and
+    re-renders when the preference changes, so a toggle can simply read that value. An
+    <code>OnChange</code> callback is also available when the preference needs to drive something
+    outside the render tree, such as persisting a choice or setting an attribute on
+    <code>&lt;html&gt;</code>.
+</p>
+
+<p>
+    The behavior <em>reports</em> the system preference; it does not store an override. A real
+    toggle is that preference plus your own state, which is all the example below is: a
+    <code>System</code> choice that defers to <code>context</code>, and explicit
+    <code>Light</code>/<code>Dark</code> choices that ignore it. Switching your OS theme while
+    <code>System</code> is selected updates the panel live. To make the choice survive a reload,
+    persist it yourself (e.g. to local storage) and seed the initial value from it.
+</p>
+
+<DocumentationBlock Title="Dark Mode Toggle" Type="typeof(DarkModeToggleExample)" />

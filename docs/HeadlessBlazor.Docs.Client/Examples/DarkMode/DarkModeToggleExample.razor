@@ -1,0 +1,43 @@
+<HBDarkModeBehavior Context="prefersDark">
+    <div class="p-3 @(IsDark(prefersDark) ? "bg-dark text-white" : "bg-light text-dark")">
+        <div class="btn-group" role="group" aria-label="Theme">
+            @foreach (var choice in Enum.GetValues<ThemeChoice>())
+            {
+                <button type="button"
+                        class="btn @ButtonClass(choice, IsDark(prefersDark))"
+                        aria-pressed="@(_choice == choice)"
+                        @onclick="() => _choice = choice">
+                    @choice
+                </button>
+            }
+        </div>
+
+        <p class="mb-0 mt-3">
+            Following @(_choice == ThemeChoice.System ? "the system" : "an explicit") preference:
+            currently <strong>@(IsDark(prefersDark) ? "dark" : "light")</strong>.
+            The system prefers <strong>@(prefersDark ? "dark" : "light")</strong>.
+        </p>
+    </div>
+</HBDarkModeBehavior>
+
+@code {
+    private enum ThemeChoice { System, Light, Dark }
+
+    private ThemeChoice _choice = ThemeChoice.System;
+
+    // Only the System choice defers to the OS; the other two override it. Because prefersDark
+    // arrives as child content, HBDarkModeBehavior re-renders this whole block when the OS
+    // preference changes, so no OnChange handler is needed to stay in sync.
+    private bool IsDark(bool prefersDark) => _choice switch
+    {
+        ThemeChoice.Light => false,
+        ThemeChoice.Dark => true,
+        _ => prefersDark
+    };
+
+    private string ButtonClass(ThemeChoice choice, bool isDark)
+    {
+        var outline = isDark ? "btn-outline-light" : "btn-outline-dark";
+        return _choice == choice ? (isDark ? "btn-light" : "btn-dark") : outline;
+    }
+}
