@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Components.Forms;
+
 namespace HeadlessBlazor.Tests.Forms;
 
 /// <summary>
@@ -45,7 +47,7 @@ public class HBValidationMessageStoreTests
 
         editContext.ValidationErrors.Add(x => x.Address.City, "City is required.");
 
-        var fieldMessages = editContext.Context.GetValidationMessages(new(person.Address, nameof(Address.City)));
+        var fieldMessages = editContext.Context.GetValidationMessages(new FieldIdentifier(person.Address, nameof(Address.City)));
         Assert.Contains("City is required.", fieldMessages);
     }
 
