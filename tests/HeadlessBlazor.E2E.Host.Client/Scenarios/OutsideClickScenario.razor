@@ -1,0 +1,40 @@
+@*
+    E2E fixture for HBOutsideClickBehavior. Deliberately minimal and unstyled - this exists to be
+    driven by Playwright, not to demo anything. The data-testid hooks are the test contract; don't
+    rename them without updating OutsideClickTests.
+*@
+
+<div data-testid="outside" style="padding: 100px; background: #eee;">
+    outside
+
+    <div @ref="_container" data-testid="container" style="padding: 50px; background: #fff;">
+        inside
+    </div>
+</div>
+
+<p>
+    outside clicks: <span data-testid="count">@_count</span>
+</p>
+
+@* Element.Id is empty until the ref is captured, and HBOutsideClickBehavior needs a real handle to
+   attach its document listener to. Under static SSR OnAfterRender never runs, so this correctly
+   stays out of the render tree and the behavior is inert. *@
+@if (!string.IsNullOrEmpty(_container.Id))
+{
+    <HBOutsideClickBehavior Container="_container" OnClick="OnClickedOutside" />
+}
+
+@code {
+    private ElementReference _container;
+    private int _count;
+
+    private void OnClickedOutside() => _count++;
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            StateHasChanged();
+        }
+    }
+}

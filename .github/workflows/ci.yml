@@ -17,5 +17,26 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
+      # Named explicitly rather than globbed: tests/ also holds the E2E harness host projects, which
+      # are not test projects, and `dotnet test` only accepts a single project.
       - name: dotnet test
-        run: dotnet test tests/**/*.csproj -c Release
+        run: dotnet test tests/HeadlessBlazor.Tests/HeadlessBlazor.Tests.csproj -c Release
+
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Build
+        run: dotnet build tests/HeadlessBlazor.E2E.Tests/HeadlessBlazor.E2E.Tests.csproj -c Release
+
+      # The install script only exists once the project has been built.
+      - name: Install Playwright browsers
+        run: pwsh tests/HeadlessBlazor.E2E.Tests/bin/Release/net10.0/playwright.ps1 install --with-deps chromium
+
+      - name: dotnet test
+        run: dotnet test tests/HeadlessBlazor.E2E.Tests/HeadlessBlazor.E2E.Tests.csproj -c Release --no-build
