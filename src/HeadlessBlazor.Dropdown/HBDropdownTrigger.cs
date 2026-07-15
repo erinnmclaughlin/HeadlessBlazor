@@ -20,7 +20,8 @@ public class HBDropdownTrigger : HBElement
     /// <inheritdoc />
     protected override void OnParametersSet()
     {
-        if (!OnClickPreventDefault)
-            UserAttributes.TryAdd("onclick", new EventCallback(this, Dropdown.ToggleAsync));
+        UserAttributes.TryAdd("onclick", OnClickPreventDefault
+            ? EventCallback.Empty
+            : new EventCallback(this, Dropdown.ToggleAsync));
     }
 }

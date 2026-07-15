@@ -63,7 +63,7 @@ public class HBDropdownTests : BunitContext
         var cut = Render<HBDropdown>(ps => ps.Add(p => p.CloseOnOutsideClick, false));
         await cut.Instance.OpenAsync();
 
-        await cut.Instance.OnClickItem.InvokeAsync(null!);
+        await cut.InvokeAsync(() => cut.Instance.OnClickItem.InvokeAsync(null!));
 
         Assert.False(cut.Instance.IsOpen);
     }
