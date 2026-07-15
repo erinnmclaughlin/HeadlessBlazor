@@ -1,0 +1,20 @@
+@*
+    The single component the harness page renders with a runtime-chosen @rendermode. Everything a
+    scenario needs must hang off this, because this is the boundary where interactivity starts.
+*@
+
+@switch (Scenario)
+{
+    case "outside-click":
+        <OutsideClickScenario />
+        break;
+
+    default:
+        <p data-testid="unknown-scenario">Unknown scenario '@Scenario'.</p>
+        break;
+}
+
+@code {
+    [Parameter]
+    public string Scenario { get; set; } = "";
+}

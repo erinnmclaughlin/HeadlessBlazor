@@ -1,0 +1,31 @@
+@page "/harness/{Mode}/{Scenario}"
+
+@*
+    This page must stay statically rendered: @rendermode can only be applied to a component whose
+    parent is static, so keeping the route static is what lets the mode be picked per-request. That
+    is the whole trick behind the E2E matrix - one URL scheme covers every render mode.
+*@
+
+<h1 data-testid="harness-mode">@Mode</h1>
+
+<ScenarioRoot Scenario="@Scenario" @rendermode="@RenderModeFor(Mode)" />
+
+@code {
+    [Parameter]
+    public string Mode { get; set; } = "";
+
+    [Parameter]
+    public string Scenario { get; set; } = "";
+
+    // A null render mode means "inherit the parent", and the parent here is static - so "static"
+    // genuinely exercises the static SSR path rather than a simulation of it.
+    private static IComponentRenderMode? RenderModeFor(string mode) => mode switch
+    {
+        "static" => null,
+        "server" => new InteractiveServerRenderMode(prerender: true),
+        "server-noprerender" => new InteractiveServerRenderMode(prerender: false),
+        "wasm" => new InteractiveWebAssemblyRenderMode(prerender: true),
+        "wasm-noprerender" => new InteractiveWebAssemblyRenderMode(prerender: false),
+        _ => throw new ArgumentException($"Unknown render mode '{mode}'.", nameof(mode))
+    };
+}
