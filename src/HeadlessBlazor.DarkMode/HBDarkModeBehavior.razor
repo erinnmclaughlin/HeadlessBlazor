@@ -1,0 +1,102 @@
+@implements IAsyncDisposable
+@namespace HeadlessBlazor
+@using Microsoft.JSInterop
+
+@ChildContent?.Invoke(IsDarkMode)
+
+@code {
+    private DotNetObjectReference<HBDarkModeBehavior>? dotNetObjRef;
+    private IJSObjectReference? handlerRef;
+
+    [Inject]
+    private IJSRuntime JS { get; set; } = default!;
+
+    /// <summary>
+    /// Rendered with the current value of <see cref="IsDarkMode"/>.
+    /// </summary>
+    [Parameter]
+    public RenderFragment<bool>? ChildContent { get; set; }
+
+    /// <summary>
+    /// Invoked whenever the user's OS-level dark mode preference changes, including once
+    /// after the initial preference has been detected.
+    /// </summary>
+    [Parameter]
+    public EventCallback<bool> OnChange { get; set; }
+
+    /// <summary>
+    /// Whether the user currently prefers dark mode, based on the browser's
+    /// <c>(prefers-color-scheme: dark)</c> media query. Defaults to <see langword="false"/> until
+    /// the initial preference has been detected.
+    /// </summary>
+    public bool IsDarkMode { get; private set; }
+
+    /// <inheritdoc />
+    public async ValueTask DisposeAsync()
+    {
+        if (handlerRef is not null)
+        {
+            try
+            {
+                await handlerRef.InvokeVoidAsync("dispose");
+                await handlerRef.DisposeAsync();
+            }
+            catch (JSDisconnectedException)
+            {
+                // The Blazor Server circuit was already torn down (e.g. page refresh), so the
+                // JS-side handle is gone too - nothing to dispose. Safe to ignore.
+            }
+
+            handlerRef = null;
+        }
+
+        dotNetObjRef?.Dispose();
+    }
+
+    /// <summary>
+    /// Invoked from JS whenever the user's dark mode preference changes.
+    /// </summary>
+    [JSInvokable]
+    public async Task NotifyChangeAsync(bool isDarkMode)
+    {
+        if (IsDarkMode == isDarkMode)
+            return;
+
+        IsDarkMode = isDarkMode;
+        await OnChange.InvokeAsync(IsDarkMode);
+        StateHasChanged();
+    }
+
+    /// <inheritdoc />
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            dotNetObjRef ??= DotNetObjectReference.Create(this);
+            var moduleName = nameof(HBDarkModeBehavior);
+
+            try
+            {
+                var module = await JS.InvokeAsync<IJSObjectReference>("import", $"./_content/HeadlessBlazor.DarkMode/{moduleName}.razor.js");
+                var handler = await module.InvokeAsync<IJSObjectReference>($"{moduleName}.createInstance", dotNetObjRef);
+                var initialValue = await handler.InvokeAsync<bool>("isDarkMode");
+                await module.DisposeAsync();
+
+                handlerRef = handler;
+
+                if (initialValue != IsDarkMode)
+                {
+                    IsDarkMode = initialValue;
+                    await OnChange.InvokeAsync(IsDarkMode);
+                    StateHasChanged();
+                }
+            }
+            catch (JSDisconnectedException)
+            {
+                // The Blazor Server circuit disconnected mid-initialization (e.g. a refresh
+                // landing between renders). There's nothing to wire up or clean up - the JS
+                // side is gone with the circuit. Safe to ignore.
+            }
+        }
+    }
+}
