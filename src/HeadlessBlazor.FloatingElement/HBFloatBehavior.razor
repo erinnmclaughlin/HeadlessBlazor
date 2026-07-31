@@ -3,6 +3,9 @@
 @code {
     private IJSObjectReference? popover;
 
+    private bool Initialized { get; set; }
+    private bool Disposed { get; set; }
+
     [Inject]
     private IJSRuntime JS { get; set; } = default!;
 
@@ -33,6 +36,8 @@
     /// <inheritdoc />
     public async ValueTask DisposeAsync()
     {
+        Disposed = true;
+
         if (popover is not null)
         {
             try
@@ -75,19 +80,42 @@
     /// <inheritdoc />
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
+        // The captured element references may not be populated on the first render, and passing an
+        // empty one hands JS a null that floating-ui dereferences. Initialize as soon as both have
+        // values rather than gating on firstRender, which gets exactly one chance and never retries.
+        if (!Initialized && !string.IsNullOrEmpty(Anchor.Id) && !string.IsNullOrEmpty(Content.Id))
         {
-            var moduleName = nameof(HBFloatBehavior);
+            Initialized = true;
+            const string moduleName = nameof(HBFloatBehavior);
 
             try
             {
                 var module = await JS.InvokeAsync<IJSObjectReference>("import", $"./_content/HeadlessBlazor.FloatingElement/{moduleName}.razor.js");
-                popover = await module.InvokeAsync<IJSObjectReference>($"{moduleName}.createInstance", Anchor, Content, new HBFloatOptions
+
+                if (Disposed)
+                {
+                    await module.DisposeAsync();
+                    return;
+                }
+
+                var handle = await module.InvokeAsync<IJSObjectReference>($"{moduleName}.createInstance", Anchor, Content, new HBFloatOptions
                 {
                     Alignment = Alignment,
                     Side = Side
                 });
+
                 await module.DisposeAsync();
+
+                if (Disposed)
+                {
+                    // Disposed while createInstance was in flight - don't hand off a
+                    // handle nothing will ever dispose; tear it down immediately.
+                    await handle.InvokeVoidAsync("dispose");
+                    await handle.DisposeAsync();
+                    return;
+                }
+
+                popover = handle;
             }
             catch (JSDisconnectedException)
             {

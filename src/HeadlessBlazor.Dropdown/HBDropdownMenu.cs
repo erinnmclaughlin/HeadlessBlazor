@@ -44,14 +44,14 @@ public class HBDropdownMenu : HBElement
         if (AutoPosition)
         {
             builder.OpenComponent<HBFloatBehavior>(sequence++);
-            builder.AddAttribute(sequence, nameof(HBFloatBehavior.Alignment), Alignment);
-            builder.AddAttribute(sequence, nameof(HBFloatBehavior.Anchor), Dropdown.ElementReference);
-            builder.AddAttribute(sequence, nameof(HBFloatBehavior.Content), ElementReference);
-            builder.AddAttribute(sequence, nameof(HBFloatBehavior.Side), Side);
+            builder.AddAttribute(sequence++, nameof(HBFloatBehavior.Alignment), Alignment);
+            builder.AddAttribute(sequence++, nameof(HBFloatBehavior.Anchor), Dropdown.ElementReference);
+            builder.AddAttribute(sequence++, nameof(HBFloatBehavior.Content), ElementReference);
+            builder.AddAttribute(sequence++, nameof(HBFloatBehavior.Side), Side);
             builder.CloseComponent();
         }
 
-        builder.AddElementReferenceCapture(sequence, async (elementRef) =>
+        builder.AddElementReferenceCapture(sequence++, async (elementRef) =>
         {
             ElementReference = elementRef;
             await InvokeAsync(StateHasChanged);
